@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///home/runner/workspace/artifacts/krishi-sarthak/src/pages/_app.tsx"],"sourcesContent":["import type { AppProps } from 'next/app';\n\nimport '../index.css';\n\nexport default function WebsiteApp({ Component, pageProps }: AppProps) {\n  return <Component {...pageProps} />;\n}\n"],"names":["WebsiteApp","Component","pageProps"],"mappings":";;;;;;;AAIe,SAASA,WAAW,EAAEC,SAAS,EAAEC,SAAS,EAAY;IACnE,qBAAO,qKAACD;QAAW,GAAGC,SAAS;;;;;;AACjC"}}]
-}

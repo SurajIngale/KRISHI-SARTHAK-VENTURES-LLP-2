@@ -1,18 +1,108 @@
 import { useState, type AnchorHTMLAttributes, type FormEvent, type ReactNode } from 'react';
 import { ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck, BarChart3, Check, ChevronDown, CircleHelp, ClipboardList, Compass, Facebook, Globe2, Instagram, Linkedin, MapPin, Menu, PackageCheck, Send, Ship, Sprout, Truck, X } from 'lucide-react';
-const heroImage = '/hero-harvest.png';
-const produceImage = '/produce-market.png';
+import { Navbar } from './components/Navbar';
+import { GlowCard } from './components/ui/spotlight-card';
 
-const categories = [
-  { name:'Fresh Fruits & Vegetables', text:'Fresh agricultural produce sourced with care for quality, freshness and export requirements.', image:produceImage, tag:'01' },
-  { name:'Frozen Vegetables', text:'Products selected with attention to quality, storage, packaging and transportation requirements.', image:heroImage, tag:'02' },
-  { name:'Dehydrated Powders', text:'Fruit and vegetable powders for food processing and relevant commercial applications.', image:produceImage, tag:'03' },
-  { name:'Spices & Herbs', text:'A considered range of Indian spices and herbs for buyers seeking dependable sourcing.', image:produceImage, tag:'04' },
-  { name:'Pulses & Grains', text:'Agricultural commodities including pulses and grains for domestic and international trade.', image:heroImage, tag:'05' },
-  { name:'Dry Fruits & Nuts', text:'A selection of dry fruits and nuts for buyers seeking quality supply arrangements.', image:produceImage, tag:'06' },
-  { name:'Construction & Road Materials', text:'Construction and road-related materials for commercial and infrastructure applications.', image:heroImage, tag:'07' },
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+export const asset = (path: string) => (path.startsWith('http') ? path : `${basePath}${path.startsWith('/') ? path : `/${path}`}`);
+
+const heroImage = asset('/hero-harvest.png');
+const heroVideo = asset('/cargo_ship_video.mp4');
+const produceImage = asset('/produce-market.png');
+
+const rawCategories = [
+  {
+    name: 'Fresh Fruits & Vegetables',
+    subtitle: 'Apples, Cavendish Bananas, Dragon Fruit & Onions',
+    text: 'Farm-sourced fresh produce graded for optimal ripeness, uniform sizing, and export longevity. Sourced under strict phytosanitary protocols with pre-cooling and cold-chain reefer transit.',
+    image: '/categories/fresh-fruits.jpeg',
+    tag: '01',
+    badge: 'Farm Fresh',
+    highlights: ['Export Grade Sorting', 'Phytosanitary Compliant', 'Reefer Container Ready'],
+    varieties: 'Royal Gala & Kashmiri Apples, Robusta & G9 Bananas, Red & White Dragon Fruit, Nashik Red & Garwa Onions, Pollachi Coconuts',
+    packaging: 'Corrugated telescopic cartons (10kg / 13.5kg / 18kg), ventilated mesh bags, customized palletization',
+  },
+  {
+    name: 'Frozen Vegetables (IQF)',
+    subtitle: 'Green Peas, Sweet Corn, Mixed Veg & Cuts',
+    text: 'Individually Quick Frozen (IQF) vegetables flash-frozen within hours of harvest to preserve vital nutrients, natural color, crisp texture, and year-round multi-market availability.',
+    image: '/categories/frozen-vegetables.jpeg',
+    tag: '02',
+    badge: 'IQF Cold-Chain',
+    highlights: ['-18°C Cold Chain', 'Zero Preservatives', 'Multi-Season Storage'],
+    varieties: 'Tender Green Peas, Golden Sweet Corn Kernels, Diced Carrots, French Beans, Cauliflower & Broccoli Florets',
+    packaging: 'Food-grade polybags (400g, 1kg, 2.5kg, 5kg) and bulk corrugated master cartons (10kg–20kg)',
+  },
+  {
+    name: 'Dehydrated Powders',
+    subtitle: 'Onion, Garlic, Ginger & Spray-Dried Powders',
+    text: 'High-purity dehydrated and spray-dried fruit and vegetable powders with low moisture retention, free-flowing consistency, and rich flavor retention for international food processing.',
+    image: '/categories/dehydrated-powders.jpeg',
+    tag: '03',
+    badge: 'Industrial Grade',
+    highlights: ['100% Pure Natural', 'Customized Mesh Sizes', 'Long Shelf Life'],
+    varieties: 'White & Red Onion Powder/Flakes, Garlic Powder/Granules, Ginger Powder, Tomato Powder, Fruit Powders',
+    packaging: 'Double-layer polyethylene lined aluminium foil pouches, multi-wall paper bags, HDPE drums (20kg–25kg)',
+  },
+  {
+    name: 'Spices & Herbs',
+    subtitle: 'High-Curcumin Turmeric, Red Chilli, Cumin & Seeds',
+    text: 'Authentic Indian whole and ground spices procured from certified regional growing belts with verified essential oil content, vibrant color value, and rigorous laboratory purity testing.',
+    image: '/categories/spices-herbs.jpeg',
+    tag: '04',
+    badge: 'Aromatic & Pure',
+    highlights: ['Spices Board Certified', 'High Curcumin & Oil', 'Low Aflatoxin Test'],
+    varieties: 'Salem & Nizamabad Turmeric (3-5% curcumin), Guntur S17 & Teja Chilli, Unjha Cumin Seeds, Coriander, Green Cardamom',
+    packaging: 'Multi-wall kraft paper bags, jute bags with inner poly liners, vacuum pouches (25kg–50kg bulk)',
+  },
+  {
+    name: 'Pulses & Grains',
+    subtitle: '1121 & Pusa Basmati, Non-Basmati & Lentils',
+    text: 'Export-grade agricultural staples including aged long-grain aromatic Basmati rice, premium Non-Basmati varieties, chickpeas, and feed grains double-cleaned and Sortex-inspected.',
+    image: '/categories/pulses-grains.jpeg',
+    tag: '05',
+    badge: 'Export Basmati',
+    highlights: ['Sortex Cleaned', 'High Kernel Elongation', 'Fumigated Cargo'],
+    varieties: '1121 Steam & Sella Basmati, Pusa Basmati, PR-11 & IR-64 Non-Basmati, Kabuli Chickpeas, Yellow Maize',
+    packaging: 'Non-woven fabric bags, BOPP laminated bags, PP bags (5kg, 10kg, 25kg, 50kg) & containerized bulk liners',
+  },
+  {
+    name: 'Dry Fruits & Nuts',
+    subtitle: 'Dates, Premium Cashews, Almonds & Raisins',
+    text: 'Nutrient-dense, rigorously graded dry fruits and tree nuts curated for institutional confectionery, bakery, retail repackers, and high-demand commercial trade sectors.',
+    image: '/categories/dry-fruits.jpeg',
+    tag: '06',
+    badge: 'Grade-A Selection',
+    highlights: ['Vacuum Sealed Packs', 'Strict Size Counts', 'Moisture Regulated'],
+    varieties: 'Medjool, Kimia & Sayer Dates, W180 / W240 / W320 Whole Cashew Kernels, California & Mamra Almonds, Raisins',
+    packaging: 'Nitrogen-flushed tins, vacuum poly-packs (10kg/20kg), reinforced corrugated master boxes with moisture barrier',
+  },
+  {
+    name: 'Construction & Road Materials',
+    subtitle: 'Natural Raw Gypsum & Industrial Minerals',
+    text: 'High-purity raw natural gypsum rock, agricultural gypsum, and selected industrial mineral commodities coordinated for commercial cement manufacturing, plasterboard, and infrastructure.',
+    image: '/categories/construction-materials.jpeg',
+    tag: '07',
+    badge: 'Bulk Mineral Supply',
+    highlights: ['Purity >85-90% CaSO4', 'Vessel & Rake Logistics', 'Industrial Tested'],
+    varieties: 'Raw Natural Gypsum Rock (crushed/lumps), Calcined Gypsum, Mineral Aggregates, Industrial Quartz & Silica',
+    packaging: 'Break-bulk vessel shipments, jumbo tonner bags (1 MT / 1.5 MT), and open-top bulk containers',
+  },
+  {
+    name: 'Custom Sourcing & Contract Farming',
+    subtitle: 'Bespoke Crop Origins & Private Labeling',
+    text: 'Looking for specific regional varieties, dedicated farm cluster contracting, or specialized consumer packaging? Our global trade specialists manage turnkey sourcing and export fulfillment.',
+    image: '/produce-market.png',
+    tag: '08',
+    badge: 'Turnkey Trade',
+    highlights: ['Direct Farmer Clusters', 'Private Labeling', 'End-to-End Clearance'],
+    varieties: 'Bespoke agricultural crops, customized processing parameters, private labeling, origin-traceable consignments',
+    packaging: 'Tailored private label retail packaging, custom cartons, branded pallet wraps, container load optimizations',
+  },
 ];
-const products = [
+const categories = rawCategories.map((c) => ({ ...c, image: asset(c.image) }));
+
+const rawProducts = [
   ['Apple','Delicious, nutritious, sweet, and globally demanded fresh fruit.','apple','/products/krishi-apple.jpg'],
   ['Dragon Fruit','An exotic, high-demand fruit known for its vibrant appearance.','dragon','/products/krishi-dragon-fruit.jpg'],
   ['Banana','Fresh bananas sourced for domestic and international markets.','banana','/products/krishi-banana.jpg'],
@@ -22,6 +112,7 @@ const products = [
   ['Dates','Dates for domestic consumption and international trade.','dates','/products/krishi-dates.jpg'],
   ['Gypsum','Gypsum for construction and industrial applications.','gypsum','/products/krishi-gypsum.jpg'],
 ];
+const products = rawProducts.map(([name, text, key, img]) => [name, text, key, asset(img)]);
 const services = [
   { name:'Shipment Services', icon:Ship, text:'Support for group and individual shipments, from product sourcing and documentation guidance to container booking, clearance coordination and logistics.' },
   { name:'Global Trade Consultancy', icon:Compass, text:'Practical advisory support to navigate trade requirements, consider market opportunities and shape an international trade strategy.' },
@@ -45,84 +136,320 @@ function Anchor({to,children,className='',...props}:AnchorHTMLAttributes<HTMLAnc
 function SectionIntro({eyebrow,title,copy,light=false}:{eyebrow:string;title:string;copy?:string;light?:boolean}) {
   return <div className="max-w-2xl"><span className={`eyebrow ${light?'!text-[#e2bd75]':''}`}>{eyebrow}</span><h2 className={`section-title mt-5 ${light?'!text-[#f7f4eb]':''}`}>{title}</h2>{copy&&<p className={`body-copy mt-5 max-w-xl ${light?'!text-white/65':''}`}>{copy}</p>}</div>;
 }
-function Logo() {
-  return <a className="flex items-center gap-3" href="#home" aria-label="Krishi Sarthak Ventures home">
-    <span className="grid h-10 w-10 place-items-center rounded-full border border-[#d5a34c]/50 bg-[#214c39] text-[#e9c26f]"><Sprout size={21}/></span>
-    <span className="block leading-tight"><span className="block text-[11px] font-extrabold tracking-[.1em] text-[#1d392d]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] font-semibold tracking-[.19em] text-[#788476]">VENTURES LLP</span></span>
-  </a>;
-}
-function Header() {
-  const [open,setOpen]=useState(false);
-  const [dropdown,setDropdown]=useState('');
-  const close=()=>{setOpen(false);setDropdown('')};
-  return <>
-    <div className="hidden bg-[#214c39] text-[#e9e5d8] md:block">
-      <div className="wrap flex h-9 items-center justify-between text-[10px] tracking-wide">
-        <div className="flex gap-7"><span>Phone: <a href="tel:[Add Company Phone Number]" className="text-white">[Add Company Phone Number]</a></span><span>Email: <a href="mailto:[Add Company Email]" className="text-white">[Add Company Email]</a></span><span>Registered office: [Add Registered Office Address]</span></div>
-        <div className="flex gap-4"><a aria-label="LinkedIn (placeholder link)" href="#contact"><Linkedin size={13}/></a><a aria-label="Facebook (placeholder link)" href="#contact"><Facebook size={13}/></a><a aria-label="Instagram (placeholder link)" href="#contact"><Instagram size={13}/></a></div>
-      </div>
-    </div>
-    <header className="sticky top-0 z-40 border-b border-[#ddd8ca] bg-[#f7f4eb]/95 backdrop-blur-md">
-      <div className="wrap flex h-[76px] items-center justify-between">
-        <Logo/>
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
-          {navItems.map(([label,id]) => label==='Our Products'||label==='Our Services' ? <div key={id} className="relative" onMouseEnter={()=>setDropdown(id)} onMouseLeave={()=>setDropdown('')}>
-            <button className="nav-link flex items-center gap-1.5 py-3" onClick={()=>setDropdown(dropdown===id?'':id)} aria-expanded={dropdown===id}>{label}<ChevronDown size={13}/></button>
-            {dropdown===id&&<div className="absolute left-0 top-full z-20 w-64 border border-[#ddd8ca] bg-[#fbf9f2] p-2 shadow-[0_18px_40px_rgba(30,50,35,.12)]">
-              {(id==='products'?productsNav:servicesNav).map((entry,i)=><Anchor key={entry} to={id==='products'?'categories':'services'} className="block px-3 py-2.5 text-[11px] text-[#44584b] hover:bg-[#f1ecdf] hover:text-[#8a682f]">{entry}</Anchor>)}
-            </div>}
-          </div>:<Anchor key={id} to={id} className="nav-link py-3">{label}</Anchor>)}
-        </nav>
-        <Anchor to="contact" className="btn-primary !hidden !px-4 !py-3 text-[10px] md:!inline-flex">Start a conversation <ArrowUpRight size={14}/></Anchor>
-        <button className="grid h-11 w-11 place-items-center text-[#214c39] lg:hidden" aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button>
-      </div>
-      {open&&<div className="border-t border-[#ddd8ca] bg-[#f7f4eb] px-5 pb-6 pt-3 lg:hidden">
-        <nav className="mx-auto flex max-w-xl flex-col" aria-label="Mobile navigation">
-          {navItems.map(([label,id])=>label==='Our Products'||label==='Our Services'?<div key={id}>
-            <button className="flex w-full items-center justify-between border-b border-[#e4dfd3] py-3.5 text-left text-sm font-semibold" onClick={()=>setDropdown(dropdown===id?'':id)}>{label}<ChevronDown size={16}/></button>
-            {dropdown===id&&<div className="grid grid-cols-1 pl-4">{(id==='products'?productsNav:servicesNav).map(t=><Anchor key={t} to={id==='products'?'categories':'services'} onClick={close} className="py-2 text-xs text-[#617267]">{t}</Anchor>)}</div>}
-          </div>:<Anchor key={id} to={id} onClick={close} className="border-b border-[#e4dfd3] py-3.5 text-sm font-semibold">{label}</Anchor>)}
-          <Anchor to="contact" onClick={close} className="btn-primary mt-5">Get in touch <ArrowRight size={15}/></Anchor>
-        </nav>
-      </div>}
-    </header>
-  </>;
-}
 function Hero() {
-  return <section id="home" className="relative isolate min-h-[840px] overflow-hidden bg-[#183c2c] text-white md:min-h-[730px]">
-    <img src={heroImage} alt="Farmland at golden hour, representing agricultural sourcing from India" className="absolute inset-0 -z-20 h-full w-full object-cover object-center"/>
-    <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(15,39,28,.91)_0%,rgba(17,46,32,.78)_48%,rgba(19,44,32,.3)_100%)]"/>
-    <div className="wrap relative flex min-h-[840px] flex-col justify-center pb-20 pt-20 md:min-h-[730px]">
-      <div className="max-w-[760px] reveal">
-        <div className="mb-7 flex items-center gap-3"><span className="h-px w-9 bg-[#dbb45c]"/><span className="text-[10px] font-bold uppercase tracking-[.23em] text-[#edcf8c]">Agricultural sourcing · International trade</span></div>
-        <p className="mb-5 text-xs font-bold tracking-[.17em] text-white/70">KRISHI SARTHAK VENTURES LLP</p>
-        <h1 className="font-display max-w-[710px] text-[clamp(3.2rem,8vw,7.3rem)] leading-[.94] tracking-[-.055em]">Global Trade<br/><em className="font-normal text-[#e3bb69]">Solutions</em></h1>
-        <p className="mt-5 text-sm font-semibold tracking-wide text-[#edcf8c]">Rooted in trust.</p>
-        <p className="mt-5 max-w-[540px] text-[15px] leading-7 text-white/78 md:text-base">Connecting businesses with global markets through product intelligence, international trade expertise, reliable sourcing, and end-to-end trade support.</p>
-        <div className="mt-9 flex flex-wrap items-center gap-5">
-          <Anchor to="contact" className="inline-flex items-center gap-3 bg-[#d5a34c] px-6 py-4 text-xs font-bold text-[#1d392d] transition hover:bg-[#e2ba70]">Get trade consultation <ArrowRight size={15}/></Anchor>
-          <Anchor to="categories" className="inline-flex items-center gap-2 text-xs font-semibold text-white/85 hover:text-[#e3bb69]">Explore our sourcing <ArrowDown size={14}/></Anchor>
+  return (
+    <section id="home" className="relative isolate min-h-[920px] overflow-hidden bg-black text-white md:min-h-[840px]">
+      {/* Background Video Layer - Vividly visible without heavy filters */}
+      <div className="absolute inset-0 -z-30 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster={heroImage}
+          className="h-full w-full object-cover object-center"
+          aria-hidden="true"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+      </div>
+
+      {/* Reduced Shade Overlay: Light transparent cinematic scrim so cargo ship & ocean are vividly visible */}
+      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-black/45 via-black/20 to-black/60" />
+
+      {/* Subtle radial center vignette to naturally enhance text contrast */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.5)_100%)]" />
+
+      <div className="wrap relative flex min-h-[920px] flex-col items-center justify-center pb-36 pt-20 text-center md:min-h-[840px] md:pb-36 md:pt-20">
+        <div className="mx-auto flex max-w-[860px] flex-col items-center reveal">
+          {/* Live Global Logistics Badge */}
+          <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-black/40 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[.2em] text-[#edcf8c] backdrop-blur-md shadow-md">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34d399] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
+            </span>
+            <span>Agricultural Sourcing · International Trade</span>
+          </div>
+
+          <p className="mb-4 text-xs font-bold tracking-[.24em] text-[#e3bb69] drop-shadow-md">
+            KRISHI SARTHAK VENTURES LLP
+          </p>
+
+          <h1 className="font-display max-w-[820px] text-[clamp(3.2rem,7.5vw,6.8rem)] leading-[.95] tracking-[-.045em] text-[#ffffff] drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+            Global Trade<br />
+            <em className="font-normal text-[#f0ca78] italic">Solutions</em>
+          </h1>
+
+          <p className="mt-5 text-base font-semibold tracking-wide text-[#f5dfa8] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] md:text-lg">
+            Rooted in trust. Connected across international borders.
+          </p>
+
+          <p className="mt-5 max-w-[660px] text-[15px] leading-relaxed text-white/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] md:text-base">
+            Connecting businesses with global markets through verified product intelligence, international trade expertise, reliable sourcing, and end-to-end export coordination.
+          </p>
+
+          {/* Action Buttons Centered */}
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+            <Anchor
+              to="contact"
+              className="inline-flex items-center gap-3 bg-[#d5a34c] px-7 py-4 text-xs font-bold text-[#1a3528] shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-300 hover:bg-[#e2ba70] hover:shadow-[0_6px_25px_rgba(213,163,76,0.5)] hover:-translate-y-0.5"
+            >
+              Get Trade Consultation <ArrowRight size={15} />
+            </Anchor>
+            <Anchor
+              to="categories"
+              className="inline-flex items-center gap-2 border border-white/35 bg-black/35 px-6 py-4 text-xs font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-black/55 hover:border-white/60 hover:text-[#eed59e] hover:-translate-y-0.5"
+            >
+              Explore Our Sourcing <ArrowDown size={14} />
+            </Anchor>
+          </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 border-t border-white/20 bg-[#183b2b]/55 backdrop-blur-sm">
-        <div className="wrap grid grid-cols-2 py-4 text-[10px] font-medium tracking-wide text-white/80 md:grid-cols-5 md:py-5">
-          {['Product & market intelligence','Trade standards & compliance','Country selection & opportunities','Buyer–supplier network support','End-to-end trade coordination'].map((item,i)=><div key={item} className={`flex items-center gap-2 py-2 md:py-0 ${i>0?'md:border-l md:border-white/20 md:pl-4':''}`}><span className="text-[#e2bd75]">0{i+1}</span><span>{item}</span></div>)}
+
+      {/* Bottom Feature Ribbon - Replaced with Interactive Spotlight GlowCards */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 w-full border-t border-white/10 bg-gradient-to-t from-black/85 via-black/45 to-transparent backdrop-blur-md">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 md:gap-4">
+            {[
+              { num: '01', title: 'Product Intelligence', desc: 'Market analysis & pricing trends', glow: 'orange' as const },
+              { num: '02', title: 'Trade Compliance', desc: 'APEDA, FSSAI & phytosanitary protocols', glow: 'green' as const },
+              { num: '03', title: 'Country Opportunities', desc: 'Targeted global market mapping', glow: 'orange' as const },
+              { num: '04', title: 'Buyer–Supplier Network', desc: 'Direct farm clusters & vetted sources', glow: 'green' as const },
+              { num: '05', title: 'End-to-End Coordination', desc: 'Port clearance & reefer cold transit', glow: 'orange' as const },
+            ].map((item) => (
+              <GlowCard
+                key={item.num}
+                customSize
+                glowColor={item.glow}
+                className="!grid-rows-1 flex flex-col justify-between rounded-xl bg-black/45 p-4 text-left border-white/15 shadow-xl transition-all duration-300 hover:-translate-y-1 min-h-[96px]"
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[10px] font-bold font-mono tracking-wider text-[#e2bd75] bg-[#d5a34c]/20 px-2 py-0.5 rounded border border-[#d5a34c]/30">
+                      {item.num}
+                    </span>
+                    <span className="h-px flex-1 bg-white/15" />
+                  </div>
+                  <h4 className="text-xs sm:text-[13px] font-bold text-white tracking-wide">
+                    {item.title}
+                  </h4>
+                </div>
+                <p className="mt-1 text-[11px] text-white/70 leading-snug">
+                  {item.desc}
+                </p>
+              </GlowCard>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="absolute right-[5%] top-[18%] hidden rounded-full border border-white/25 p-4 xl:block"><Globe2 className="text-[#e3bb69]" size={28}/></div>
-    </div>
-  </section>;
+    </section>
+  );
 }
 function CategorySection() {
+  const [selectedCategory, setSelectedCategory] = useState<typeof categories[0] | null>(null);
   return <section id="categories" className="section-pad bg-[#f7f4eb]">
     <div className="wrap">
-      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><SectionIntro eyebrow="What we source" title="A considered range. A world of possibility." copy="Explore product categories we can help source and coordinate for relevant domestic and international requirements."/><p className="max-w-[245px] pb-1 text-xs leading-6 text-[#718074]">Category availability and specifications depend on buyer requirements, origin and current supply.</p></div>
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {categories.map((item,i)=><article key={item.name} className={`group card-line image-zoom relative overflow-hidden ${i===0?'sm:col-span-2 lg:col-span-2':''}`}>
-          <div className={`relative overflow-hidden ${i===0?'h-[270px]':'h-[195px]'}`}><img src={item.image} alt={`${item.name} sourcing category`} className="h-full w-full object-cover"/><div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-transparent to-transparent"/><span className="absolute left-4 top-4 border border-white/55 px-2 py-1 text-[9px] tracking-widest text-white/90">CATEGORY {item.tag}</span><ArrowUpRight size={18} className="absolute bottom-4 right-4 text-white transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"/></div>
-          <div className="p-5"><h3 className="font-display text-xl leading-tight">{item.name}</h3><p className="mt-2 min-h-[48px] text-xs leading-5 text-[#6f7b70]">{item.text}</p><Anchor to="contact" className="btn-outline mt-4">View details <ArrowRight size={13}/></Anchor></div>
-        </article>)}
+      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <SectionIntro
+          eyebrow="What we source"
+          title="A considered range. A world of possibility."
+          copy="Explore our core export-grade sourcing categories. Procured with precision, rigorous grading, and end-to-end cold-chain compliance for global destinations."
+        />
+        <div className="max-w-[280px] pb-1 text-xs leading-6 text-[#718074]">
+          <p className="flex items-center gap-2 font-medium text-[#214c39]">
+            <BadgeCheck size={16} className="text-[#d5a34c] shrink-0" />
+            APEDA &amp; Phytosanitary Sourced
+          </p>
+          <p className="mt-1 text-[11px] text-[#718074]">
+            Custom grade sorting, packaging specifications, and container palletization upon request.
+          </p>
+        </div>
       </div>
+
+      {/* Grid of identical size cards and images */}
+      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((item) => (
+          <article
+            key={item.name}
+            className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#d5a34c] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden"
+          >
+            {/* Exactly identical size image container for all cards */}
+            <div className="relative h-[210px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
+              <img
+                src={item.image}
+                alt={`${item.name} sourcing category`}
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-[#102c20]/15 to-transparent pointer-events-none" />
+              <span className="absolute left-3.5 top-3.5 border border-white/40 bg-[#1d392d]/85 px-2.5 py-1 text-[9px] font-bold tracking-widest text-[#f5ebd2] backdrop-blur-xs">
+                CATEGORY {item.tag}
+              </span>
+              <span className="absolute right-3.5 top-3.5 border border-[#d5a34c]/60 bg-[#d5a34c]/95 px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#1d392d] backdrop-blur-xs shadow-xs">
+                {item.badge}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedCategory(item)}
+                className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#d5a34c] group-hover:scale-110"
+                aria-label={`View ${item.name} specifications`}
+              >
+                <ArrowUpRight size={15} />
+              </button>
+            </div>
+
+            {/* Exactly identical size card body */}
+            <div className="p-5 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#8a682f] transition-colors line-clamp-1">
+                  {item.name}
+                </h3>
+                <p className="mt-1 text-[11px] font-semibold text-[#8a682f] tracking-wide line-clamp-1">
+                  {item.subtitle}
+                </p>
+                <p className="mt-2.5 text-xs leading-5 text-[#6f7b70] line-clamp-3 min-h-[60px]">
+                  {item.text}
+                </p>
+
+                {/* Specification tags */}
+                <div className="mt-3.5 flex flex-wrap gap-1.5 pt-1">
+                  {item.highlights.map((h) => (
+                    <span
+                      key={h}
+                      className="rounded-xs border border-[#ddd8ca] bg-[#f4eee1] px-2 py-0.5 text-[9.5px] font-medium text-[#526457]"
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Card Footer with identical button positions */}
+              <div className="mt-5 pt-3.5 border-t border-[#e8e2d4] flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory(item)}
+                  className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#8a682f] inline-flex items-center gap-1.5"
+                >
+                  View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+                </button>
+                <Anchor
+                  to="contact"
+                  className="text-[10px] font-bold uppercase tracking-wider text-[#8a682f] hover:underline"
+                >
+                  Inquire
+                </Anchor>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* Interactive Category Details Modal */}
+      {selectedCategory && (
+        <div
+          className="fixed inset-0 z-[60] grid place-items-center bg-[#122a1f]/70 p-4 backdrop-blur-xs"
+          onClick={() => setSelectedCategory(null)}
+          role="presentation"
+        >
+          <div
+            className="relative w-full max-w-lg overflow-hidden bg-[#fbf9f2] shadow-2xl border border-[#ddd8ca]"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${selectedCategory.name} specifications`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Image Header */}
+            <div className="relative h-[220px] w-full overflow-hidden bg-[#183c2c]">
+              <img
+                src={selectedCategory.image}
+                alt={selectedCategory.name}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/90 via-black/30 to-transparent" />
+              <button
+                type="button"
+                onClick={() => setSelectedCategory(null)}
+                className="absolute right-3.5 top-3.5 grid h-8 w-8 place-items-center rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors"
+                aria-label="Close modal"
+              >
+                <X size={16} />
+              </button>
+              <div className="absolute bottom-4 left-5 right-5 text-white">
+                <span className="border border-[#d5a34c]/60 bg-[#d5a34c]/95 px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#1d392d]">
+                  CATEGORY {selectedCategory.tag} · {selectedCategory.badge}
+                </span>
+                <h3 className="font-display mt-2 text-2xl text-[#f7f4eb] leading-tight">
+                  {selectedCategory.name}
+                </h3>
+                <p className="text-xs text-[#edcf8c] font-medium mt-0.5">
+                  {selectedCategory.subtitle}
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div>
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                  Export Overview
+                </h4>
+                <p className="mt-1.5 text-xs leading-6 text-[#526457]">
+                  {selectedCategory.text}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-[#f4eee1] p-3.5 border border-[#e4decb]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                  Key Varieties &amp; Commercial Grades
+                </h4>
+                <p className="mt-1 text-xs text-[#314537] font-medium leading-relaxed">
+                  {selectedCategory.varieties}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-[#f4eee1] p-3.5 border border-[#e4decb]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                  Packaging &amp; Cold-Chain Sourcing
+                </h4>
+                <p className="mt-1 text-xs text-[#314537] font-medium leading-relaxed">
+                  {selectedCategory.packaging}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                  Export Highlights
+                </h4>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {selectedCategory.highlights.map((h) => (
+                    <span
+                      key={h}
+                      className="inline-flex items-center gap-1 rounded-sm border border-[#d5a34c]/40 bg-[#fbf5e6] px-2.5 py-1 text-[10px] font-semibold text-[#8a682f]"
+                    >
+                      <Check size={12} className="text-[#718b5c]" />
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#e4dfd3] flex items-center justify-between gap-3">
+                <p className="text-[10px] text-[#718074]">
+                  Discuss grade, origin, and container specifications.
+                </p>
+                <Anchor
+                  to="contact"
+                  onClick={() => setSelectedCategory(null)}
+                  className="btn-primary !py-2.5 !px-4 text-xs shrink-0"
+                >
+                  Request Quote <ArrowRight size={14} />
+                </Anchor>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   </section>;
 }
@@ -182,7 +509,7 @@ function About() {
   </section>;
 }
 function Compliance() {
-  return <section className="bg-[#214c39] py-14 text-[#f7f4eb]">
+  return <section id="compliance" className="bg-[#214c39] py-14 text-[#f7f4eb]">
     <div className="wrap">
       <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="eyebrow !text-[#e2bd75]">Trade readiness</span><h2 className="font-display mt-3 text-3xl md:text-4xl">Certifications & compliance</h2></div><p className="max-w-[430px] text-xs leading-6 text-white/65">Applicable registration and certification categories vary by product, market and business activity. No company registrations are represented as confirmed here.</p></div>
       <div className="mt-8 flex gap-3 overflow-x-auto pb-3">
@@ -256,7 +583,7 @@ function News() {
   </section>;
 }
 function GlobalPresence() {
-  return <section className="relative overflow-hidden bg-[#193e2d] py-20 text-[#f7f4eb]">
+  return <section id="presence" className="relative overflow-hidden bg-[#193e2d] py-20 text-[#f7f4eb]">
     <div className="absolute -right-28 -top-48 h-[570px] w-[570px] rounded-full border border-white/[.08]"/><div className="absolute -right-12 -top-32 h-[430px] w-[430px] rounded-full border border-white/[.08]"/>
     <div className="wrap relative grid items-center gap-12 lg:grid-cols-[.82fr_1.18fr]">
       <div><SectionIntro eyebrow="A world of possibilities" title="Our global presence" copy="Expanding businesses across international markets — one informed connection at a time." light/><p className="mt-6 max-w-lg text-xs leading-6 text-white/55">The countries below are example markets for discussion, not confirmed operating destinations or existing trade routes for KRISHI SARTHAK VENTURES LLP.</p><Anchor to="contact" className="mt-7 inline-flex items-center gap-2 border-b border-[#d5a34c] pb-2 text-xs font-semibold text-[#f0d18f]">Discuss a market <ArrowRight size={14}/></Anchor></div>
@@ -327,7 +654,7 @@ function Footer() {
 function App() {
   return <div className="grain min-h-[100dvh]">
     <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:p-3">Skip to content</a>
-    <Header/><main id="main-content"><Hero/><CategorySection/><Highlights/><ProductCollection/><About/><Compliance/><Services/><Growth/><Approach/><News/><GlobalPresence/><Careers/><Contact/></main><Footer/>
+    <Navbar/><main id="main-content"><Hero/><CategorySection/><Highlights/><ProductCollection/><About/><Compliance/><Services/><Growth/><Approach/><News/><GlobalPresence/><Careers/><Contact/></main><Footer/>
   </div>;
 }
 export default App;

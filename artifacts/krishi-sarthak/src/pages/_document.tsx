@@ -22,9 +22,9 @@ export default function Document() {
           property="og:description"
           content="Agricultural sourcing, international trade support, shipment coordination, and global trade solutions."
         />
-        <meta property="og:image" content="/hero-harvest.png" />
+        <meta property="og:image" content={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/hero-harvest.png`} />
         <meta name="twitter:card" content="summary_large_image" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.svg`} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
