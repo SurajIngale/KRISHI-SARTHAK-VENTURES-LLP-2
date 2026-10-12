@@ -1,0 +1,333 @@
+import { useState, type AnchorHTMLAttributes, type FormEvent, type ReactNode } from 'react';
+import { ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck, BarChart3, Check, ChevronDown, CircleHelp, ClipboardList, Compass, Facebook, Globe2, Instagram, Linkedin, MapPin, Menu, PackageCheck, Send, Ship, Sprout, Truck, X } from 'lucide-react';
+const heroImage = '/hero-harvest.png';
+const produceImage = '/produce-market.png';
+
+const categories = [
+  { name:'Fresh Fruits & Vegetables', text:'Fresh agricultural produce sourced with care for quality, freshness and export requirements.', image:produceImage, tag:'01' },
+  { name:'Frozen Vegetables', text:'Products selected with attention to quality, storage, packaging and transportation requirements.', image:heroImage, tag:'02' },
+  { name:'Dehydrated Powders', text:'Fruit and vegetable powders for food processing and relevant commercial applications.', image:produceImage, tag:'03' },
+  { name:'Spices & Herbs', text:'A considered range of Indian spices and herbs for buyers seeking dependable sourcing.', image:produceImage, tag:'04' },
+  { name:'Pulses & Grains', text:'Agricultural commodities including pulses and grains for domestic and international trade.', image:heroImage, tag:'05' },
+  { name:'Dry Fruits & Nuts', text:'A selection of dry fruits and nuts for buyers seeking quality supply arrangements.', image:produceImage, tag:'06' },
+  { name:'Construction & Road Materials', text:'Construction and road-related materials for commercial and infrastructure applications.', image:heroImage, tag:'07' },
+];
+const products = [
+  ['Apple','Delicious, nutritious, sweet, and globally demanded fresh fruit.','apple','/products/krishi-apple.jpg'],
+  ['Dragon Fruit','An exotic, high-demand fruit known for its vibrant appearance.','dragon','/products/krishi-dragon-fruit.jpg'],
+  ['Banana','Fresh bananas sourced for domestic and international markets.','banana','/products/krishi-banana.jpg'],
+  ['Coconut','Fresh coconuts for commercial and international trade.','coconut','/products/krishi-coconut.jpg'],
+  ['Indian Onion','Indian onions valued for their distinctive flavor and commercial demand.','onion','/products/krishi-onion.jpg'],
+  ['Rice','Indian Basmati and Non-Basmati rice for domestic and international markets.','rice','/products/krishi-rice.jpg'],
+  ['Dates','Dates for domestic consumption and international trade.','dates','/products/krishi-dates.jpg'],
+  ['Gypsum','Gypsum for construction and industrial applications.','gypsum','/products/krishi-gypsum.jpg'],
+];
+const services = [
+  { name:'Shipment Services', icon:Ship, text:'Support for group and individual shipments, from product sourcing and documentation guidance to container booking, clearance coordination and logistics.' },
+  { name:'Global Trade Consultancy', icon:Compass, text:'Practical advisory support to navigate trade requirements, consider market opportunities and shape an international trade strategy.' },
+  { name:'Freight Forwarding & Logistics', icon:Truck, text:'Logistics coordination designed to support safe, timely and efficient international handling across sea, land and air.' },
+  { name:'Documentation Services', icon:ClipboardList, text:'Guidance on registration and compliance requirements including IEC, DGFT, RCMC, AD Code, ICEGATE, APEDA and other applicable processes.' },
+];
+const credentials = ['IEC – Import Export Code','APEDA Registration','FSSAI License','GSTIN Registration','MSME (Udyam) Registration','FIEO Membership','Coconut Development Board Registration','Spices Board Registration','Halal Certification','Kosher Certification','ISO Certification'];
+const markets = ['United Arab Emirates','Saudi Arabia','Oman','Qatar','Kuwait','Bahrain','Iran','Turkey','Vietnam','Sri Lanka','United Kingdom','Netherlands','Canada'];
+const blogs = [
+  ['Premium Apples Imported from Iran','An overview of sourcing premium-grade fresh apples, with applicable documentation and import compliance considerations.','A market note'],
+  ['Dragon Fruit Sourcing from Vietnam','Explore sourcing considerations for export-quality dragon fruit, including quality and temperature-controlled logistics.','A sourcing note'],
+  ['Successful Onion Export Shipment','A sample overview of sorting, packaging, documentation, and logistics considerations for international onion shipments.','A trade guide'],
+];
+const navItems = [['Home','home'],['About Us','about'],['Our Products','products'],['Our Services','services'],['News & Blogs','news'],['Careers','careers'],['Contact Us','contact']];
+const productsNav = ['Fresh Fruits & Vegetables','Frozen Vegetables','Dehydrated Powders','Spices & Herbs','Pulses & Grains','Dry Fruits & Nuts','Construction & Road Materials'];
+const servicesNav = services.map(s=>s.name);
+
+function Anchor({to,children,className='',...props}:AnchorHTMLAttributes<HTMLAnchorElement>&{to:string;children:ReactNode}) {
+  return <a href={`#${to}`} className={className} {...props}>{children}</a>;
+}
+function SectionIntro({eyebrow,title,copy,light=false}:{eyebrow:string;title:string;copy?:string;light?:boolean}) {
+  return <div className="max-w-2xl"><span className={`eyebrow ${light?'!text-[#e2bd75]':''}`}>{eyebrow}</span><h2 className={`section-title mt-5 ${light?'!text-[#f7f4eb]':''}`}>{title}</h2>{copy&&<p className={`body-copy mt-5 max-w-xl ${light?'!text-white/65':''}`}>{copy}</p>}</div>;
+}
+function Logo() {
+  return <a className="flex items-center gap-3" href="#home" aria-label="Krishi Sarthak Ventures home">
+    <span className="grid h-10 w-10 place-items-center rounded-full border border-[#d5a34c]/50 bg-[#214c39] text-[#e9c26f]"><Sprout size={21}/></span>
+    <span className="block leading-tight"><span className="block text-[11px] font-extrabold tracking-[.1em] text-[#1d392d]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] font-semibold tracking-[.19em] text-[#788476]">VENTURES LLP</span></span>
+  </a>;
+}
+function Header() {
+  const [open,setOpen]=useState(false);
+  const [dropdown,setDropdown]=useState('');
+  const close=()=>{setOpen(false);setDropdown('')};
+  return <>
+    <div className="hidden bg-[#214c39] text-[#e9e5d8] md:block">
+      <div className="wrap flex h-9 items-center justify-between text-[10px] tracking-wide">
+        <div className="flex gap-7"><span>Phone: <a href="tel:[Add Company Phone Number]" className="text-white">[Add Company Phone Number]</a></span><span>Email: <a href="mailto:[Add Company Email]" className="text-white">[Add Company Email]</a></span><span>Registered office: [Add Registered Office Address]</span></div>
+        <div className="flex gap-4"><a aria-label="LinkedIn (placeholder link)" href="#contact"><Linkedin size={13}/></a><a aria-label="Facebook (placeholder link)" href="#contact"><Facebook size={13}/></a><a aria-label="Instagram (placeholder link)" href="#contact"><Instagram size={13}/></a></div>
+      </div>
+    </div>
+    <header className="sticky top-0 z-40 border-b border-[#ddd8ca] bg-[#f7f4eb]/95 backdrop-blur-md">
+      <div className="wrap flex h-[76px] items-center justify-between">
+        <Logo/>
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
+          {navItems.map(([label,id]) => label==='Our Products'||label==='Our Services' ? <div key={id} className="relative" onMouseEnter={()=>setDropdown(id)} onMouseLeave={()=>setDropdown('')}>
+            <button className="nav-link flex items-center gap-1.5 py-3" onClick={()=>setDropdown(dropdown===id?'':id)} aria-expanded={dropdown===id}>{label}<ChevronDown size={13}/></button>
+            {dropdown===id&&<div className="absolute left-0 top-full z-20 w-64 border border-[#ddd8ca] bg-[#fbf9f2] p-2 shadow-[0_18px_40px_rgba(30,50,35,.12)]">
+              {(id==='products'?productsNav:servicesNav).map((entry,i)=><Anchor key={entry} to={id==='products'?'categories':'services'} className="block px-3 py-2.5 text-[11px] text-[#44584b] hover:bg-[#f1ecdf] hover:text-[#8a682f]">{entry}</Anchor>)}
+            </div>}
+          </div>:<Anchor key={id} to={id} className="nav-link py-3">{label}</Anchor>)}
+        </nav>
+        <Anchor to="contact" className="btn-primary !hidden !px-4 !py-3 text-[10px] md:!inline-flex">Start a conversation <ArrowUpRight size={14}/></Anchor>
+        <button className="grid h-11 w-11 place-items-center text-[#214c39] lg:hidden" aria-label={open?'Close navigation':'Open navigation'} aria-expanded={open} onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button>
+      </div>
+      {open&&<div className="border-t border-[#ddd8ca] bg-[#f7f4eb] px-5 pb-6 pt-3 lg:hidden">
+        <nav className="mx-auto flex max-w-xl flex-col" aria-label="Mobile navigation">
+          {navItems.map(([label,id])=>label==='Our Products'||label==='Our Services'?<div key={id}>
+            <button className="flex w-full items-center justify-between border-b border-[#e4dfd3] py-3.5 text-left text-sm font-semibold" onClick={()=>setDropdown(dropdown===id?'':id)}>{label}<ChevronDown size={16}/></button>
+            {dropdown===id&&<div className="grid grid-cols-1 pl-4">{(id==='products'?productsNav:servicesNav).map(t=><Anchor key={t} to={id==='products'?'categories':'services'} onClick={close} className="py-2 text-xs text-[#617267]">{t}</Anchor>)}</div>}
+          </div>:<Anchor key={id} to={id} onClick={close} className="border-b border-[#e4dfd3] py-3.5 text-sm font-semibold">{label}</Anchor>)}
+          <Anchor to="contact" onClick={close} className="btn-primary mt-5">Get in touch <ArrowRight size={15}/></Anchor>
+        </nav>
+      </div>}
+    </header>
+  </>;
+}
+function Hero() {
+  return <section id="home" className="relative isolate min-h-[840px] overflow-hidden bg-[#183c2c] text-white md:min-h-[730px]">
+    <img src={heroImage} alt="Farmland at golden hour, representing agricultural sourcing from India" className="absolute inset-0 -z-20 h-full w-full object-cover object-center"/>
+    <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(15,39,28,.91)_0%,rgba(17,46,32,.78)_48%,rgba(19,44,32,.3)_100%)]"/>
+    <div className="wrap relative flex min-h-[840px] flex-col justify-center pb-20 pt-20 md:min-h-[730px]">
+      <div className="max-w-[760px] reveal">
+        <div className="mb-7 flex items-center gap-3"><span className="h-px w-9 bg-[#dbb45c]"/><span className="text-[10px] font-bold uppercase tracking-[.23em] text-[#edcf8c]">Agricultural sourcing · International trade</span></div>
+        <p className="mb-5 text-xs font-bold tracking-[.17em] text-white/70">KRISHI SARTHAK VENTURES LLP</p>
+        <h1 className="font-display max-w-[710px] text-[clamp(3.2rem,8vw,7.3rem)] leading-[.94] tracking-[-.055em]">Global Trade<br/><em className="font-normal text-[#e3bb69]">Solutions</em></h1>
+        <p className="mt-5 text-sm font-semibold tracking-wide text-[#edcf8c]">Rooted in trust.</p>
+        <p className="mt-5 max-w-[540px] text-[15px] leading-7 text-white/78 md:text-base">Connecting businesses with global markets through product intelligence, international trade expertise, reliable sourcing, and end-to-end trade support.</p>
+        <div className="mt-9 flex flex-wrap items-center gap-5">
+          <Anchor to="contact" className="inline-flex items-center gap-3 bg-[#d5a34c] px-6 py-4 text-xs font-bold text-[#1d392d] transition hover:bg-[#e2ba70]">Get trade consultation <ArrowRight size={15}/></Anchor>
+          <Anchor to="categories" className="inline-flex items-center gap-2 text-xs font-semibold text-white/85 hover:text-[#e3bb69]">Explore our sourcing <ArrowDown size={14}/></Anchor>
+        </div>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0 border-t border-white/20 bg-[#183b2b]/55 backdrop-blur-sm">
+        <div className="wrap grid grid-cols-2 py-4 text-[10px] font-medium tracking-wide text-white/80 md:grid-cols-5 md:py-5">
+          {['Product & market intelligence','Trade standards & compliance','Country selection & opportunities','Buyer–supplier network support','End-to-end trade coordination'].map((item,i)=><div key={item} className={`flex items-center gap-2 py-2 md:py-0 ${i>0?'md:border-l md:border-white/20 md:pl-4':''}`}><span className="text-[#e2bd75]">0{i+1}</span><span>{item}</span></div>)}
+        </div>
+      </div>
+      <div className="absolute right-[5%] top-[18%] hidden rounded-full border border-white/25 p-4 xl:block"><Globe2 className="text-[#e3bb69]" size={28}/></div>
+    </div>
+  </section>;
+}
+function CategorySection() {
+  return <section id="categories" className="section-pad bg-[#f7f4eb]">
+    <div className="wrap">
+      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><SectionIntro eyebrow="What we source" title="A considered range. A world of possibility." copy="Explore product categories we can help source and coordinate for relevant domestic and international requirements."/><p className="max-w-[245px] pb-1 text-xs leading-6 text-[#718074]">Category availability and specifications depend on buyer requirements, origin and current supply.</p></div>
+      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((item,i)=><article key={item.name} className={`group card-line image-zoom relative overflow-hidden ${i===0?'sm:col-span-2 lg:col-span-2':''}`}>
+          <div className={`relative overflow-hidden ${i===0?'h-[270px]':'h-[195px]'}`}><img src={item.image} alt={`${item.name} sourcing category`} className="h-full w-full object-cover"/><div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-transparent to-transparent"/><span className="absolute left-4 top-4 border border-white/55 px-2 py-1 text-[9px] tracking-widest text-white/90">CATEGORY {item.tag}</span><ArrowUpRight size={18} className="absolute bottom-4 right-4 text-white transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"/></div>
+          <div className="p-5"><h3 className="font-display text-xl leading-tight">{item.name}</h3><p className="mt-2 min-h-[48px] text-xs leading-5 text-[#6f7b70]">{item.text}</p><Anchor to="contact" className="btn-outline mt-4">View details <ArrowRight size={13}/></Anchor></div>
+        </article>)}
+      </div>
+    </div>
+  </section>;
+}
+function Highlights() {
+  const metrics=[['10+','Years in global trade'],['25+','Countries served'],['1,500+','Global buyers & suppliers network'],['3,000+','Successful trade executions']];
+  return <section className="bg-[#e9e5d8] py-12">
+    <div className="wrap">
+      <div className="mb-7 flex items-start gap-3 border-b border-[#d5d0c1] pb-4 text-[11px] leading-5 text-[#6a7569]"><CircleHelp size={16} className="mt-0.5 shrink-0 text-[#987333]"/><span>Illustrative placeholders inherited from a reference brief — these are <strong className="text-[#33493a]">not verified company achievements</strong> and must be confirmed or removed before publishing.</span></div>
+      <div className="grid grid-cols-2 gap-y-7 md:grid-cols-4">{metrics.map(([value,label])=><div key={label} className="border-l border-[#d0caba] pl-5 first:border-0 first:pl-0"><p className="font-display text-4xl text-[#214c39]">{value}</p><p className="mt-2 text-[11px] font-semibold text-[#526457]">{label}</p><span className="text-[9px] uppercase tracking-widest text-[#9b865b]">Example only · verify</span></div>)}</div>
+    </div>
+  </section>;
+}
+function ProductCollection() {
+  const [active,setActive]=useState<string|null>(null);
+  return <section id="products" className="section-pad bg-[#fbf9f2]">
+    <div className="wrap">
+      <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end"><SectionIntro eyebrow="Product catalogue" title="Our major import-export grade products" copy="A starting point for conversation. Share the origin, grade, volume and destination requirements that matter to your business."/><span className="text-[10px] uppercase tracking-[.13em] text-[#8a806d]">Product availability on request</span></div>
+      <div className="mt-12 grid gap-x-5 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map(([name,text,key,image],i)=><article key={name} className="group">
+          <div className="image-zoom relative h-[222px] overflow-hidden bg-[#e8e1cf]">
+            <img src={image} alt={`${name} product`} className={`h-full w-full object-cover ${key==='rice'?'object-bottom':''}`}/>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#172f23]/50 to-transparent"/>
+            <span className="absolute bottom-3 left-4 text-[9px] font-semibold uppercase tracking-[.17em] text-white">{i<6?'Agricultural product':'Trade product'}</span>
+            <button onClick={()=>setActive(name)} className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-[#f8f4e9] text-[#214c39] transition hover:bg-[#d5a34c]" aria-label={`View ${name} details`}><ArrowUpRight size={16}/></button>
+          </div>
+          <div className="flex items-start justify-between gap-2 pt-4"><div><h3 className="font-display text-[23px]">{name}</h3><p className="mt-2 max-w-[245px] text-xs leading-5 text-[#758074]">{text}</p></div><span className="pt-1 text-[10px] text-[#9a865b]">0{i+1}</span></div>
+          <button onClick={()=>setActive(name)} className="btn-outline mt-4">View product <ArrowRight size={13}/></button>
+        </article>)}
+      </div>
+      <div className="mt-12 border-t border-[#e2ddcf] pt-7 text-center"><Anchor to="contact" className="btn-primary">Discuss product requirements <ArrowRight size={15}/></Anchor></div>
+      {active&&<div className="fixed inset-0 z-[60] grid place-items-center bg-[#122a1f]/65 p-5" onClick={()=>setActive(null)} role="presentation">
+        <div className="relative w-full max-w-md bg-[#fbf9f2] p-7 shadow-2xl" role="dialog" aria-modal="true" aria-label={`${active} product information`} onClick={e=>e.stopPropagation()}>
+          <button onClick={()=>setActive(null)} className="absolute right-4 top-4 p-2" aria-label="Close product details"><X size={18}/></button><span className="eyebrow">Product enquiry</span><h3 className="font-display mt-4 text-4xl">{active}</h3><p className="body-copy mt-4 text-sm">Product grades, origin, packaging and availability can be discussed against your specification. Contact us to begin a sourcing conversation.</p><Anchor to="contact" onClick={()=>setActive(null)} className="btn-primary mt-6">Ask about {active} <ArrowRight size={15}/></Anchor>
+        </div>
+      </div>}
+    </div>
+  </section>;
+}
+function About() {
+  return <section id="about" className="section-pad bg-[#e9e5d8]">
+    <div className="wrap grid items-center gap-12 lg:grid-cols-[.95fr_1.05fr] lg:gap-20">
+      <div className="relative image-zoom">
+        <div className="absolute -left-3 -top-3 h-24 w-24 border-l border-t border-[#ba9451]"/>
+        <img src={heroImage} alt="Agricultural fields reflecting the sourcing and trade focus of Krishi Sarthak Ventures" className="h-[420px] w-full object-cover md:h-[515px]"/>
+        <div className="absolute bottom-5 left-5 max-w-[250px] bg-[#f7f4eb] p-5"><span className="eyebrow">Our perspective</span><p className="font-display mt-2 text-xl leading-tight">Trade starts with understanding what matters at both ends.</p></div>
+      </div>
+      <div><SectionIntro eyebrow="About the company" title="Your partner in global trade"/>
+        <div className="mt-6 space-y-4 text-[13px] leading-7 text-[#66756a]">
+          <p>KRISHI SARTHAK VENTURES LLP is focused on connecting businesses with international markets through agricultural product sourcing, market intelligence and global trade support.</p>
+          <p>Our business approach emphasizes product quality, reliable sourcing, buyer–supplier relationships and efficient coordination throughout the import-export process.</p>
+          <p>We aim to help businesses identify market opportunities, understand international trade requirements and establish dependable commercial relationships across borders.</p>
+          <p>Our services cover product sourcing, international trade coordination, shipment support and documentation guidance. We strive to deliver professional service and help clients navigate the complexities of international trade.</p>
+        </div>
+        <Anchor to="approach" className="btn-primary mt-7">Read more about our approach <ArrowRight size={15}/></Anchor>
+      </div>
+    </div>
+  </section>;
+}
+function Compliance() {
+  return <section className="bg-[#214c39] py-14 text-[#f7f4eb]">
+    <div className="wrap">
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="eyebrow !text-[#e2bd75]">Trade readiness</span><h2 className="font-display mt-3 text-3xl md:text-4xl">Certifications & compliance</h2></div><p className="max-w-[430px] text-xs leading-6 text-white/65">Applicable registration and certification categories vary by product, market and business activity. No company registrations are represented as confirmed here.</p></div>
+      <div className="mt-8 flex gap-3 overflow-x-auto pb-3">
+        {credentials.map((credential,i)=><div key={credential} className="min-w-[210px] border border-white/20 bg-white/[.06] p-4">
+          <span className="mb-4 grid h-8 w-8 place-items-center rounded-full border border-[#d5a34c]/60 text-[#edcf8c]"><BadgeCheck size={15}/></span><p className="text-xs font-semibold">{credential}</p><p className="mt-2 text-[9px] uppercase tracking-[.14em] text-[#c5c9b9]">Applicable category · confirm</p>
+        </div>)}
+      </div>
+      <p className="mt-3 text-[10px] text-white/50">Reference categories only. Actual registrations and certifications are to be confirmed before publication.</p>
+    </div>
+  </section>;
+}
+function Services() {
+  return <section id="services" className="section-pad bg-[#f7f4eb]">
+    <div className="wrap"><SectionIntro eyebrow="How we help" title="Comprehensive global trade services" copy="Thoughtful support across sourcing, preparation and movement — shaped around your product and requirements."/>
+      <div className="mt-12 grid gap-px bg-[#dcd7c9] md:grid-cols-2">
+        {services.map((service,i)=>{const Icon=service.icon;return <article key={service.name} className="group bg-[#f7f4eb] p-7 transition-colors hover:bg-[#eeeadf] md:p-9">
+          <div className="flex items-start justify-between"><span className="grid h-12 w-12 place-items-center border border-[#d7c9a6] text-[#967235]"><Icon size={21}/></span><span className="font-display text-3xl text-[#c8c1b0]">0{i+1}</span></div>
+          <h3 className="font-display mt-7 text-2xl">{service.name}</h3><p className="mt-3 max-w-lg text-[13px] leading-6 text-[#69776c]">{service.text}</p>
+          <Anchor to="contact" className="btn-outline mt-6">Read more <ArrowRight size={13}/></Anchor>
+        </article>})}
+      </div>
+    </div>
+  </section>;
+}
+function Growth() {
+  const years=['2021','2022','2023','2024','2025'];
+  return <section className="section-pad bg-[#e9e5d8]">
+    <div className="wrap"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><SectionIntro eyebrow="Perspective, not forecast" title="Our growth & strategy" copy="Illustrative visual frameworks for how trade and market priorities can be considered. These are not company performance data."/><span className="mb-2 inline-flex items-center gap-2 text-[10px] uppercase tracking-[.13em] text-[#7e715a]"><BarChart3 size={14}/> Sample charts · illustrative data</span></div>
+      <div className="mt-10 grid gap-5 lg:grid-cols-2">
+        <div className="card-line p-6 md:p-8"><div className="flex items-start justify-between"><div><h3 className="font-display text-2xl">Import–export growth</h3><p className="mt-1 text-[11px] text-[#7b8679]">Example trend only · illustrative data</p></div><span className="border border-[#ddd8ca] p-2 text-[#718b5c]"><BarChart3 size={17}/></span></div>
+          <div className="mt-8 flex h-[205px] items-end gap-3 border-b border-l border-[#d8d4c7] px-3">
+            {[35,50,43,68,60,83,73,94].map((height,i)=><div key={i} className="group relative flex h-full flex-1 items-end"><span className="w-full bg-[#718b5c] transition-colors group-hover:bg-[#d5a34c]" style={{height:`${height}%`}}/><span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] text-[#858878]">{years[i%5]}</span></div>)}
+          </div><div className="mt-10 flex items-center gap-2 text-[10px] text-[#6e7a6f]"><span className="h-2 w-2 bg-[#718b5c]"/> Illustrative index (not actual trade volume)</div>
+        </div>
+        <div className="card-line p-6 md:p-8"><div className="flex items-start justify-between"><div><h3 className="font-display text-2xl">Market strategy distribution</h3><p className="mt-1 text-[11px] text-[#7b8679]">Example allocation only · illustrative data</p></div><span className="border border-[#ddd8ca] p-2 text-[#718b5c]"><Globe2 size={17}/></span></div>
+          <div className="mt-7 flex flex-col items-center gap-7 sm:flex-row"><div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full" style={{background:'conic-gradient(#214c39 0 34%, #d5a34c 34% 59%, #8b9b71 59% 79%, #bb8160 79% 91%, #aec3b7 91% 100%)'}}><div className="grid h-24 w-24 place-items-center rounded-full bg-[#fbf9f2] text-center"><span className="font-display text-xl">Illustrative</span><span className="text-[8px] uppercase tracking-wider text-[#718074]">allocation</span></div></div>
+            <div className="grid grid-cols-2 gap-x-5 gap-y-3 text-[10px] text-[#68766c]">{[['South Asia','#214c39'],['Gulf','#d5a34c'],['Europe','#8b9b71'],['East Asia','#bb8160'],['Other','#aec3b7']].map(([label,color])=><span key={label} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{background:color}}/>{label}</span>)}</div>
+          </div><p className="mt-6 text-[10px] text-[#7e8779]">Illustrative categories and proportions; not actual company activity.</p>
+        </div>
+      </div>
+    </div>
+  </section>;
+}
+function Approach() {
+  const steps=[
+    ['Product & Market Intelligence','We identify potential products and analyze market opportunities to support informed import-export decisions.',Compass],
+    ['Trade Standards & Compliance','We provide guidance on relevant regulations, certifications, documentation and compliance requirements.',BadgeCheck],
+    ['Global Buyer–Supplier Network','We help businesses identify potential international buyers and suppliers and build dependable relationships.',Globe2],
+    ['End-to-End Trade Execution','From sourcing to shipment coordination, we support import-export processes through organized planning.',PackageCheck],
+  ] as const;
+  return <section id="approach" className="section-pad bg-[#fbf9f2]">
+    <div className="wrap"><div className="grid gap-9 lg:grid-cols-[.7fr_1.3fr]"><SectionIntro eyebrow="A clear process" title="From first question to a considered next step." copy="A practical way of working that brings product, market and movement into the same conversation."/>
+      <div className="grid gap-0 sm:grid-cols-2">
+        {steps.map(([title,text,Icon],i)=><article key={title} className="relative border-b border-[#e2ddcf] py-6 sm:odd:mr-6 sm:even:ml-6">
+          <span className="absolute right-0 top-5 font-display text-4xl text-[#ddd7c7]">0{i+1}</span><span className="grid h-11 w-11 place-items-center bg-[#e9e5d8] text-[#5e7953]"><Icon size={20}/></span><h3 className="font-display mt-5 max-w-[240px] text-xl">{title}</h3><p className="mt-2 max-w-[300px] text-xs leading-6 text-[#707c70]">{text}</p>
+        </article>)}
+      </div>
+    </div></div>
+  </section>;
+}
+function News() {
+  return <section id="news" className="section-pad bg-[#e9e5d8]">
+    <div className="wrap"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><SectionIntro eyebrow="Notes from the trade" title="News & blogs" copy="Sample editorial topics for future updates. These examples do not describe completed transactions by the company."/><span className="mb-2 text-[10px] uppercase tracking-[.14em] text-[#8b7959]">Sample entries · editable</span></div>
+      <div className="mt-11 grid gap-5 md:grid-cols-3">
+        {blogs.map(([title,text,tag],i)=><article key={title} className="group overflow-hidden bg-[#f7f4eb]">
+          <div className="image-zoom relative h-[220px] overflow-hidden"><img src={i===1?produceImage:heroImage} alt={`${tag}: ${title}`} className="h-full w-full object-cover"/><div className="absolute inset-0 bg-gradient-to-t from-[#132d21]/60 to-transparent"/><span className="absolute bottom-4 left-5 text-[9px] font-semibold uppercase tracking-[.16em] text-[#f1d18b]">{tag}</span></div>
+          <div className="p-6"><p className="text-[9px] font-bold uppercase tracking-[.14em] text-[#9b7535]">Trade perspective · sample</p><h3 className="font-display mt-3 text-[23px] leading-tight">{title}</h3><p className="mt-3 text-xs leading-6 text-[#6f7b70]">{text}</p><Anchor to="contact" className="btn-outline mt-5">Read more <ArrowRight size={13}/></Anchor></div>
+        </article>)}
+      </div>
+    </div>
+  </section>;
+}
+function GlobalPresence() {
+  return <section className="relative overflow-hidden bg-[#193e2d] py-20 text-[#f7f4eb]">
+    <div className="absolute -right-28 -top-48 h-[570px] w-[570px] rounded-full border border-white/[.08]"/><div className="absolute -right-12 -top-32 h-[430px] w-[430px] rounded-full border border-white/[.08]"/>
+    <div className="wrap relative grid items-center gap-12 lg:grid-cols-[.82fr_1.18fr]">
+      <div><SectionIntro eyebrow="A world of possibilities" title="Our global presence" copy="Expanding businesses across international markets — one informed connection at a time." light/><p className="mt-6 max-w-lg text-xs leading-6 text-white/55">The countries below are example markets for discussion, not confirmed operating destinations or existing trade routes for KRISHI SARTHAK VENTURES LLP.</p><Anchor to="contact" className="mt-7 inline-flex items-center gap-2 border-b border-[#d5a34c] pb-2 text-xs font-semibold text-[#f0d18f]">Discuss a market <ArrowRight size={14}/></Anchor></div>
+      <div className="border border-white/15 bg-white/[.045] p-6 md:p-8">
+        <div className="mb-7 flex items-center justify-between"><span className="text-[10px] uppercase tracking-[.16em] text-[#e5c47c]">Potential market examples</span><Globe2 size={21} className="text-[#e5c47c]"/></div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{markets.map((market,i)=><div key={market} className="flex items-center gap-2 border border-white/10 px-3 py-3 text-[11px] text-white/80"><span className="text-[9px] text-[#e3bd72]">{String(i+1).padStart(2,'0')}</span>{market}</div>)}</div>
+        <p className="mt-5 text-[9px] leading-5 text-white/45">Illustrative country list only. Market access and any business activity must be independently confirmed.</p>
+      </div>
+    </div>
+  </section>;
+}
+function Careers() {
+  return <section id="careers" className="bg-[#d5a34c] py-14">
+    <div className="wrap flex flex-col justify-between gap-7 md:flex-row md:items-center"><div><span className="eyebrow !text-[#594b2f]">People make trade move</span><h2 className="font-display mt-3 text-3xl text-[#1d392d] md:text-4xl">Careers at KRISHI SARTHAK VENTURES LLP</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-[#4e533e]">We welcome individuals interested in agricultural trade, international business, logistics, sourcing and business development. No active vacancies are being advertised here.</p></div><Anchor to="contact" className="inline-flex shrink-0 items-center gap-3 border border-[#314537] px-5 py-4 text-xs font-bold text-[#1d392d] transition hover:bg-[#214c39] hover:text-white">Explore opportunities <ArrowUpRight size={15}/></Anchor></div>
+  </section>;
+}
+function Contact() {
+  const [success,setSuccess]=useState(false);
+  const [formError,setFormError]=useState('');
+  const submit=(event:FormEvent<HTMLFormElement>)=>{
+    event.preventDefault(); const form=event.currentTarget;
+    if(!form.reportValidity()){setFormError('Please complete the required fields with a valid email address.');return;}
+    setFormError('');setSuccess(true);form.reset();
+  };
+  return <section id="contact" className="section-pad bg-[#f7f4eb]">
+    <div className="wrap">
+      <div className="grid gap-12 lg:grid-cols-[.83fr_1.17fr]">
+        <div><SectionIntro eyebrow="Let's talk business" title="Let's discuss your global trade requirements" copy="Have questions about agricultural products, international sourcing, shipments, documentation or global trade opportunities? Get in touch to discuss your requirements."/>
+          <div className="mt-9 space-y-5">
+            <div className="flex gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center border border-[#d8cfb9] text-[#8b6c34]"><Send size={16}/></span><div><p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#8c7958]">Phone</p><a href="tel:[Add Company Phone Number]" className="mt-1 block text-sm font-semibold">[Add Company Phone Number]</a></div></div>
+            <div className="flex gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center border border-[#d8cfb9] text-[#8b6c34]"><Send size={16}/></span><div><p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#8c7958]">Email</p><a href="mailto:[Add Company Email]" className="mt-1 block text-sm font-semibold">[Add Company Email]</a></div></div>
+            <div className="flex gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center border border-[#d8cfb9] text-[#8b6c34]"><MapPin size={16}/></span><div><p className="text-[9px] font-bold uppercase tracking-[.16em] text-[#8c7958]">Registered office</p><p className="mt-1 text-sm font-semibold">[Add Registered Office Address]</p></div></div>
+          </div>
+          <div className="mt-8 flex h-[165px] items-center justify-center border border-dashed border-[#bcb7a8] bg-[#eeeadf] p-5 text-center">
+            <div><MapPin size={21} className="mx-auto text-[#8b6c34]"/><p className="mt-3 text-[11px] font-semibold">Office location map placeholder</p><p className="mt-1 text-[10px] text-[#7a8376]">Replace with the confirmed registered office location.</p></div>
+          </div>
+        </div>
+        <div className="border border-[#ddd8ca] bg-[#fbf9f2] p-6 md:p-9">
+          <div className="mb-7"><p className="font-display text-2xl">Tell us what you need.</p><p className="mt-2 text-xs text-[#7a8579]">Fields marked * are required.</p></div>
+          {success&&<div role="status" className="mb-5 flex gap-3 border border-[#a8b69a] bg-[#edf2e8] p-4 text-xs leading-5 text-[#38543d]"><Check size={17} className="mt-0.5 shrink-0"/><p><strong>Preview only.</strong> Your details were not sent. This form is a frontend preview and is not connected to an email service or backend.</p></div>}
+          {formError&&<p role="alert" className="mb-4 text-xs text-[#9d483c]">{formError}</p>}
+          <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-[10px] font-bold text-[#56675a]">Full name *<input required name="name" autoComplete="name" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Your full name"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Company name<input name="company" autoComplete="organization" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Company or organization"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Email address *<input required type="email" name="email" autoComplete="email" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="name@company.com"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Phone number<input type="tel" name="phone" autoComplete="tel" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="+ country code"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Country<input name="country" autoComplete="country-name" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Country"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Interested in<select name="interest" defaultValue="" className="mt-2 w-full border border-[#d9d4c7] bg-[#fbf9f2] px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]"><option value="" disabled>Select a product or service</option>{[...productsNav,...servicesNav].map(item=><option key={item}>{item}</option>)}</select></label>
+            <label className="block text-[10px] font-bold text-[#56675a] sm:col-span-2">Your message *<textarea required name="message" rows={4} className="mt-2 w-full resize-y border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Tell us a little about your requirements"/></label>
+            <div className="flex flex-col justify-between gap-4 sm:col-span-2 sm:flex-row sm:items-center"><p className="max-w-xs text-[9px] leading-4 text-[#889084]">Preview form only. No message will be transmitted or stored.</p><button type="submit" className="btn-primary">Send inquiry <ArrowRight size={15}/></button></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>;
+}
+function Footer() {
+  return <footer className="bg-[#173a2a] text-[#f7f4eb]">
+    <div className="wrap grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_.75fr_.9fr_.85fr]">
+      <div><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full border border-[#d5a34c]/50 text-[#e9c26f]"><Sprout size={21}/></span><span><span className="block text-[11px] font-extrabold tracking-[.1em]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] tracking-[.19em] text-white/55">VENTURES LLP</span></span></div><p className="mt-5 max-w-sm font-display text-xl leading-snug text-[#e1c781]">Empowering Global Trade Through Quality, Reliability, and Innovation.</p><p className="mt-4 max-w-sm text-xs leading-6 text-white/60">Connecting businesses with agricultural products, sourcing opportunities and international trade solutions.</p><div className="mt-5 flex gap-3 text-xs"><a href="#contact" aria-label="LinkedIn (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Linkedin size={14}/></a><a href="#contact" aria-label="Facebook (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Facebook size={14}/></a><a href="#contact" aria-label="Instagram (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Instagram size={14}/></a></div></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Quick links</p><ul className="mt-5 space-y-3">{navItems.map(([label,id])=><li key={id}><Anchor to={id} className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Product categories</p><ul className="mt-5 space-y-3">{productsNav.map(label=><li key={label}><Anchor to="categories" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Trade services</p><ul className="mt-5 space-y-3">{servicesNav.map(label=><li key={label}><Anchor to="services" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul><div className="mt-7 space-y-2 text-[10px] leading-5 text-white/65"><p>Phone: [Add Company Phone Number]</p><p>Email: [Add Company Email]</p><p>Address: [Add Registered Office Address]</p></div></div>
+    </div>
+    <div className="border-t border-white/15"><div className="wrap flex flex-col justify-between gap-2 py-5 text-[9px] text-white/50 sm:flex-row"><p>© 2026 KRISHI SARTHAK VENTURES LLP. All Rights Reserved.</p><p>Company details and contact information are editable placeholders.</p></div></div>
+  </footer>;
+}
+function App() {
+  return <div className="grain min-h-[100dvh]">
+    <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:p-3">Skip to content</a>
+    <Header/><main id="main-content"><Hero/><CategorySection/><Highlights/><ProductCollection/><About/><Compliance/><Services/><Growth/><Approach/><News/><GlobalPresence/><Careers/><Contact/></main><Footer/>
+  </div>;
+}
+export default App;

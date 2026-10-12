@@ -1,0 +1,595 @@
+Create a basic, modern, responsive import-export business website for KRISHI SARTHAK VENTURES LLP.
+
+OBJECTIVE:
+Build the basic structure and homepage design using the content provided below. The website should follow the structure of a professional import-export company website, with product categories, services, company information, international markets, news, and contact details.
+
+Do not ask me to provide any reference HTML file. All required website content is included in this prompt.
+
+TECHNOLOGY:
+- Use Next.js with TypeScript.
+- Use Tailwind CSS for styling.
+- Use reusable React components.
+- Use Lucide React for icons.
+- Keep the project structure clean and simple.
+- Make the website fully responsive on desktop, tablet, and mobile.
+- Use appropriate agricultural product, shipping, logistics, and international trade images.
+- Use simple animations and smooth scrolling.
+- Do not build a backend, database, authentication system, or admin panel at this stage.
+
+BRAND:
+Company Name: KRISHI SARTHAK VENTURES LLP
+
+Industry: Import-Export, Agricultural Products, International Trade, Global Trade Consultancy, and Logistics.
+
+Create a professional brand identity suitable for an Indian agricultural export company.
+
+DESIGN AND IMPLEMENTATION:
+
+Decide the website's design, color palette, typography, layout, spacing, animations, visual effects, and overall user experience independently.
+Use your own judgment to create a professional, modern, and responsive business website suitable for KRISHI SARTHAK VENTURES LLP.
+Focus on implementing the complete website structure, navigation, content sections, product categories, services, and basic functionality specified in this prompt.
+Do not ask me to select colors, themes, layouts, or other design preferences. Make these decisions yourself.
+Ensure the website works properly across desktop, tablet, and mobile devices.
+WEBSITE STRUCTURE AND CONTENT:
+
+1. TOP CONTACT BAR
+
+Display the following information:
+
+Phone: [Add Company Phone Number]
+Email: [Add Company Email]
+Address: [Add Registered Office Address]
+
+Include LinkedIn, Facebook, and Instagram icons.
+
+Do not use AAAENSA Global LLP's contact information. Use editable placeholders until the correct company details are available.
+
+2. NAVIGATION BAR
+
+Display the company name or logo:
+
+KRISHI SARTHAK VENTURES LLP
+
+Navigation items:
+- Home
+- About Us
+- Our Products
+- Our Services
+- News & Blogs
+- Careers
+- Contact Us
+
+OUR PRODUCTS dropdown:
+- Fresh Fruits & Vegetables
+- Frozen Vegetables
+- Dehydrated Powders
+- Spices & Herbs
+- Pulses & Grains
+- Dry Fruits & Nuts
+- Construction & Road Materials
+
+OUR SERVICES dropdown:
+- Shipment Services
+- Global Trade Consultancy
+- Freight Forwarding & Logistics
+- Documentation Services
+
+Do not include Export–Import Training anywhere in the website.
+
+3. HERO SECTION
+
+Main heading:
+KRISHI SARTHAK VENTURES LLP
+
+Hero title:
+Global Trade Solutions
+
+Description:
+Connecting businesses with global markets through product intelligence, international trade expertise, reliable sourcing, and end-to-end trade support.
+
+Display the following highlights:
+- Product & Market Intelligence
+- Global Trade Standards & Certifications
+- Country Selection & Trade Opportunities
+- Buyers–Suppliers Network Support
+- End-to-End Trade Execution
+
+Primary button:
+Get Trade Consultation
+
+The button should navigate to the Contact Us section.
+
+Use a visually attractive agricultural export or international shipping background image with a dark overlay to maintain text readability.
+
+4. PRODUCT CATEGORIES
+
+Section heading:
+Discover Our Wide Range of Products
+
+Display six product category cards with images, titles, and View Details buttons.
+
+CATEGORY 1: Fresh Fruits & Vegetables
+
+Description:
+Fresh agricultural produce sourced for domestic and international markets, with an emphasis on quality, freshness, and export requirements.
+
+CATEGORY 2: Frozen Vegetables
+
+Description:
+Frozen vegetable products intended for international markets, with attention to product quality, storage, packaging, and transportation requirements.
+
+CATEGORY 3: Dehydrated Powders
+
+Description:
+Processed fruit and vegetable powders suitable for food processing and other relevant commercial applications.
+
+CATEGORY 4: Spices & Herbs
+
+Description:
+A range of Indian spices and herbs for international buyers seeking quality agricultural products and reliable sourcing.
+
+CATEGORY 5: Pulses & Grains
+
+Description:
+Agricultural commodities including pulses and grains for domestic and international trade.
+
+CATEGORY 6: Dry Fruits & Nuts
+
+Description:
+A selection of dry fruits and nuts for buyers seeking quality products and dependable supply arrangements.
+
+CATEGORY 7: Construction & Road Materials
+
+Description:
+Construction and road-related materials for commercial and infrastructure applications.
+
+Although there are seven categories, arrange them in a visually balanced grid that works on all screen sizes.
+
+5. BUSINESS HIGHLIGHTS
+
+Create a horizontal statistics section with four counters.
+
+Display these values as editable placeholders, not as verified company achievements:
+
+- 10+ Years in Global Trade
+- 25+ Countries Served
+- 1500+ Global Buyers & Suppliers Network
+- 3000+ Successful Trade Executions
+
+IMPORTANT:
+These figures are inherited from the reference website and are not verified for KRISHI SARTHAK VENTURES LLP. Keep them configurable and mark them for confirmation before publishing.
+
+6. OUR MAJOR IMPORT-EXPORT PRODUCTS
+
+Section heading:
+Our Products
+
+Subheading:
+Our Major Import-Export Grade Products
+
+Display product cards for the following products.
+
+PRODUCT 1: Apple
+
+Description:
+Delicious, nutritious, sweet, and globally demanded fresh fruit.
+
+Button: View Product
+
+PRODUCT 2: Dragon Fruit
+
+Description:
+An exotic, high-demand fruit known for its vibrant appearance.
+
+Button: View Product
+
+PRODUCT 3: Banana
+
+Description:
+Fresh bananas sourced for domestic and international markets.
+
+Button: View Product
+
+PRODUCT 4: Coconut
+
+Description:
+Fresh coconuts for commercial and international trade.
+
+Button: View Product
+
+PRODUCT 5: Indian Onion
+
+Description:
+Indian onions valued for their distinctive flavor and commercial demand.
+
+Button: View Product
+
+PRODUCT 6: Rice
+
+Description:
+Indian Basmati and Non-Basmati rice for domestic and international markets.
+
+Button: View Product
+
+PRODUCT 7: Dates
+
+Description:
+Dates for domestic consumption and international trade.
+
+Button: View Product
+
+PRODUCT 8: Gypsum
+
+Description:
+Gypsum for construction and industrial applications.
+
+Button: View Product
+
+Use relevant images for each product.
+
+Each card should contain a product image, product name, short description, and View Product button.
+
+Use appropriate product detail routes or simple placeholder links for now.
+
+7. ABOUT OUR COMPANY
+
+Section heading:
+About KRISHI SARTHAK VENTURES LLP
+
+Main heading:
+Your Partner in Global Trade
+
+Description:
+
+KRISHI SARTHAK VENTURES LLP is focused on connecting businesses with international markets through agricultural product sourcing, market intelligence, and global trade support.
+
+Our business approach emphasizes product quality, reliable sourcing, buyer-supplier relationships, and efficient coordination throughout the import-export process.
+
+We aim to help businesses identify market opportunities, understand international trade requirements, and establish dependable commercial relationships across borders.
+
+Our services cover product sourcing, international trade coordination, shipment support, and documentation guidance.
+
+We strive to deliver professional service, build long-term business relationships, and support our clients in navigating the complexities of international trade.
+
+Button:
+Read More
+
+Use a professional agricultural export or international trade image alongside the text.
+
+Do not invent company history, awards, certifications, or achievements.
+
+8. CERTIFICATIONS AND COMPLIANCE
+
+Section heading:
+Certifications & Compliance
+
+Create a horizontal, scrollable section with cards or icons for:
+
+- IEC – Import Export Code
+- APEDA Registration
+- FSSAI License
+- GSTIN Registration
+- MSME (Udyam) Registration
+- FIEO Membership
+- Coconut Development Board Registration
+- Spices Board Registration
+- Halal Certification
+- Kosher Certification
+- ISO Certification
+
+IMPORTANT:
+These are reference categories, not verified certifications of KRISHI SARTHAK VENTURES LLP.
+
+Display them as applicable certification or registration categories. Do not use another company's certificates, registration numbers, or logos as proof of our company's credentials.
+
+Allow the section to be updated when our actual registrations and certifications are confirmed.
+
+9. OUR SERVICES
+
+Section heading:
+Our Services
+
+Subheading:
+Comprehensive Global Trade Services
+
+Create four service cards with images, descriptions, and Read More buttons.
+
+SERVICE 1: Shipment Services
+
+Description:
+Complete support for group and individual shipments, including product sourcing, documentation guidance, container booking, customs clearance coordination, and logistics.
+
+Button: Read More
+
+SERVICE 2: Global Trade Consultancy
+
+Description:
+Expert advisory services to help businesses navigate international trade regulations, optimize their trade strategies, identify opportunities, and expand into global markets.
+
+Button: Read More
+
+SERVICE 3: Freight Forwarding & Logistics
+
+Description:
+End-to-end logistics coordination designed to support safe, timely, and efficient international shipment handling across sea, land, and air.
+
+Button: Read More
+
+SERVICE 4: Documentation Services
+
+Description:
+Registration and compliance support related to IEC, DGFT, RCMC, AD Code, ICEGATE, APEDA, FSSAI, ISO, MSME, and other applicable trade requirements.
+
+Button: Read More
+
+Do not add any Export–Import Training card, link, heading, or description.
+
+10. OUR GROWTH & STRATEGY
+
+Section heading:
+Our Growth & Strategy
+
+Subheading:
+Driving Global Trade Growth
+
+Create two simple, responsive chart containers.
+
+Chart 1:
+Import Export Growth
+
+Display a sample bar chart showing import-export growth over several years.
+
+Chart 2:
+Market Strategy Distribution
+
+Display a sample pie or doughnut chart showing different market categories.
+
+Use clearly labelled illustrative data. Do not present sample chart data as actual company performance.
+
+Use a lightweight chart library if required.
+
+11. OUR APPROACH
+
+Create a four-step section explaining how we support international trade.
+
+STEP 1: Product & Market Intelligence
+
+Description:
+We identify potential products and analyze market opportunities to help businesses make informed import-export decisions.
+
+STEP 2: Trade Standards & Compliance
+
+Description:
+We provide guidance on relevant international trade regulations, certifications, documentation, and compliance requirements.
+
+STEP 3: Global Buyer-Supplier Network
+
+Description:
+We help businesses identify potential international buyers and suppliers and develop reliable commercial relationships.
+
+STEP 4: End-to-End Trade Execution
+
+Description:
+From sourcing to shipment coordination, we support the import-export process through organized planning and execution.
+
+Display these four steps using icons, short descriptions, and a clean visual layout.
+
+12. NEWS & BLOGS
+
+Section heading:
+News & Blogs
+
+Create three blog cards.
+
+BLOG 1:
+Title: Premium Apples Imported from Iran
+
+Description:
+An overview of sourcing premium-grade fresh apples from international suppliers, including applicable documentation and import compliance considerations.
+
+BLOG 2:
+Title: Dragon Fruit Sourcing from Vietnam
+
+Description:
+Explore international sourcing opportunities for export-quality dragon fruit, including product quality and temperature-controlled logistics considerations.
+
+BLOG 3:
+Title: Successful Onion Export Shipment
+
+Description:
+Learn about the key considerations involved in sorting, packaging, documentation, and logistics coordination for international onion shipments.
+
+Each card should have:
+- Relevant image
+- Blog title
+- Short description
+- Read More link
+
+These are sample blog entries. Keep them editable and do not imply that KRISHI SARTHAK VENTURES LLP completed these specific transactions unless verified.
+
+13. OUR GLOBAL PRESENCE
+
+Section heading:
+Our Global Presence
+
+Subheading:
+Expanding Businesses Across International Markets
+
+Create a global trade section featuring:
+- A world map or globe illustration
+- A list of potential international markets
+- Country flags or country cards
+- A clean international business design
+
+Reference market examples:
+- United Arab Emirates
+- Saudi Arabia
+- Oman
+- Qatar
+- Kuwait
+- Bahrain
+- Iran
+- Turkey
+- Vietnam
+- Sri Lanka
+- United Kingdom
+- Netherlands
+- Canada
+
+Treat these as example markets rather than confirmed operating destinations for our company.
+
+Do not claim that KRISHI SARTHAK VENTURES LLP currently exports to or imports from these countries unless verified.
+
+14. CAREERS
+
+Section heading:
+Careers at KRISHI SARTHAK VENTURES LLP
+
+Description:
+We welcome individuals interested in contributing to agricultural trade, international business, logistics, sourcing, and business development.
+
+Create a simple careers section with a button:
+
+Explore Opportunities
+
+For now, link the button to a basic Careers page or a contact section.
+
+Do not invent active job vacancies.
+
+15. CONTACT US
+
+Section heading:
+Contact KRISHI SARTHAK VENTURES LLP
+
+Subheading:
+Let's Discuss Your Global Trade Requirements
+
+Description:
+Have questions about agricultural products, international sourcing, shipments, documentation, or global trade opportunities? Contact our team to discuss your requirements.
+
+Display these contact fields:
+
+Phone: [Add Company Phone Number]
+Email: [Add Company Email]
+Address: [Add Registered Office Address]
+
+Create a contact form with the following fields:
+
+- Full Name
+- Company Name
+- Email Address
+- Phone Number
+- Country
+- Product or Service Interested In
+- Message
+
+Submit button:
+Send Inquiry
+
+For the initial version, implement basic frontend validation and a clear success or placeholder message. Do not claim that an inquiry has been delivered unless a backend or email service is connected.
+
+Include an editable map placeholder for the company's actual office location.
+
+16. FOOTER
+
+Display:
+
+KRISHI SARTHAK VENTURES LLP
+
+Tagline:
+Empowering Global Trade Through Quality, Reliability, and Innovation.
+
+Footer description:
+Connecting businesses with agricultural products, sourcing opportunities, and international trade solutions.
+
+Quick Links:
+- Home
+- About Us
+- Our Products
+- Our Services
+- News & Blogs
+- Careers
+- Contact Us
+
+Product Links:
+- Fresh Fruits & Vegetables
+- Frozen Vegetables
+- Dehydrated Powders
+- Spices & Herbs
+- Pulses & Grains
+- Dry Fruits & Nuts
+- Construction & Road Materials
+
+Service Links:
+- Shipment Services
+- Global Trade Consultancy
+- Freight Forwarding & Logistics
+- Documentation Services
+
+Contact Details:
+- Phone: [Add Company Phone Number]
+- Email: [Add Company Email]
+- Address: [Add Registered Office Address]
+
+Include social media icons and a copyright line:
+
+© 2026 KRISHI SARTHAK VENTURES LLP. All Rights Reserved.
+
+17. BASIC SEO
+
+Set the website title to:
+
+KRISHI SARTHAK VENTURES LLP | Agricultural Exports & Global Trade
+
+Use this meta description:
+
+KRISHI SARTHAK VENTURES LLP connects businesses with agricultural products, international sourcing opportunities, import-export services, shipment coordination, and global trade solutions.
+
+Use relevant SEO keywords naturally throughout the website:
+- Agricultural Exporter India
+- Fresh Fruits and Vegetables Export
+- Indian Agricultural Products
+- Spices and Herbs Export
+- Pulses and Grains Export
+- International Trade Solutions
+- Import Export Services India
+- Global Trade Consultancy
+- Freight Forwarding and Logistics
+- Export Documentation Services
+
+Configure basic metadata, Open Graph tags, a favicon placeholder, and appropriate image alt text.
+
+Do not use AAAENSA Global LLP's website URL, logo, canonical URL, social profiles, or company-specific structured data.
+
+18. BASIC FUNCTIONALITY
+
+Ensure the following features work:
+
+- Responsive navigation menu
+- Mobile navigation drawer or dropdown
+- Product category cards
+- Service cards
+- Functional internal navigation
+- Smooth scrolling
+- Working call-to-action links
+- Basic contact form validation
+- Responsive image galleries or sliders where appropriate
+- Reusable header and footer
+- Basic SEO metadata
+
+Use placeholder contact information and local placeholder assets where required.
+
+FINAL REQUIREMENTS:
+
+1. Build the basic website structure and homepage first.
+2. Include every section and the content provided in this prompt.
+3. Do not omit any product category or service.
+4. Exclude all Export–Import Training-related content from navigation, homepage, service cards, and footer.
+5. Do not copy AAAENSA Global LLP's identity, contact details, certificates, or unverified business achievements.
+6. Use KRISHI SARTHAK VENTURES LLP as the website's company name throughout.
+7. Keep the code clean, modular, and easy to extend.
+8. Use reusable components instead of putting the entire website into one large component.
+9. Ensure the website runs without errors.
+10. Focus on the basic structure, visual design, and complete homepage content. Do not build unnecessary advanced functionality.
+
+Start implementing the website now.
