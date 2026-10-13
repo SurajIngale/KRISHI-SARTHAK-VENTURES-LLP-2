@@ -7,7 +7,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export const asset = (path: string) => (path.startsWith('http') ? path : `${basePath}${path.startsWith('/') ? path : `/${path}`}`);
 
 const heroImage = asset('/hero-harvest.png');
-const heroVideo = asset('/cargo_ship_video.mp4');
+const heroVideo = asset('/cargo_ship_video_2.mp4');
 const produceImage = asset('/produce-market.png');
 
 const rawCategories = [
