@@ -138,6 +138,16 @@ function Anchor({to,children,className='',...props}:AnchorHTMLAttributes<HTMLAnc
 function SectionIntro({eyebrow,title,copy,light=false}:{eyebrow:string;title:string;copy?:string;light?:boolean}) {
   return <div className="max-w-2xl"><span className={`eyebrow ${light?'!text-[#D9A441]':''}`}>{eyebrow}</span><h2 className={`section-title mt-5 ${light?'!text-[#f7f4eb]':''}`}>{title}</h2>{copy&&<p className={`body-copy mt-5 max-w-xl ${light?'!text-white/70':''}`}>{copy}</p>}</div>;
 }
+const featureRibbonItems = [
+  { num: '01', title: 'Product Intelligence', desc: 'Market analysis & pricing trends', glow: 'orange' as const },
+  { num: '02', title: 'Trade Compliance', desc: 'APEDA, FSSAI & phytosanitary protocols', glow: 'green' as const },
+  { num: '03', title: 'Country Opportunities', desc: 'Targeted global market mapping', glow: 'orange' as const },
+  { num: '04', title: 'Buyer–Supplier Network', desc: 'Direct farm clusters & vetted sources', glow: 'green' as const },
+  { num: '05', title: 'End-to-End Coordination', desc: 'Port clearance & reefer cold transit', glow: 'orange' as const },
+];
+// Repeat twice per half to ensure full seamless coverage across all screens from mobile to ultrawide
+const ribbonHalfItems = [...featureRibbonItems, ...featureRibbonItems];
+
 function Hero() {
   return (
     <section
@@ -232,39 +242,68 @@ function Hero() {
         </div>
       </div>
 
-      {/* Bottom Feature Ribbon - Fully visible within initial viewport */}
-      <div className="relative z-10 w-full overflow-hidden border-t border-[#D9A441]/20 bg-gradient-to-t from-[#050e18]/95 via-[#071524]/85 to-transparent backdrop-blur-md">
-        <div className="mx-auto w-full max-w-[1400px] px-3 py-2.5 sm:px-5 sm:py-3 lg:px-6 lg:py-3">
-          <div className="flex overflow-x-auto no-scrollbar gap-2.5 pb-1 pt-0.5 scroll-smooth snap-x snap-mandatory -mx-3 px-3 sm:-mx-5 sm:px-5 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-5 lg:gap-3 lg:overflow-visible lg:pb-0 lg:pt-0">
-            {[
-              { num: '01', title: 'Product Intelligence', desc: 'Market analysis & pricing trends', glow: 'orange' as const },
-              { num: '02', title: 'Trade Compliance', desc: 'APEDA, FSSAI & phytosanitary protocols', glow: 'green' as const },
-              { num: '03', title: 'Country Opportunities', desc: 'Targeted global market mapping', glow: 'orange' as const },
-              { num: '04', title: 'Buyer–Supplier Network', desc: 'Direct farm clusters & vetted sources', glow: 'green' as const },
-              { num: '05', title: 'End-to-End Coordination', desc: 'Port clearance & reefer cold transit', glow: 'orange' as const },
-            ].map((item) => (
-              <GlowCard
-                key={item.num}
-                customSize
-                glowColor={item.glow}
-                className="!grid-rows-1 flex w-[215px] shrink-0 snap-start flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 text-left shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D9A441]/50 sm:w-[235px] min-h-[72px] sm:min-h-[78px] lg:w-auto lg:min-h-[80px]"
-              >
-                <div>
-                  <div className="mb-1 flex items-center gap-1.5">
-                    <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
-                      {item.num}
-                    </span>
-                    <span className="h-px flex-1 bg-white/15" />
+      {/* Bottom Feature Ribbon - Continuous slow infinite loop marquee */}
+      <div className="relative z-10 w-full overflow-hidden border-t border-[#D9A441]/20 bg-gradient-to-t from-[#050e18]/95 via-[#071524]/85 to-transparent backdrop-blur-md py-2.5 sm:py-3 select-none">
+        {/* Soft edge masks for smooth fade in/out on left and right */}
+        <div className="pointer-events-none absolute left-0 inset-y-0 w-8 sm:w-16 md:w-24 bg-gradient-to-r from-[#050e18]/95 via-[#050e18]/60 to-transparent z-20" />
+        <div className="pointer-events-none absolute right-0 inset-y-0 w-8 sm:w-16 md:w-24 bg-gradient-to-l from-[#050e18]/95 via-[#050e18]/60 to-transparent z-20" />
+
+        {/* Marquee Track Container */}
+        <div className="w-full overflow-hidden no-scrollbar">
+          <div className="animate-ribbon-scroll flex items-center">
+            {/* Primary Track Half */}
+            <div className="flex shrink-0 items-center gap-2.5 sm:gap-3.5 pr-2.5 sm:pr-3.5">
+              {ribbonHalfItems.map((item, idx) => (
+                <GlowCard
+                  key={`ribbon-h1-${item.num}-${idx}`}
+                  customSize
+                  glowColor={item.glow}
+                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 sm:p-3 text-left shadow-md transition-all duration-300 hover:border-[#D9A441]/50 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
+                >
+                  <div>
+                    <div className="mb-1 flex items-center gap-1.5">
+                      <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
+                        {item.num}
+                      </span>
+                      <span className="h-px flex-1 bg-white/15" />
+                    </div>
+                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
+                      {item.title}
+                    </h4>
                   </div>
-                  <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
-                    {item.title}
-                  </h4>
-                </div>
-                <p className="-translate-y-1 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
-                  {item.desc}
-                </p>
-              </GlowCard>
-            ))}
+                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
+                    {item.desc}
+                  </p>
+                </GlowCard>
+              ))}
+            </div>
+
+            {/* Secondary Track Half (Exact clone for zero-gap seamless infinite loop) */}
+            <div className="flex shrink-0 items-center gap-2.5 sm:gap-3.5 pr-2.5 sm:pr-3.5" aria-hidden="true">
+              {ribbonHalfItems.map((item, idx) => (
+                <GlowCard
+                  key={`ribbon-h2-${item.num}-${idx}`}
+                  customSize
+                  glowColor={item.glow}
+                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 sm:p-3 text-left shadow-md transition-all duration-300 hover:border-[#D9A441]/50 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
+                >
+                  <div>
+                    <div className="mb-1 flex items-center gap-1.5">
+                      <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
+                        {item.num}
+                      </span>
+                      <span className="h-px flex-1 bg-white/15" />
+                    </div>
+                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
+                      {item.title}
+                    </h4>
+                  </div>
+                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
+                    {item.desc}
+                  </p>
+                </GlowCard>
+              ))}
+            </div>
           </div>
         </div>
       </div>

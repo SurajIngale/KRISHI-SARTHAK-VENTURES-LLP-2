@@ -490,3 +490,28 @@ body { font-family:var(--sans); background:var(--paper); color:var(--ink); }
 .nav-link:after { content:'';position:absolute;height:1px;left:0;right:100%;bottom:-6px;background:#D9A441;transition:right .25s; }
 .nav-link:hover { color:#967235; }.nav-link:hover:after { right:0; }
 @media(max-width:767px) { .wrap{width:min(100% - 36px,620px)}.section-pad{padding:72px 0}html{scroll-padding-top:75px} }
+
+/* Bottom Feature Ribbon Infinite Marquee Animation */
+@keyframes ribbon-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ribbon-scroll {
+  display: flex;
+  width: max-content;
+  flex-shrink: 0;
+  animation: ribbon-scroll 45s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 640px) {
+  .animate-ribbon-scroll {
+    animation-duration: 36s;
+  }
+}
+
