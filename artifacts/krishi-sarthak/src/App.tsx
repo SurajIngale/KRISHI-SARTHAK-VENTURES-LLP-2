@@ -7,7 +7,9 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export const asset = (path: string) => (path.startsWith('http') ? path : `${basePath}${path.startsWith('/') ? path : `/${path}`}`);
 
 const heroImage = asset('/hero-harvest.png');
+const heroImageVertical = asset('/hero-harvest-vertical.png');
 const heroVideo = asset('/cargo_ship_video_2.mp4');
+const heroVideoVertical = asset('/cargo_ship_video_vertical.mp4');
 const produceImage = asset('/produce-market.png');
 
 const rawCategories = [
@@ -134,13 +136,31 @@ function Anchor({to,children,className='',...props}:AnchorHTMLAttributes<HTMLAnc
   return <a href={`#${to}`} className={className} {...props}>{children}</a>;
 }
 function SectionIntro({eyebrow,title,copy,light=false}:{eyebrow:string;title:string;copy?:string;light?:boolean}) {
-  return <div className="max-w-2xl"><span className={`eyebrow ${light?'!text-[#e2bd75]':''}`}>{eyebrow}</span><h2 className={`section-title mt-5 ${light?'!text-[#f7f4eb]':''}`}>{title}</h2>{copy&&<p className={`body-copy mt-5 max-w-xl ${light?'!text-white/65':''}`}>{copy}</p>}</div>;
+  return <div className="max-w-2xl"><span className={`eyebrow ${light?'!text-[#D9A441]':''}`}>{eyebrow}</span><h2 className={`section-title mt-5 ${light?'!text-[#f7f4eb]':''}`}>{title}</h2>{copy&&<p className={`body-copy mt-5 max-w-xl ${light?'!text-white/70':''}`}>{copy}</p>}</div>;
 }
 function Hero() {
   return (
-    <section id="home" className="relative isolate min-h-[920px] overflow-hidden bg-black text-white md:min-h-[840px]">
+    <section
+      id="home"
+      className="relative isolate flex min-h-[calc(100svh-76px)] md:min-h-[calc(100svh-112px)] flex-col justify-between overflow-hidden bg-[#071320] text-white"
+    >
       {/* Background Video Layer - Vividly visible without heavy filters */}
       <div className="absolute inset-0 -z-30 overflow-hidden">
+        {/* Mobile Vertical Video (portrait orientation for screens < md) */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          poster={heroImageVertical}
+          className="h-full w-full object-cover object-center md:hidden"
+          aria-hidden="true"
+        >
+          <source src={heroVideoVertical} type="video/mp4" />
+        </video>
+
+        {/* Desktop / Tablet Horizontal Video (landscape orientation for screens >= md) */}
         <video
           autoPlay
           loop
@@ -148,69 +168,74 @@ function Hero() {
           playsInline
           preload="auto"
           poster={heroImage}
-          className="h-full w-full object-cover object-center"
+          className="hidden h-full w-full object-cover object-center md:block"
           aria-hidden="true"
         >
           <source src={heroVideo} type="video/mp4" />
         </video>
       </div>
 
-      {/* Reduced Shade Overlay: Light transparent cinematic scrim so cargo ship & ocean are vividly visible */}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-black/45 via-black/20 to-black/60" />
+      {/* Refined Translucent Dark Navy Gradient Overlay: allows the cargo ship and ocean to be vividly visible while keeping text crisp */}
+      {/* Light navy directional scrim */}
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-gradient-to-b from-[#061424]/50 via-[#081a2f]/25 to-[#050f1a]/65" />
 
-      {/* Subtle radial center vignette to naturally enhance text contrast */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.5)_100%)]" />
+      {/* Subtle radial center vignette for natural text depth without darkening the video */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(6,20,36,0.15)_0%,rgba(5,15,26,0.45)_100%)]" />
 
-      <div className="wrap relative flex min-h-[920px] flex-col items-center justify-center pb-36 pt-20 text-center md:min-h-[840px] md:pb-36 md:pt-20">
-        <div className="mx-auto flex max-w-[860px] flex-col items-center reveal">
+      {/* Smooth bottom blend into the feature ribbon */}
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 -z-10 bg-gradient-to-t from-[#050e18]/80 to-transparent" />
+
+      {/* Main Hero Content - Vertically centered with generous text size and comfortable height */}
+      <div className="wrap relative my-auto flex flex-1 flex-col items-center justify-center px-4 pt-8 pb-6 text-center sm:pt-10 sm:pb-8 md:pt-12 md:pb-9">
+        <div className="mx-auto flex max-w-[900px] flex-col items-center reveal">
           {/* Live Global Logistics Badge */}
-          <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-black/40 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[.2em] text-[#edcf8c] backdrop-blur-md shadow-md">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#34d399] opacity-75" />
+          <div className="mb-4 inline-flex max-w-[calc(100vw-32px)] items-center gap-2 rounded-full border border-[#D9A441]/40 bg-[#091b2e]/85 px-2.5 py-1 text-[8.5px] font-bold uppercase tracking-[.1em] text-[#D9A441] backdrop-blur-md shadow-md whitespace-nowrap min-[380px]:text-[9.5px] min-[380px]:tracking-[.14em] min-[380px]:px-3.5 sm:gap-2.5 sm:px-4 sm:py-1.5 sm:text-[10.5px] sm:tracking-[.22em] md:text-xs">
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#10b981]" />
             </span>
-            <span>Agricultural Sourcing · International Trade</span>
+            <span className="whitespace-nowrap">Agricultural Sourcing · International Trade</span>
           </div>
 
-          <p className="mb-4 text-xs font-bold tracking-[.24em] text-[#e3bb69] drop-shadow-md">
+          <p className="mb-3 text-[13px] font-bold tracking-[.26em] text-[#D9A441] drop-shadow-md sm:text-[13.5px]">
             KRISHI SARTHAK VENTURES LLP
           </p>
 
-          <h1 className="font-display max-w-[820px] text-[clamp(3.2rem,7.5vw,6.8rem)] leading-[.95] tracking-[-.045em] text-[#ffffff] drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+          <h1 className="font-display max-w-[880px] text-[clamp(2.75rem,5.6vw,5.2rem)] font-medium leading-[1.03] tracking-[-.038em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
             Global Trade<br />
-            <em className="font-normal text-[#f0ca78] italic">Solutions</em>
+            <em className="font-normal text-[#D9A441] italic drop-shadow-[0_2px_14px_rgba(217,164,65,0.4)]">Solutions</em>
           </h1>
 
-          <p className="mt-5 text-base font-semibold tracking-wide text-[#f5dfa8] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] md:text-lg">
+          <p className="mt-4 text-base font-semibold tracking-wide text-[#f4dfb5] drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] sm:text-lg md:text-xl">
             Rooted in trust. Connected across international borders.
           </p>
 
-          <p className="mt-5 max-w-[660px] text-[15px] leading-relaxed text-white/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] md:text-base">
+          <p className="mt-3.5 max-w-[700px] text-[15px] leading-relaxed text-white/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-[16px] md:text-[17px]">
             Connecting businesses with global markets through verified product intelligence, international trade expertise, reliable sourcing, and end-to-end export coordination.
           </p>
 
           {/* Action Buttons Centered */}
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-4 sm:mt-8">
             <Anchor
               to="contact"
-              className="inline-flex items-center gap-3 bg-[#d5a34c] px-7 py-4 text-xs font-bold text-[#1a3528] shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-300 hover:bg-[#e2ba70] hover:shadow-[0_6px_25px_rgba(213,163,76,0.5)] hover:-translate-y-0.5"
+              className="inline-flex items-center gap-3 bg-[#D9A441] px-7 py-3.5 text-xs font-bold text-[#0a1826] uppercase tracking-wider shadow-[0_4px_20px_rgba(217,164,65,0.4)] transition-all duration-300 hover:bg-[#e6b450] hover:shadow-[0_8px_30px_rgba(217,164,65,0.55)] hover:-translate-y-0.5 active:translate-y-0 sm:text-[13px]"
             >
               Get Trade Consultation <ArrowRight size={15} />
             </Anchor>
             <Anchor
               to="categories"
-              className="inline-flex items-center gap-2 border border-white/35 bg-black/35 px-6 py-4 text-xs font-semibold text-white backdrop-blur-md transition-all duration-300 hover:bg-black/55 hover:border-white/60 hover:text-[#eed59e] hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 border border-white/35 bg-[#091b2d]/65 px-7 py-3.5 text-xs font-semibold text-white uppercase tracking-wider backdrop-blur-md transition-all duration-300 hover:bg-[#091b2d]/90 hover:border-[#D9A441] hover:text-[#D9A441] hover:-translate-y-0.5 shadow-md sm:text-[13px]"
             >
-              Explore Our Sourcing <ArrowDown size={14} />
+              Explore Our Sourcing <ArrowDown size={14} className="text-[#D9A441]" />
             </Anchor>
           </div>
         </div>
       </div>
 
-      {/* Bottom Feature Ribbon - Replaced with Interactive Spotlight GlowCards */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 w-full border-t border-white/10 bg-gradient-to-t from-black/85 via-black/45 to-transparent backdrop-blur-md">
-        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 md:gap-4">
+      {/* Bottom Feature Ribbon - Fully visible within initial viewport */}
+      <div className="relative z-10 w-full overflow-hidden border-t border-[#D9A441]/20 bg-gradient-to-t from-[#050e18]/95 via-[#071524]/85 to-transparent backdrop-blur-md">
+        <div className="mx-auto w-full max-w-[1400px] px-3 py-2.5 sm:px-5 sm:py-3 lg:px-6 lg:py-3">
+          <div className="flex overflow-x-auto no-scrollbar gap-2.5 pb-1 pt-0.5 scroll-smooth snap-x snap-mandatory -mx-3 px-3 sm:-mx-5 sm:px-5 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-5 lg:gap-3 lg:overflow-visible lg:pb-0 lg:pt-0">
             {[
               { num: '01', title: 'Product Intelligence', desc: 'Market analysis & pricing trends', glow: 'orange' as const },
               { num: '02', title: 'Trade Compliance', desc: 'APEDA, FSSAI & phytosanitary protocols', glow: 'green' as const },
@@ -222,20 +247,20 @@ function Hero() {
                 key={item.num}
                 customSize
                 glowColor={item.glow}
-                className="!grid-rows-1 flex flex-col justify-between rounded-xl bg-black/45 p-4 text-left border-white/15 shadow-xl transition-all duration-300 hover:-translate-y-1 min-h-[96px]"
+                className="!grid-rows-1 flex w-[215px] shrink-0 snap-start flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 text-left shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#D9A441]/50 sm:w-[235px] min-h-[72px] sm:min-h-[78px] lg:w-auto lg:min-h-[80px]"
               >
                 <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[10px] font-bold font-mono tracking-wider text-[#e2bd75] bg-[#d5a34c]/20 px-2 py-0.5 rounded border border-[#d5a34c]/30">
+                  <div className="mb-1 flex items-center gap-1.5">
+                    <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
                       {item.num}
                     </span>
                     <span className="h-px flex-1 bg-white/15" />
                   </div>
-                  <h4 className="text-xs sm:text-[13px] font-bold text-white tracking-wide">
+                  <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
                     {item.title}
                   </h4>
                 </div>
-                <p className="mt-1 text-[11px] text-white/70 leading-snug">
+                <p className="-translate-y-1 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
                   {item.desc}
                 </p>
               </GlowCard>
@@ -258,7 +283,7 @@ function CategorySection() {
         />
         <div className="max-w-[280px] pb-1 text-xs leading-6 text-[#718074]">
           <p className="flex items-center gap-2 font-medium text-[#214c39]">
-            <BadgeCheck size={16} className="text-[#d5a34c] shrink-0" />
+            <BadgeCheck size={16} className="text-[#D9A441] shrink-0" />
             APEDA &amp; Phytosanitary Sourced
           </p>
           <p className="mt-1 text-[11px] text-[#718074]">
@@ -272,7 +297,7 @@ function CategorySection() {
         {categories.map((item) => (
           <article
             key={item.name}
-            className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#d5a34c] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden"
+            className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#D9A441] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden rounded-lg"
           >
             {/* Exactly identical size image container for all cards */}
             <div className="relative h-[210px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
@@ -285,13 +310,13 @@ function CategorySection() {
               <span className="absolute left-3.5 top-3.5 border border-white/40 bg-[#1d392d]/85 px-2.5 py-1 text-[9px] font-bold tracking-widest text-[#f5ebd2] backdrop-blur-xs">
                 CATEGORY {item.tag}
               </span>
-              <span className="absolute right-3.5 top-3.5 border border-[#d5a34c]/60 bg-[#d5a34c]/95 px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#1d392d] backdrop-blur-xs shadow-xs">
+              <span className="absolute right-3.5 top-3.5 border border-[#D9A441]/60 bg-[#D9A441] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#0a1826] backdrop-blur-xs shadow-xs">
                 {item.badge}
               </span>
               <button
                 type="button"
                 onClick={() => setSelectedCategory(item)}
-                className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#d5a34c] group-hover:scale-110"
+                className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
                 aria-label={`View ${item.name} specifications`}
               >
                 <ArrowUpRight size={15} />
@@ -301,10 +326,10 @@ function CategorySection() {
             {/* Exactly identical size card body */}
             <div className="p-5 flex flex-col flex-1 justify-between">
               <div>
-                <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#8a682f] transition-colors line-clamp-1">
+                <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#967235] transition-colors line-clamp-1">
                   {item.name}
                 </h3>
-                <p className="mt-1 text-[11px] font-semibold text-[#8a682f] tracking-wide line-clamp-1">
+                <p className="mt-1 text-[11px] font-semibold text-[#967235] tracking-wide line-clamp-1">
                   {item.subtitle}
                 </p>
                 <p className="mt-2.5 text-xs leading-5 text-[#6f7b70] line-clamp-3 min-h-[60px]">
@@ -329,13 +354,13 @@ function CategorySection() {
                 <button
                   type="button"
                   onClick={() => setSelectedCategory(item)}
-                  className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#8a682f] inline-flex items-center gap-1.5"
+                  className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
                 >
-                  View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+                  View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1 text-[#D9A441]" />
                 </button>
                 <Anchor
                   to="contact"
-                  className="text-[10px] font-bold uppercase tracking-wider text-[#8a682f] hover:underline"
+                  className="text-[10px] font-bold uppercase tracking-wider text-[#967235] hover:underline"
                 >
                   Inquire
                 </Anchor>
@@ -348,12 +373,12 @@ function CategorySection() {
       {/* Interactive Category Details Modal */}
       {selectedCategory && (
         <div
-          className="fixed inset-0 z-[60] grid place-items-center bg-[#122a1f]/70 p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-[60] grid place-items-center bg-[#122a1f]/75 p-4 backdrop-blur-xs"
           onClick={() => setSelectedCategory(null)}
           role="presentation"
         >
           <div
-            className="relative w-full max-w-lg overflow-hidden bg-[#fbf9f2] shadow-2xl border border-[#ddd8ca]"
+            className="relative w-full max-w-lg overflow-hidden bg-[#fbf9f2] shadow-2xl border border-[#ddd8ca] rounded-lg"
             role="dialog"
             aria-modal="true"
             aria-label={`${selectedCategory.name} specifications`}
@@ -376,13 +401,13 @@ function CategorySection() {
                 <X size={16} />
               </button>
               <div className="absolute bottom-4 left-5 right-5 text-white">
-                <span className="border border-[#d5a34c]/60 bg-[#d5a34c]/95 px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#1d392d]">
+                <span className="border border-[#D9A441]/60 bg-[#D9A441] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#0a1826]">
                   CATEGORY {selectedCategory.tag} · {selectedCategory.badge}
                 </span>
                 <h3 className="font-display mt-2 text-2xl text-[#f7f4eb] leading-tight">
                   {selectedCategory.name}
                 </h3>
-                <p className="text-xs text-[#edcf8c] font-medium mt-0.5">
+                <p className="text-xs text-[#D9A441] font-medium mt-0.5">
                   {selectedCategory.subtitle}
                 </p>
               </div>
@@ -391,7 +416,7 @@ function CategorySection() {
             {/* Modal Body */}
             <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#967235]">
                   Export Overview
                 </h4>
                 <p className="mt-1.5 text-xs leading-6 text-[#526457]">
@@ -400,7 +425,7 @@ function CategorySection() {
               </div>
 
               <div className="rounded-lg bg-[#f4eee1] p-3.5 border border-[#e4decb]">
-                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#967235]">
                   Key Varieties &amp; Commercial Grades
                 </h4>
                 <p className="mt-1 text-xs text-[#314537] font-medium leading-relaxed">
@@ -409,7 +434,7 @@ function CategorySection() {
               </div>
 
               <div className="rounded-lg bg-[#f4eee1] p-3.5 border border-[#e4decb]">
-                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#967235]">
                   Packaging &amp; Cold-Chain Sourcing
                 </h4>
                 <p className="mt-1 text-xs text-[#314537] font-medium leading-relaxed">
@@ -418,16 +443,16 @@ function CategorySection() {
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#8b682d]">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[#967235]">
                   Export Highlights
                 </h4>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {selectedCategory.highlights.map((h) => (
                     <span
                       key={h}
-                      className="inline-flex items-center gap-1 rounded-sm border border-[#d5a34c]/40 bg-[#fbf5e6] px-2.5 py-1 text-[10px] font-semibold text-[#8a682f]"
+                      className="inline-flex items-center gap-1 rounded-sm border border-[#D9A441]/40 bg-[#fbf5e6] px-2.5 py-1 text-[10px] font-semibold text-[#967235]"
                     >
-                      <Check size={12} className="text-[#718b5c]" />
+                      <Check size={12} className="text-[#214c39]" />
                       {h}
                     </span>
                   ))}
@@ -473,7 +498,7 @@ function ProductCollection() {
             <img src={image} alt={`${name} product`} className={`h-full w-full object-cover ${key==='rice'?'object-bottom':''}`}/>
             <div className="absolute inset-0 bg-gradient-to-t from-[#172f23]/50 to-transparent"/>
             <span className="absolute bottom-3 left-4 text-[9px] font-semibold uppercase tracking-[.17em] text-white">{i<6?'Agricultural product':'Trade product'}</span>
-            <button onClick={()=>setActive(name)} className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-[#f8f4e9] text-[#214c39] transition hover:bg-[#d5a34c]" aria-label={`View ${name} details`}><ArrowUpRight size={16}/></button>
+            <button onClick={()=>setActive(name)} className="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-full bg-[#f8f4e9] text-[#214c39] transition hover:bg-[#D9A441] hover:text-[#0a1826]" aria-label={`View ${name} details`}><ArrowUpRight size={16}/></button>
           </div>
           <div className="flex items-start justify-between gap-2 pt-4"><div><h3 className="font-display text-[23px]">{name}</h3><p className="mt-2 max-w-[245px] text-xs leading-5 text-[#758074]">{text}</p></div><span className="pt-1 text-[10px] text-[#9a865b]">0{i+1}</span></div>
           <button onClick={()=>setActive(name)} className="btn-outline mt-4">View product <ArrowRight size={13}/></button>
@@ -492,7 +517,7 @@ function About() {
   return <section id="about" className="section-pad bg-[#e9e5d8]">
     <div className="wrap grid items-center gap-12 lg:grid-cols-[.95fr_1.05fr] lg:gap-20">
       <div className="relative image-zoom">
-        <div className="absolute -left-3 -top-3 h-24 w-24 border-l border-t border-[#ba9451]"/>
+        <div className="absolute -left-3 -top-3 h-24 w-24 border-l border-t border-[#D9A441]"/>
         <img src={heroImage} alt="Agricultural fields reflecting the sourcing and trade focus of Krishi Sarthak Ventures" className="h-[420px] w-full object-cover md:h-[515px]"/>
         <div className="absolute bottom-5 left-5 max-w-[250px] bg-[#f7f4eb] p-5"><span className="eyebrow">Our perspective</span><p className="font-display mt-2 text-xl leading-tight">Trade starts with understanding what matters at both ends.</p></div>
       </div>
@@ -511,10 +536,10 @@ function About() {
 function Compliance() {
   return <section id="compliance" className="bg-[#214c39] py-14 text-[#f7f4eb]">
     <div className="wrap">
-      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="eyebrow !text-[#e2bd75]">Trade readiness</span><h2 className="font-display mt-3 text-3xl md:text-4xl">Certifications & compliance</h2></div><p className="max-w-[430px] text-xs leading-6 text-white/65">Applicable registration and certification categories vary by product, market and business activity. No company registrations are represented as confirmed here.</p></div>
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="eyebrow !text-[#D9A441]">Trade readiness</span><h2 className="font-display mt-3 text-3xl md:text-4xl">Certifications & compliance</h2></div><p className="max-w-[430px] text-xs leading-6 text-white/65">Applicable registration and certification categories vary by product, market and business activity. No company registrations are represented as confirmed here.</p></div>
       <div className="mt-8 flex gap-3 overflow-x-auto pb-3">
         {credentials.map((credential,i)=><div key={credential} className="min-w-[210px] border border-white/20 bg-white/[.06] p-4">
-          <span className="mb-4 grid h-8 w-8 place-items-center rounded-full border border-[#d5a34c]/60 text-[#edcf8c]"><BadgeCheck size={15}/></span><p className="text-xs font-semibold">{credential}</p><p className="mt-2 text-[9px] uppercase tracking-[.14em] text-[#c5c9b9]">Applicable category · confirm</p>
+          <span className="mb-4 grid h-8 w-8 place-items-center rounded-full border border-[#D9A441]/60 text-[#D9A441]"><BadgeCheck size={15}/></span><p className="text-xs font-semibold">{credential}</p><p className="mt-2 text-[9px] uppercase tracking-[.14em] text-[#c5c9b9]">Applicable category · confirm</p>
         </div>)}
       </div>
       <p className="mt-3 text-[10px] text-white/50">Reference categories only. Actual registrations and certifications are to be confirmed before publication.</p>
@@ -522,17 +547,62 @@ function Compliance() {
   </section>;
 }
 function Services() {
-  return <section id="services" className="section-pad bg-[#f7f4eb]">
-    <div className="wrap"><SectionIntro eyebrow="How we help" title="Comprehensive global trade services" copy="Thoughtful support across sourcing, preparation and movement — shaped around your product and requirements."/>
-      <div className="mt-12 grid gap-px bg-[#dcd7c9] md:grid-cols-2">
-        {services.map((service,i)=>{const Icon=service.icon;return <article key={service.name} className="group bg-[#f7f4eb] p-7 transition-colors hover:bg-[#eeeadf] md:p-9">
-          <div className="flex items-start justify-between"><span className="grid h-12 w-12 place-items-center border border-[#d7c9a6] text-[#967235]"><Icon size={21}/></span><span className="font-display text-3xl text-[#c8c1b0]">0{i+1}</span></div>
-          <h3 className="font-display mt-7 text-2xl">{service.name}</h3><p className="mt-3 max-w-lg text-[13px] leading-6 text-[#69776c]">{service.text}</p>
-          <Anchor to="contact" className="btn-outline mt-6">Read more <ArrowRight size={13}/></Anchor>
-        </article>})}
+  return (
+    <section id="services" className="section-pad bg-[#f7f4eb]">
+      <div className="wrap">
+        <SectionIntro
+          eyebrow="How we help"
+          title="Comprehensive global trade services"
+          copy="Thoughtful support across sourcing, preparation and movement — shaped around your product and requirements."
+        />
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
+          {services.map((service, i) => {
+            const Icon = service.icon;
+            return (
+              <article
+                key={service.name}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-[#ddd8ca] bg-[#fbf9f2] p-7 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#D9A441] hover:bg-white hover:shadow-xl md:p-9"
+              >
+                {/* Elegant top accent indicator that highlights on hover */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-transparent transition-colors duration-300 group-hover:bg-[#D9A441]" />
+
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-12 w-12 place-items-center rounded-lg border border-[#D9A441]/35 bg-[#f4eee1] text-[#967235] shadow-xs transition-all duration-300 group-hover:border-[#D9A441] group-hover:bg-[#214c39] group-hover:text-[#D9A441] group-hover:scale-105">
+                      <Icon size={22} />
+                    </span>
+                    <span className="font-display text-3xl font-light text-[#cfc7b4] transition-colors duration-300 group-hover:text-[#D9A441]">
+                      0{i + 1}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display mt-6 text-2xl font-medium text-[#1d392d] transition-colors duration-300 group-hover:text-[#183c2c]">
+                    {service.name}
+                  </h3>
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-[#5c6e61]">
+                    {service.text}
+                  </p>
+                </div>
+
+                <div className="mt-8 flex items-center justify-between border-t border-[#ede7d8] pt-5">
+                  <Anchor
+                    to="contact"
+                    className="inline-flex items-center gap-2 text-xs font-bold text-[#214c39] transition-all duration-200 group-hover:text-[#967235] group-hover:translate-x-1"
+                  >
+                    <span>Read more</span>
+                    <ArrowRight size={13} className="text-[#D9A441] transition-transform duration-200 group-hover:translate-x-1" />
+                  </Anchor>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#9a865b]">
+                    Trade service
+                  </span>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>;
+    </section>
+  );
 }
 function Growth() {
   const years=['2021','2022','2023','2024','2025'];
@@ -541,12 +611,12 @@ function Growth() {
       <div className="mt-10 grid gap-5 lg:grid-cols-2">
         <div className="card-line p-6 md:p-8"><div className="flex items-start justify-between"><div><h3 className="font-display text-2xl">Import–export growth</h3><p className="mt-1 text-[11px] text-[#7b8679]">Example trend only · illustrative data</p></div><span className="border border-[#ddd8ca] p-2 text-[#718b5c]"><BarChart3 size={17}/></span></div>
           <div className="mt-8 flex h-[205px] items-end gap-3 border-b border-l border-[#d8d4c7] px-3">
-            {[35,50,43,68,60,83,73,94].map((height,i)=><div key={i} className="group relative flex h-full flex-1 items-end"><span className="w-full bg-[#718b5c] transition-colors group-hover:bg-[#d5a34c]" style={{height:`${height}%`}}/><span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] text-[#858878]">{years[i%5]}</span></div>)}
+            {[35,50,43,68,60,83,73,94].map((height,i)=><div key={i} className="group relative flex h-full flex-1 items-end"><span className="w-full bg-[#718b5c] transition-colors group-hover:bg-[#D9A441]" style={{height:`${height}%`}}/><span className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[9px] text-[#858878]">{years[i%5]}</span></div>)}
           </div><div className="mt-10 flex items-center gap-2 text-[10px] text-[#6e7a6f]"><span className="h-2 w-2 bg-[#718b5c]"/> Illustrative index (not actual trade volume)</div>
         </div>
         <div className="card-line p-6 md:p-8"><div className="flex items-start justify-between"><div><h3 className="font-display text-2xl">Market strategy distribution</h3><p className="mt-1 text-[11px] text-[#7b8679]">Example allocation only · illustrative data</p></div><span className="border border-[#ddd8ca] p-2 text-[#718b5c]"><Globe2 size={17}/></span></div>
-          <div className="mt-7 flex flex-col items-center gap-7 sm:flex-row"><div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full" style={{background:'conic-gradient(#214c39 0 34%, #d5a34c 34% 59%, #8b9b71 59% 79%, #bb8160 79% 91%, #aec3b7 91% 100%)'}}><div className="grid h-24 w-24 place-items-center rounded-full bg-[#fbf9f2] text-center"><span className="font-display text-xl">Illustrative</span><span className="text-[8px] uppercase tracking-wider text-[#718074]">allocation</span></div></div>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-3 text-[10px] text-[#68766c]">{[['South Asia','#214c39'],['Gulf','#d5a34c'],['Europe','#8b9b71'],['East Asia','#bb8160'],['Other','#aec3b7']].map(([label,color])=><span key={label} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{background:color}}/>{label}</span>)}</div>
+          <div className="mt-7 flex flex-col items-center gap-7 sm:flex-row"><div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full" style={{background:'conic-gradient(#214c39 0 34%, #D9A441 34% 59%, #8b9b71 59% 79%, #bb8160 79% 91%, #aec3b7 91% 100%)'}}><div className="grid h-24 w-24 place-items-center rounded-full bg-[#fbf9f2] text-center"><span className="font-display text-xl">Illustrative</span><span className="text-[8px] uppercase tracking-wider text-[#718074]">allocation</span></div></div>
+            <div className="grid grid-cols-2 gap-x-5 gap-y-3 text-[10px] text-[#68766c]">{[['South Asia','#214c39'],['Gulf','#D9A441'],['Europe','#8b9b71'],['East Asia','#bb8160'],['Other','#aec3b7']].map(([label,color])=><span key={label} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{background:color}}/>{label}</span>)}</div>
           </div><p className="mt-6 text-[10px] text-[#7e8779]">Illustrative categories and proportions; not actual company activity.</p>
         </div>
       </div>
@@ -586,18 +656,18 @@ function GlobalPresence() {
   return <section id="presence" className="relative overflow-hidden bg-[#193e2d] py-20 text-[#f7f4eb]">
     <div className="absolute -right-28 -top-48 h-[570px] w-[570px] rounded-full border border-white/[.08]"/><div className="absolute -right-12 -top-32 h-[430px] w-[430px] rounded-full border border-white/[.08]"/>
     <div className="wrap relative grid items-center gap-12 lg:grid-cols-[.82fr_1.18fr]">
-      <div><SectionIntro eyebrow="A world of possibilities" title="Our global presence" copy="Expanding businesses across international markets — one informed connection at a time." light/><p className="mt-6 max-w-lg text-xs leading-6 text-white/55">The countries below are example markets for discussion, not confirmed operating destinations or existing trade routes for KRISHI SARTHAK VENTURES LLP.</p><Anchor to="contact" className="mt-7 inline-flex items-center gap-2 border-b border-[#d5a34c] pb-2 text-xs font-semibold text-[#f0d18f]">Discuss a market <ArrowRight size={14}/></Anchor></div>
+      <div><SectionIntro eyebrow="A world of possibilities" title="Our global presence" copy="Expanding businesses across international markets — one informed connection at a time." light/><p className="mt-6 max-w-lg text-xs leading-6 text-white/55">The countries below are example markets for discussion, not confirmed operating destinations or existing trade routes for KRISHI SARTHAK VENTURES LLP.</p><Anchor to="contact" className="mt-7 inline-flex items-center gap-2 border-b border-[#D9A441] pb-2 text-xs font-semibold text-[#D9A441]">Discuss a market <ArrowRight size={14}/></Anchor></div>
       <div className="border border-white/15 bg-white/[.045] p-6 md:p-8">
-        <div className="mb-7 flex items-center justify-between"><span className="text-[10px] uppercase tracking-[.16em] text-[#e5c47c]">Potential market examples</span><Globe2 size={21} className="text-[#e5c47c]"/></div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{markets.map((market,i)=><div key={market} className="flex items-center gap-2 border border-white/10 px-3 py-3 text-[11px] text-white/80"><span className="text-[9px] text-[#e3bd72]">{String(i+1).padStart(2,'0')}</span>{market}</div>)}</div>
+        <div className="mb-7 flex items-center justify-between"><span className="text-[10px] uppercase tracking-[.16em] text-[#D9A441]">Potential market examples</span><Globe2 size={21} className="text-[#D9A441]"/></div>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">{markets.map((market,i)=><div key={market} className="flex items-center gap-2 border border-white/10 px-3 py-3 text-[11px] text-white/80"><span className="text-[9px] text-[#D9A441] font-mono font-bold">{String(i+1).padStart(2,'0')}</span>{market}</div>)}</div>
         <p className="mt-5 text-[9px] leading-5 text-white/45">Illustrative country list only. Market access and any business activity must be independently confirmed.</p>
       </div>
     </div>
   </section>;
 }
 function Careers() {
-  return <section id="careers" className="bg-[#d5a34c] py-14">
-    <div className="wrap flex flex-col justify-between gap-7 md:flex-row md:items-center"><div><span className="eyebrow !text-[#594b2f]">People make trade move</span><h2 className="font-display mt-3 text-3xl text-[#1d392d] md:text-4xl">Careers at KRISHI SARTHAK VENTURES LLP</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-[#4e533e]">We welcome individuals interested in agricultural trade, international business, logistics, sourcing and business development. No active vacancies are being advertised here.</p></div><Anchor to="contact" className="inline-flex shrink-0 items-center gap-3 border border-[#314537] px-5 py-4 text-xs font-bold text-[#1d392d] transition hover:bg-[#214c39] hover:text-white">Explore opportunities <ArrowUpRight size={15}/></Anchor></div>
+  return <section id="careers" className="bg-[#D9A441] py-14">
+    <div className="wrap flex flex-col justify-between gap-7 md:flex-row md:items-center"><div><span className="eyebrow !text-[#0a1826]/80">People make trade move</span><h2 className="font-display mt-3 text-3xl text-[#0a1826] md:text-4xl">Careers at KRISHI SARTHAK VENTURES LLP</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-[#152e22]">We welcome individuals interested in agricultural trade, international business, logistics, sourcing and business development. No active vacancies are being advertised here.</p></div><Anchor to="contact" className="inline-flex shrink-0 items-center gap-3 border border-[#0a1826] px-5 py-4 text-xs font-bold text-[#0a1826] transition hover:bg-[#0a1826] hover:text-[#D9A441]">Explore opportunities <ArrowUpRight size={15}/></Anchor></div>
   </section>;
 }
 function Contact() {
@@ -643,10 +713,10 @@ function Contact() {
 function Footer() {
   return <footer className="bg-[#173a2a] text-[#f7f4eb]">
     <div className="wrap grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_.75fr_.9fr_.85fr]">
-      <div><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full border border-[#d5a34c]/50 text-[#e9c26f]"><Sprout size={21}/></span><span><span className="block text-[11px] font-extrabold tracking-[.1em]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] tracking-[.19em] text-white/55">VENTURES LLP</span></span></div><p className="mt-5 max-w-sm font-display text-xl leading-snug text-[#e1c781]">Empowering Global Trade Through Quality, Reliability, and Innovation.</p><p className="mt-4 max-w-sm text-xs leading-6 text-white/60">Connecting businesses with agricultural products, sourcing opportunities and international trade solutions.</p><div className="mt-5 flex gap-3 text-xs"><a href="#contact" aria-label="LinkedIn (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Linkedin size={14}/></a><a href="#contact" aria-label="Facebook (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Facebook size={14}/></a><a href="#contact" aria-label="Instagram (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#d5a34c]"><Instagram size={14}/></a></div></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Quick links</p><ul className="mt-5 space-y-3">{navItems.map(([label,id])=><li key={id}><Anchor to={id} className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Product categories</p><ul className="mt-5 space-y-3">{productsNav.map(label=><li key={label}><Anchor to="categories" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">Trade services</p><ul className="mt-5 space-y-3">{servicesNav.map(label=><li key={label}><Anchor to="services" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul><div className="mt-7 space-y-2 text-[10px] leading-5 text-white/65"><p>Phone: [Add Company Phone Number]</p><p>Email: [Add Company Email]</p><p>Address: [Add Registered Office Address]</p></div></div>
+      <div><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full border border-[#D9A441]/60 text-[#D9A441]"><Sprout size={21}/></span><span><span className="block text-[11px] font-extrabold tracking-[.1em]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] tracking-[.19em] text-white/55">VENTURES LLP</span></span></div><p className="mt-5 max-w-sm font-display text-xl leading-snug text-[#f3dfb4]">Empowering Global Trade Through Quality, Reliability, and Innovation.</p><p className="mt-4 max-w-sm text-xs leading-6 text-white/60">Connecting businesses with agricultural products, sourcing opportunities and international trade solutions.</p><div className="mt-5 flex gap-3 text-xs"><a href="#contact" aria-label="LinkedIn (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Linkedin size={14}/></a><a href="#contact" aria-label="Facebook (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Facebook size={14}/></a><a href="#contact" aria-label="Instagram (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Instagram size={14}/></a></div></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Quick links</p><ul className="mt-5 space-y-3">{navItems.map(([label,id])=><li key={id}><Anchor to={id} className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Product categories</p><ul className="mt-5 space-y-3">{productsNav.map(label=><li key={label}><Anchor to="categories" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
+      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Trade services</p><ul className="mt-5 space-y-3">{servicesNav.map(label=><li key={label}><Anchor to="services" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul><div className="mt-7 space-y-2 text-[10px] leading-5 text-white/65"><p>Phone: [Add Company Phone Number]</p><p>Email: [Add Company Email]</p><p>Address: [Add Registered Office Address]</p></div></div>
     </div>
     <div className="border-t border-white/15"><div className="wrap flex flex-col justify-between gap-2 py-5 text-[9px] text-white/50 sm:flex-row"><p>© 2026 KRISHI SARTHAK VENTURES LLP. All Rights Reserved.</p><p>Company details and contact information are editable placeholders.</p></div></div>
   </footer>;

@@ -171,7 +171,7 @@ export function Navbar() {
               href="tel:[Add Company Phone Number]"
               className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
             >
-              <Phone className="h-3 w-3 text-[#d5a34c]" />
+              <Phone className="h-3 w-3 text-[#D9A441]" />
               <span>[Add Company Phone Number]</span>
             </a>
             <span className="h-3 w-px bg-white/20" />
@@ -179,37 +179,37 @@ export function Navbar() {
               href="mailto:[Add Company Email]"
               className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
             >
-              <Mail className="h-3 w-3 text-[#d5a34c]" />
+              <Mail className="h-3 w-3 text-[#D9A441]" />
               <span>[Add Company Email]</span>
             </a>
             <span className="h-3 w-px bg-white/20" />
             <span className="inline-flex items-center gap-1.5 text-white/70">
-              <MapPin className="h-3 w-3 text-[#d5a34c]" />
+              <MapPin className="h-3 w-3 text-[#D9A441]" />
               <span>Office: [Add Registered Office Address]</span>
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-[10px] uppercase tracking-wider text-[#d5a34c]">Connect:</span>
+            <span className="text-[10px] uppercase tracking-wider text-[#D9A441]">Connect:</span>
             <div className="flex items-center gap-2">
               <a
                 href="#contact"
                 aria-label="LinkedIn profile"
-                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#d5a34c] hover:text-[#1d392d]"
+                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#D9A441] hover:text-[#0a1826]"
               >
                 <Linkedin size={12} />
               </a>
               <a
                 href="#contact"
                 aria-label="Facebook page"
-                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#d5a34c] hover:text-[#1d392d]"
+                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#D9A441] hover:text-[#0a1826]"
               >
                 <Facebook size={12} />
               </a>
               <a
                 href="#contact"
                 aria-label="Instagram profile"
-                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#d5a34c] hover:text-[#1d392d]"
+                className="grid h-6 w-6 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[#D9A441] hover:text-[#0a1826]"
               >
                 <Instagram size={12} />
               </a>
@@ -227,7 +227,7 @@ export function Navbar() {
             className="group flex items-center gap-3 outline-none"
             aria-label="Krishi Sarthak Ventures Home"
           >
-            <span className="grid h-10 w-10 place-items-center rounded-full border border-[#d5a34c]/60 bg-[#214c39] text-[#e9c26f] shadow-xs transition-transform duration-300 group-hover:scale-105">
+            <span className="grid h-10 w-10 place-items-center rounded-full border border-[#D9A441]/70 bg-[#214c39] text-[#D9A441] shadow-xs transition-transform duration-300 group-hover:scale-105">
               <Sprout size={21} />
             </span>
             <span className="block leading-tight">
@@ -266,10 +266,10 @@ export function Navbar() {
                       {/* Left Highlight Card */}
                       <div className="flex h-full flex-col justify-between rounded-lg bg-gradient-to-br from-[#214c39] to-[#153426] p-5 text-white shadow-sm">
                         <div>
-                          <div className="mb-3 inline-grid h-9 w-9 place-items-center rounded-full border border-[#d5a34c]/60 bg-white/10 text-[#e9c26f]">
+                          <div className="mb-3 inline-grid h-9 w-9 place-items-center rounded-full border border-[#D9A441]/60 bg-white/10 text-[#D9A441]">
                             <Sprout className="h-5 w-5" />
                           </div>
-                          <span className="block text-[10px] font-bold uppercase tracking-[.18em] text-[#e5c47c]">
+                          <span className="block text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">
                             About Us
                           </span>
                           <h4 className="font-display mt-2 text-xl font-normal leading-snug text-[#f7f4eb]">
@@ -282,7 +282,7 @@ export function Navbar() {
                         <div className="mt-4 border-t border-white/15 pt-3">
                           <Link
                             href="#about"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#f0d18f] hover:underline"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D9A441] hover:underline"
                           >
                             Explore our story <ArrowRight className="h-3.5 w-3.5" />
                           </Link>
@@ -444,7 +444,7 @@ export function Navbar() {
               className="inline-flex items-center gap-2 rounded-none bg-[#214c39] px-5 py-3 text-xs font-bold text-[#fff9ed] shadow-xs transition-all hover:bg-[#183c2c] hover:shadow-md hover:-translate-y-0.5"
             >
               Start a conversation
-              <ArrowUpRight size={14} className="text-[#e9c26f]" />
+              <ArrowUpRight size={14} className="text-[#D9A441]" />
             </Link>
           </div>
 
@@ -715,7 +715,7 @@ function ListItem({
         >
           <div className="flex items-start gap-2.5">
             {Icon && (
-              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d] transition-colors group-hover:border-[#d5a34c] group-hover:bg-[#214c39] group-hover:text-[#e9c26f]">
+              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d] transition-colors group-hover:border-[#D9A441] group-hover:bg-[#214c39] group-hover:text-[#D9A441]">
                 <Icon className="h-3.5 w-3.5" />
               </span>
             )}
