@@ -192,8 +192,8 @@ function Hero() {
       {/* Subtle radial center vignette for natural text depth without darkening the video */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(6,20,36,0.15)_0%,rgba(5,15,26,0.45)_100%)]" />
 
-      {/* Smooth bottom blend into the feature ribbon */}
-      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-32 -z-10 bg-gradient-to-t from-[#050e18]/80 to-transparent" />
+      {/* Subtle bottom shadow allowing video to shine through transparent ribbon */}
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-20 -z-10 bg-gradient-to-t from-[#050e18]/25 to-transparent" />
 
       {/* Main Hero Content - Vertically centered with generous text size and comfortable height */}
       <div className="wrap relative my-auto flex flex-1 flex-col items-center justify-center px-4 pt-8 pb-6 text-center sm:pt-10 sm:pb-8 md:pt-12 md:pb-9">
@@ -242,14 +242,10 @@ function Hero() {
         </div>
       </div>
 
-      {/* Bottom Feature Ribbon - Continuous slow infinite loop marquee */}
-      <div className="relative z-10 w-full overflow-hidden border-t border-[#D9A441]/20 bg-gradient-to-t from-[#050e18]/95 via-[#071524]/85 to-transparent backdrop-blur-md py-2.5 sm:py-3 select-none">
-        {/* Soft edge masks for smooth fade in/out on left and right */}
-        <div className="pointer-events-none absolute left-0 inset-y-0 w-8 sm:w-16 md:w-24 bg-gradient-to-r from-[#050e18]/95 via-[#050e18]/60 to-transparent z-20" />
-        <div className="pointer-events-none absolute right-0 inset-y-0 w-8 sm:w-16 md:w-24 bg-gradient-to-l from-[#050e18]/95 via-[#050e18]/60 to-transparent z-20" />
-
-        {/* Marquee Track Container */}
-        <div className="w-full overflow-hidden no-scrollbar">
+      {/* Bottom Feature Ribbon - Transparent continuous slow infinite loop marquee */}
+      <div className="relative z-10 w-full overflow-hidden border-t border-white/10 bg-transparent py-2.5 sm:py-3 select-none">
+        {/* Marquee Track Container with transparent alpha fade masks at edges */}
+        <div className="w-full overflow-hidden no-scrollbar [mask-image:linear-gradient(to_right,transparent,black_28px,black_calc(100%-28px),transparent)] sm:[mask-image:linear-gradient(to_right,transparent,black_60px,black_calc(100%-60px),transparent)]">
           <div className="animate-ribbon-scroll flex items-center">
             {/* Primary Track Half */}
             <div className="flex shrink-0 items-center gap-2.5 sm:gap-3.5 pr-2.5 sm:pr-3.5">
@@ -258,20 +254,20 @@ function Hero() {
                   key={`ribbon-h1-${item.num}-${idx}`}
                   customSize
                   glowColor={item.glow}
-                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 sm:p-3 text-left shadow-md transition-all duration-300 hover:border-[#D9A441]/50 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
+                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/15 bg-[#071524]/40 backdrop-blur-md p-2.5 sm:p-3 text-left shadow-lg transition-all duration-300 hover:border-[#D9A441]/60 hover:bg-[#071524]/60 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
                 >
                   <div>
                     <div className="mb-1 flex items-center gap-1.5">
-                      <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
+                      <span className="rounded border border-[#D9A441]/40 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
                         {item.num}
                       </span>
-                      <span className="h-px flex-1 bg-white/15" />
+                      <span className="h-px flex-1 bg-white/20" />
                     </div>
-                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
+                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs drop-shadow-sm">
                       {item.title}
                     </h4>
                   </div>
-                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
+                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/75 line-clamp-1 sm:line-clamp-2 drop-shadow-xs">
                     {item.desc}
                   </p>
                 </GlowCard>
@@ -285,20 +281,20 @@ function Hero() {
                   key={`ribbon-h2-${item.num}-${idx}`}
                   customSize
                   glowColor={item.glow}
-                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/10 bg-[#091829]/80 p-2.5 sm:p-3 text-left shadow-md transition-all duration-300 hover:border-[#D9A441]/50 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
+                  className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/15 bg-[#071524]/40 backdrop-blur-md p-2.5 sm:p-3 text-left shadow-lg transition-all duration-300 hover:border-[#D9A441]/60 hover:bg-[#071524]/60 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
                 >
                   <div>
                     <div className="mb-1 flex items-center gap-1.5">
-                      <span className="rounded border border-[#D9A441]/35 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
+                      <span className="rounded border border-[#D9A441]/40 bg-[#D9A441]/20 px-1.5 py-0.2 font-mono text-[9px] font-bold tracking-wider text-[#D9A441]">
                         {item.num}
                       </span>
-                      <span className="h-px flex-1 bg-white/15" />
+                      <span className="h-px flex-1 bg-white/20" />
                     </div>
-                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs">
+                    <h4 className="text-[11.5px] font-bold tracking-wide text-white leading-tight sm:text-xs drop-shadow-sm">
                       {item.title}
                     </h4>
                   </div>
-                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/70 line-clamp-1 sm:line-clamp-2">
+                  <p className="-translate-y-0.5 text-[10.5px] leading-tight text-white/75 line-clamp-1 sm:line-clamp-2 drop-shadow-xs">
                     {item.desc}
                   </p>
                 </GlowCard>
