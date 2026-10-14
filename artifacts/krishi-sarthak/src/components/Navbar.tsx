@@ -139,27 +139,95 @@ const aboutLinks = [
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [mobileActiveSubmenu, setMobileActiveSubmenu] = React.useState<string | null>(null)
+  const [headerBottom, setHeaderBottom] = React.useState(76)
+  const headerRef = React.useRef<HTMLElement>(null)
+
+  const updateHeaderBottom = React.useCallback(() => {
+    if (headerRef.current) {
+      const rect = headerRef.current.getBoundingClientRect()
+      setHeaderBottom(Math.round(rect.bottom))
+    }
+  }, [])
 
   const toggleSubmenu = (key: string) => {
     setMobileActiveSubmenu((prev) => (prev === key ? null : key))
   }
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = React.useCallback(() => {
     setMobileMenuOpen(false)
     setMobileActiveSubmenu(null)
+  }, [])
+
+  const toggleMobileMenu = () => {
+    if (!mobileMenuOpen) {
+      updateHeaderBottom()
+      setMobileMenuOpen(true)
+    } else {
+      closeMobileMenu()
+    }
+  }
+
+  // Handle in-page smooth navigation and reliable menu closing on touch/click
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    closeMobileMenu()
+
+    if (href.startsWith("#")) {
+      e.preventDefault()
+      const targetId = href.slice(1)
+      const element = document.getElementById(targetId)
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" })
+          window.history.pushState(null, "", href)
+        }, 60)
+      }
+    }
   }
 
   // Prevent background scroll when mobile menu is open
   React.useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden"
-    } else {
-      document.body.style.overflow = ""
-    }
+    if (!mobileMenuOpen) return
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
     return () => {
-      document.body.style.overflow = ""
+      document.body.style.overflow = originalOverflow
     }
   }, [mobileMenuOpen])
+
+  // Update header bottom measurement on mount, resize, and scroll while menu is open
+  React.useEffect(() => {
+    updateHeaderBottom()
+    if (!mobileMenuOpen) return
+    window.addEventListener("resize", updateHeaderBottom)
+    window.addEventListener("scroll", updateHeaderBottom)
+    return () => {
+      window.removeEventListener("resize", updateHeaderBottom)
+      window.removeEventListener("scroll", updateHeaderBottom)
+    }
+  }, [mobileMenuOpen, updateHeaderBottom])
+
+  // Close mobile menu on desktop resize or on Escape key
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        closeMobileMenu()
+      }
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) {
+        closeMobileMenu()
+      }
+    }
+    window.addEventListener("resize", handleResize)
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [mobileMenuOpen, closeMobileMenu])
 
   return (
     <>
@@ -219,22 +287,26 @@ export function Navbar() {
       </div>
 
       {/* Main Sticky Header */}
-      <header className="sticky top-0 z-40 w-full border-b border-[#ddd8ca] bg-[#f7f4eb]/95 shadow-xs backdrop-blur-md">
-        <div className="wrap flex h-[76px] items-center justify-between">
+      <header
+        ref={headerRef}
+        className="sticky top-0 z-50 w-full border-b border-[#ddd8ca] bg-[#f7f4eb]/95 shadow-xs backdrop-blur-md"
+      >
+        <div className="wrap flex h-[70px] sm:h-[76px] items-center justify-between">
           {/* Brand Logo */}
           <Link
             href="#home"
-            className="group flex items-center gap-3 outline-none"
+            onClick={(e) => handleNavClick(e, "#home")}
+            className="group flex items-center gap-2.5 sm:gap-3 outline-none"
             aria-label="Krishi Sarthak Ventures Home"
           >
-            <span className="grid h-10 w-10 place-items-center rounded-full border border-[#D9A441]/70 bg-[#214c39] text-[#D9A441] shadow-xs transition-transform duration-300 group-hover:scale-105">
-              <Sprout size={21} />
+            <span className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full border border-[#D9A441]/70 bg-[#214c39] text-[#D9A441] shadow-xs transition-transform duration-300 group-hover:scale-105">
+              <Sprout size={20} className="sm:h-[21px] sm:w-[21px]" />
             </span>
             <span className="block leading-tight">
-              <span className="block text-[12px] font-extrabold tracking-[.1em] text-[#1d392d]">
+              <span className="block text-[11px] sm:text-[12px] font-extrabold tracking-[.1em] text-[#1d392d]">
                 KRISHI SARTHAK
               </span>
-              <span className="mt-0.5 block text-[8.5px] font-semibold tracking-[.2em] text-[#788476]">
+              <span className="mt-0.5 block text-[8px] sm:text-[8.5px] font-semibold tracking-[.2em] text-[#788476]">
                 VENTURES LLP
               </span>
             </span>
@@ -451,237 +523,330 @@ export function Navbar() {
           {/* Mobile Menu Hamburger Button */}
           <button
             type="button"
-            className="grid h-11 w-11 place-items-center rounded-lg border border-[#ddd8ca] bg-[#fbf9f2] text-[#214c39] transition-colors hover:bg-[#ede7d8] lg:hidden"
+            className="grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-lg border border-[#ddd8ca] bg-[#fbf9f2] text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] lg:hidden touch-manipulation focus:outline-none focus:ring-2 focus:ring-[#214c39]/30"
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-controls="mobile-navigation-drawer"
+            onClick={toggleMobileMenu}
           >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileMenuOpen ? (
+              <X size={22} className="transition-transform duration-200" />
+            ) : (
+              <Menu size={22} className="transition-transform duration-200" />
+            )}
           </button>
         </div>
+      </header>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-x-0 top-[76px] bottom-0 z-50 flex flex-col overflow-y-auto border-t border-[#ddd8ca] bg-[#f7f4eb] shadow-2xl lg:hidden">
-            <nav className="flex flex-1 flex-col p-5" aria-label="Mobile Navigation">
-              <div className="space-y-1">
-                {/* Home */}
-                <Link
-                  href="#home"
-                  onClick={closeMobileMenu}
-                  className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-[#1d392d] hover:bg-[#eee8dc]"
-                >
+      {/* Mobile Navigation Drawer & Backdrop (Rendered outside header to decouple from backdrop-filter containing block) */}
+      {mobileMenuOpen && (
+        <div
+          id="mobile-navigation-drawer"
+          style={{
+            top: `${headerBottom}px`,
+            height: `calc(100dvh - ${headerBottom}px)`,
+          }}
+          className="fixed inset-x-0 bottom-0 z-50 flex flex-col overflow-y-auto overscroll-contain bg-[#f7f4eb] border-t border-[#ddd8ca] shadow-2xl lg:hidden touch-pan-y animate-in fade-in slide-in-from-top-1 duration-200"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation Menu"
+        >
+          <nav className="flex flex-1 flex-col p-4 sm:p-6 pb-12" aria-label="Mobile Navigation">
+            <div className="space-y-1.5">
+              {/* Home */}
+              <a
+                href="#home"
+                onClick={(e) => handleNavClick(e, "#home")}
+                className="flex min-h-[48px] items-center justify-between rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+              >
+                <span className="flex items-center gap-2.5">
+                  <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
+                    <Sprout className="h-4 w-4" />
+                  </span>
                   <span>Home</span>
-                  <ChevronRight size={16} className="text-[#998b76]" />
-                </Link>
+                </span>
+                <ChevronRight size={16} className="text-[#998b76]" />
+              </a>
 
-                {/* About Us Accordion */}
-                <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2]">
-                  <button
-                    type="button"
-                    onClick={() => toggleSubmenu("about")}
-                    className="flex w-full items-center justify-between px-3 py-3 text-sm font-semibold text-[#1d392d]"
-                    aria-expanded={mobileActiveSubmenu === "about"}
-                  >
-                    <span className="flex items-center gap-2">
-                      <Sprout className="h-4 w-4 text-[#8a682f]" />
-                      About Us
+              {/* About Us Accordion */}
+              <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleSubmenu("about")}
+                  className="flex min-h-[48px] w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+                  aria-expanded={mobileActiveSubmenu === "about"}
+                  aria-controls="mobile-submenu-about"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
+                      <Sprout className="h-4 w-4" />
                     </span>
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "text-[#776c59] transition-transform duration-200",
-                        mobileActiveSubmenu === "about" && "rotate-180"
-                      )}
-                    />
-                  </button>
+                    <span>About Us</span>
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={cn(
+                      "text-[#776c59] transition-transform duration-200",
+                      mobileActiveSubmenu === "about" && "rotate-180 text-[#214c39]"
+                    )}
+                  />
+                </button>
 
-                  {mobileActiveSubmenu === "about" && (
-                    <div className="border-t border-[#e4dfd3] bg-[#f7f4eb] px-3 py-2 space-y-1">
-                      <Link
-                        href="#about"
-                        onClick={closeMobileMenu}
-                        className="block rounded-md px-3 py-2 text-xs font-bold text-[#214c39] hover:bg-[#ede7d8]"
-                      >
-                        Company Overview & Perspective
-                      </Link>
-                      {aboutLinks.map((item) => (
-                        <Link
+                {mobileActiveSubmenu === "about" && (
+                  <div id="mobile-submenu-about" className="border-t border-[#e4dfd3] bg-[#f3efe4] px-3 py-2.5 space-y-1.5">
+                    <a
+                      href="#about"
+                      onClick={(e) => handleNavClick(e, "#about")}
+                      className="block min-h-[44px] rounded-md bg-[#fbf9f2] border border-[#e2dccf] px-3.5 py-2.5 text-xs font-bold text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
+                    >
+                      Company Overview & Perspective
+                    </a>
+                    {aboutLinks.map((item) => {
+                      const IconComponent = item.icon
+                      return (
+                        <a
                           key={item.title}
                           href={item.href}
-                          onClick={closeMobileMenu}
-                          className="block rounded-md px-3 py-2 text-xs text-[#526457] hover:bg-[#ede7d8]"
+                          onClick={(e) => handleNavClick(e, item.href)}
+                          className="flex min-h-[44px] items-start gap-2.5 rounded-md px-3.5 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
                         >
-                          <div className="font-semibold text-[#1d392d]">{item.title}</div>
-                          <div className="text-[11px] text-[#718074]">{item.description}</div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                          <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded border border-[#d8cfb9] bg-[#fbf9f2] text-[#8b682d]">
+                            <IconComponent className="h-3.5 w-3.5" />
+                          </span>
+                          <div>
+                            <div className="font-semibold text-[#1d392d]">{item.title}</div>
+                            <div className="text-[11px] leading-relaxed text-[#718074]">{item.description}</div>
+                          </div>
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
 
-                {/* Our Products Accordion */}
-                <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2]">
-                  <button
-                    type="button"
-                    onClick={() => toggleSubmenu("products")}
-                    className="flex w-full items-center justify-between px-3 py-3 text-sm font-semibold text-[#1d392d]"
-                    aria-expanded={mobileActiveSubmenu === "products"}
-                  >
-                    <span className="flex items-center gap-2">
-                      <Boxes className="h-4 w-4 text-[#8a682f]" />
-                      Our Products
+              {/* Our Products Accordion */}
+              <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleSubmenu("products")}
+                  className="flex min-h-[48px] w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+                  aria-expanded={mobileActiveSubmenu === "products"}
+                  aria-controls="mobile-submenu-products"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
+                      <Boxes className="h-4 w-4" />
                     </span>
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "text-[#776c59] transition-transform duration-200",
-                        mobileActiveSubmenu === "products" && "rotate-180"
-                      )}
-                    />
-                  </button>
+                    <span>Our Products</span>
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={cn(
+                      "text-[#776c59] transition-transform duration-200",
+                      mobileActiveSubmenu === "products" && "rotate-180 text-[#214c39]"
+                    )}
+                  />
+                </button>
 
-                  {mobileActiveSubmenu === "products" && (
-                    <div className="border-t border-[#e4dfd3] bg-[#f7f4eb] px-3 py-2 space-y-1">
-                      <Link
-                        href="#products"
-                        onClick={closeMobileMenu}
-                        className="block rounded-md px-3 py-2 text-xs font-bold text-[#214c39] hover:bg-[#ede7d8]"
-                      >
-                        Browse Full Product Catalog
-                      </Link>
+                {mobileActiveSubmenu === "products" && (
+                  <div id="mobile-submenu-products" className="border-t border-[#e4dfd3] bg-[#f3efe4] px-3 py-2.5 space-y-1.5">
+                    <a
+                      href="#products"
+                      onClick={(e) => handleNavClick(e, "#products")}
+                      className="block min-h-[44px] rounded-md bg-[#fbf9f2] border border-[#e2dccf] px-3.5 py-2.5 text-xs font-bold text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
+                    >
+                      Browse Full Product Catalog
+                    </a>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
                       {productCategories.map((cat) => (
-                        <Link
+                        <a
                           key={cat.title}
                           href={cat.href}
-                          onClick={closeMobileMenu}
-                          className="flex items-center justify-between rounded-md px-3 py-2 text-xs text-[#526457] hover:bg-[#ede7d8]"
+                          onClick={(e) => handleNavClick(e, cat.href)}
+                          className="flex min-h-[44px] items-center justify-between rounded-md bg-[#fbf9f2]/80 border border-[#e2dccf]/70 px-3 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
                         >
-                          <span>{cat.title}</span>
-                          <span className="text-[10px] text-[#9a865b]">{cat.tag}</span>
-                        </Link>
+                          <div className="flex items-center gap-2 pr-2">
+                            <span className="font-semibold text-[#1d392d]">{cat.title}</span>
+                            {cat.badge && (
+                              <span className="rounded bg-[#e8e1cf] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-wider text-[#685b41]">
+                                {cat.badge}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[10px] font-bold text-[#9a865b] shrink-0">{cat.tag}</span>
+                        </a>
                       ))}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+              </div>
 
-                {/* Our Services Accordion */}
-                <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2]">
-                  <button
-                    type="button"
-                    onClick={() => toggleSubmenu("services")}
-                    className="flex w-full items-center justify-between px-3 py-3 text-sm font-semibold text-[#1d392d]"
-                    aria-expanded={mobileActiveSubmenu === "services"}
-                  >
-                    <span className="flex items-center gap-2">
-                      <Ship className="h-4 w-4 text-[#8a682f]" />
-                      Our Services
+              {/* Our Services Accordion */}
+              <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => toggleSubmenu("services")}
+                  className="flex min-h-[48px] w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+                  aria-expanded={mobileActiveSubmenu === "services"}
+                  aria-controls="mobile-submenu-services"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
+                      <Ship className="h-4 w-4" />
                     </span>
-                    <ChevronDown
-                      size={16}
-                      className={cn(
-                        "text-[#776c59] transition-transform duration-200",
-                        mobileActiveSubmenu === "services" && "rotate-180"
-                      )}
-                    />
-                  </button>
+                    <span>Our Services</span>
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={cn(
+                      "text-[#776c59] transition-transform duration-200",
+                      mobileActiveSubmenu === "services" && "rotate-180 text-[#214c39]"
+                    )}
+                  />
+                </button>
 
-                  {mobileActiveSubmenu === "services" && (
-                    <div className="border-t border-[#e4dfd3] bg-[#f7f4eb] px-3 py-2 space-y-1">
-                      {tradeServices.map((service) => (
-                        <Link
+                {mobileActiveSubmenu === "services" && (
+                  <div id="mobile-submenu-services" className="border-t border-[#e4dfd3] bg-[#f3efe4] px-3 py-2.5 space-y-1.5">
+                    <a
+                      href="#services"
+                      onClick={(e) => handleNavClick(e, "#services")}
+                      className="block min-h-[44px] rounded-md bg-[#fbf9f2] border border-[#e2dccf] px-3.5 py-2.5 text-xs font-bold text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
+                    >
+                      Comprehensive Trade Support
+                    </a>
+                    {tradeServices.map((service) => {
+                      const IconComponent = service.icon
+                      return (
+                        <a
                           key={service.title}
                           href={service.href}
-                          onClick={closeMobileMenu}
-                          className="block rounded-md px-3 py-2 text-xs text-[#526457] hover:bg-[#ede7d8]"
+                          onClick={(e) => handleNavClick(e, service.href)}
+                          className="flex min-h-[44px] items-start gap-2.5 rounded-md px-3.5 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
                         >
-                          <div className="font-semibold text-[#1d392d]">{service.title}</div>
-                          <div className="text-[11px] text-[#718074]">{service.description}</div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                          <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded border border-[#d8cfb9] bg-[#fbf9f2] text-[#8b682d]">
+                            <IconComponent className="h-3.5 w-3.5" />
+                          </span>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-[#1d392d]">{service.title}</span>
+                              {service.badge && (
+                                <span className="rounded bg-[#e8e1cf] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-wider text-[#685b41]">
+                                  {service.badge}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[11px] leading-relaxed text-[#718074]">{service.description}</div>
+                          </div>
+                        </a>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
 
-                {/* News & Blogs */}
-                <Link
-                  href="#news"
-                  onClick={closeMobileMenu}
-                  className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-[#1d392d] hover:bg-[#eee8dc]"
-                >
-                  <span>News & Blogs</span>
-                  <ChevronRight size={16} className="text-[#998b76]" />
-                </Link>
+              {/* News & Blogs */}
+              <a
+                href="#news"
+                onClick={(e) => handleNavClick(e, "#news")}
+                className="flex min-h-[48px] items-center justify-between rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+              >
+                <span>News & Blogs</span>
+                <ChevronRight size={16} className="text-[#998b76]" />
+              </a>
 
-                {/* Careers */}
-                <Link
-                  href="#careers"
-                  onClick={closeMobileMenu}
-                  className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-[#1d392d] hover:bg-[#eee8dc]"
-                >
-                  <span>Careers</span>
-                  <ChevronRight size={16} className="text-[#998b76]" />
-                </Link>
+              {/* Careers */}
+              <a
+                href="#careers"
+                onClick={(e) => handleNavClick(e, "#careers")}
+                className="flex min-h-[48px] items-center justify-between rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+              >
+                <span>Careers</span>
+                <ChevronRight size={16} className="text-[#998b76]" />
+              </a>
 
-                {/* Contact Us */}
-                <Link
+              {/* Contact Us */}
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="flex min-h-[48px] items-center justify-between rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
+              >
+                <span>Contact Us</span>
+                <ChevronRight size={16} className="text-[#998b76]" />
+              </a>
+            </div>
+
+            {/* Mobile CTA */}
+            <div className="mt-5 pt-4 border-t border-[#ddd8ca]">
+              <a
+                href="#contact"
+                onClick={(e) => handleNavClick(e, "#contact")}
+                className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-[#214c39] px-5 py-3.5 text-sm font-bold text-[#fff9ed] shadow-md transition-all hover:bg-[#183c2c] active:bg-[#122e22] active:scale-[0.99] touch-manipulation"
+              >
+                <span>Start a conversation</span>
+                <ArrowUpRight size={16} className="text-[#D9A441]" />
+              </a>
+            </div>
+
+            {/* Mobile Quick Info footer */}
+            <div className="mt-5 rounded-lg border border-[#e2dccf] bg-[#efe9dc] p-4 text-xs text-[#526457] space-y-2.5">
+              <p className="font-bold text-[#1d392d] text-sm">Direct Inquiries</p>
+              <div className="space-y-1.5 text-xs">
+                <p className="flex items-center gap-2">
+                  <Phone className="h-3.5 w-3.5 text-[#8a682f] shrink-0" />
+                  <a
+                    href="tel:[Add Company Phone Number]"
+                    className="font-medium text-[#214c39] underline decoration-[#214c39]/40 hover:text-[#8a682f] touch-manipulation"
+                    onClick={closeMobileMenu}
+                  >
+                    [Add Company Phone Number]
+                  </a>
+                </p>
+                <p className="flex items-center gap-2">
+                  <Mail className="h-3.5 w-3.5 text-[#8a682f] shrink-0" />
+                  <a
+                    href="mailto:[Add Company Email]"
+                    className="font-medium text-[#214c39] underline decoration-[#214c39]/40 hover:text-[#8a682f] touch-manipulation"
+                    onClick={closeMobileMenu}
+                  >
+                    [Add Company Email]
+                  </a>
+                </p>
+                <p className="flex items-start gap-2 text-[#637066]">
+                  <MapPin className="h-3.5 w-3.5 text-[#8a682f] shrink-0 mt-0.5" />
+                  <span>[Add Registered Office Address]</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-3 pt-2 border-t border-[#dfd7c5] text-[#214c39]">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#8a682f]">Follow Us:</span>
+                <a
                   href="#contact"
-                  onClick={closeMobileMenu}
-                  className="flex items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-[#1d392d] hover:bg-[#eee8dc]"
+                  aria-label="LinkedIn"
+                  onClick={(e) => handleNavClick(e, "#contact")}
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/70 text-[#214c39] transition-colors hover:bg-[#D9A441] hover:text-[#0a1826] active:bg-[#D9A441] touch-manipulation"
                 >
-                  <span>Contact Us</span>
-                  <ChevronRight size={16} className="text-[#998b76]" />
-                </Link>
-              </div>
-
-              {/* Mobile CTA */}
-              <div className="mt-6 pt-4 border-t border-[#ddd8ca]">
-                <Link
+                  <Linkedin size={15} />
+                </a>
+                <a
                   href="#contact"
-                  onClick={closeMobileMenu}
-                  className="btn-primary w-full justify-center !py-3.5 text-center"
+                  aria-label="Facebook"
+                  onClick={(e) => handleNavClick(e, "#contact")}
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/70 text-[#214c39] transition-colors hover:bg-[#D9A441] hover:text-[#0a1826] active:bg-[#D9A441] touch-manipulation"
                 >
-                  Start a conversation
-                  <ArrowRight size={15} />
-                </Link>
+                  <Facebook size={15} />
+                </a>
+                <a
+                  href="#contact"
+                  aria-label="Instagram"
+                  onClick={(e) => handleNavClick(e, "#contact")}
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/70 text-[#214c39] transition-colors hover:bg-[#D9A441] hover:text-[#0a1826] active:bg-[#D9A441] touch-manipulation"
+                >
+                  <Instagram size={15} />
+                </a>
               </div>
-
-              {/* Mobile Quick Info footer */}
-              <div className="mt-6 rounded-lg bg-[#efe9dc] p-4 text-xs text-[#526457] space-y-2">
-                <p className="font-bold text-[#1d392d]">Direct Inquiries</p>
-                <div className="space-y-1 text-[11px]">
-                  <p>
-                    <span className="font-semibold">Phone:</span>{" "}
-                    <a href="tel:[Add Company Phone Number]" className="text-[#214c39] underline">
-                      [Add Company Phone Number]
-                    </a>
-                  </p>
-                  <p>
-                    <span className="font-semibold">Email:</span>{" "}
-                    <a href="mailto:[Add Company Email]" className="text-[#214c39] underline">
-                      [Add Company Email]
-                    </a>
-                  </p>
-                  <p>
-                    <span className="font-semibold">Office:</span> [Add Registered Office Address]
-                  </p>
-                </div>
-                <div className="flex gap-4 pt-2 text-[#214c39]">
-                  <a href="#contact" aria-label="LinkedIn" onClick={closeMobileMenu}>
-                    <Linkedin size={16} />
-                  </a>
-                  <a href="#contact" aria-label="Facebook" onClick={closeMobileMenu}>
-                    <Facebook size={16} />
-                  </a>
-                  <a href="#contact" aria-label="Instagram" onClick={closeMobileMenu}>
-                    <Instagram size={16} />
-                  </a>
-                </div>
-              </div>
-            </nav>
-          </div>
-        )}
-      </header>
+            </div>
+          </nav>
+        </div>
+      )}
     </>
   )
 }
