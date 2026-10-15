@@ -629,7 +629,7 @@ function Hero() {
                 <GlowCard
                   key={`ribbon-h1-${item.num}-${idx}`}
                   customSize
-                  glowColor={item.glow}
+                  // glowColor={item.glow}
                   className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/15 bg-[#071524]/40 backdrop-blur-md p-2.5 sm:p-3 text-left shadow-lg transition-all duration-300 hover:border-[#D9A441]/60 hover:bg-[#071524]/60 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
                 >
                   <div>
@@ -658,7 +658,7 @@ function Hero() {
                 <GlowCard
                   key={`ribbon-h2-${item.num}-${idx}`}
                   customSize
-                  glowColor={item.glow}
+                  // glowColor={item.glow}
                   className="!grid-rows-1 flex w-[215px] sm:w-[240px] md:w-[265px] shrink-0 flex-col justify-between rounded-lg border border-white/15 bg-[#071524]/40 backdrop-blur-md p-2.5 sm:p-3 text-left shadow-lg transition-all duration-300 hover:border-[#D9A441]/60 hover:bg-[#071524]/60 min-h-[74px] sm:min-h-[78px] md:min-h-[82px]"
                 >
                   <div>

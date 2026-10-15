@@ -22,14 +22,12 @@ import {
   ClipboardList,
   Compass,
   Facebook,
-  Globe2,
   Instagram,
   Linkedin,
   Mail,
   MapPin,
   Menu,
   Phone,
-  ShieldCheck,
   Ship,
   Sparkles,
   Sprout,
@@ -120,32 +118,13 @@ const tradeServices = [
   },
 ]
 
-// About section subsections
-const aboutLinks = [
-  {
-    title: "Our Approach",
-    href: "#approach",
-    description: "A disciplined 4-stage process from market intelligence to final shipment delivery.",
-    icon: Compass,
-  },
-  {
-    title: "Certifications & Compliance",
-    href: "#compliance",
-    description: "Trade readiness across IEC, APEDA, FSSAI, GSTIN, and international phytosanitary standards.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Global Presence",
-    href: "#presence",
-    description: "Serving strategic trade routes across the UAE, Saudi Arabia, Gulf, Europe & Southeast Asia.",
-    icon: Globe2,
-  },
-]
+
 
 export function Navbar() {
   const router = useRouter()
   const currentPath = router?.pathname || ""
   const isHomePage = currentPath === "/" || currentPath === ""
+  const isAboutPage = currentPath === "/about" || currentPath.startsWith("/about/")
   const isFreshFruitsPage = currentPath.includes("fresh-fruits-vegetables")
   const isFrozenVegetablesPage = currentPath.includes("frozen-vegetables")
   const isDehydratedPowdersPage = currentPath.includes("dehydrated-powders")
@@ -360,54 +339,19 @@ export function Navbar() {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
 
-                {/* About Us Menu */}
+                {/* About Us – direct link */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]">
-                    About Us
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid w-[620px] grid-cols-[.85fr_1.15fr] gap-3 p-4 bg-[#fbf9f2]">
-                      {/* Left Highlight Card */}
-                      <div className="flex h-full flex-col justify-between rounded-lg bg-gradient-to-br from-[#214c39] to-[#153426] p-5 text-white shadow-sm">
-                        <div>
-                          <div className="mb-3 inline-grid h-9 w-9 place-items-center rounded-full border border-[#D9A441]/60 bg-white/10 text-[#D9A441]">
-                            <Sprout className="h-5 w-5" />
-                          </div>
-                          <span className="block text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">
-                            About Us
-                          </span>
-                          <h4 className="font-display mt-2 text-xl font-normal leading-snug text-[#f7f4eb]">
-                            Rooted in trust, expanding globally.
-                          </h4>
-                          <p className="mt-2 text-xs leading-relaxed text-white/75">
-                            Bridging domestic producers with verified international buyers through rigorous quality standards.
-                          </p>
-                        </div>
-                        <div className="mt-4 border-t border-white/15 pt-3">
-                          <Link
-                            href="#about"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#D9A441] hover:underline"
-                          >
-                            Explore our story <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
-                      </div>
-
-                      {/* Right Sub-links */}
-                      <ul className="flex flex-col gap-1.5">
-                        {aboutLinks.map((item) => (
-                          <ListItem
-                            key={item.title}
-                            title={item.title}
-                            href={item.href}
-                            icon={item.icon}
-                          >
-                            {item.description}
-                          </ListItem>
-                        ))}
-                      </ul>
-                    </div>
-                  </NavigationMenuContent>
+                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                    <Link
+                      href="/about/"
+                      className={cn(
+                        "text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f]",
+                        isAboutPage && "bg-[#ede7d8] text-[#8a682f] font-bold"
+                      )}
+                    >
+                      About Us
+                    </Link>
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
 
                 {/* Our Products Menu */}
@@ -620,61 +564,23 @@ export function Navbar() {
                 <ChevronRight size={16} className="text-[#998b76]" />
               </a>
 
-              {/* About Us Accordion */}
-              <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => toggleSubmenu("about")}
-                  className="flex min-h-[48px] w-full items-center justify-between px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation"
-                  aria-expanded={mobileActiveSubmenu === "about"}
-                  aria-controls="mobile-submenu-about"
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
-                      <Sprout className="h-4 w-4" />
-                    </span>
-                    <span>About Us</span>
-                  </span>
-                  <ChevronDown
-                    size={18}
-                    className={cn(
-                      "text-[#776c59] transition-transform duration-200",
-                      mobileActiveSubmenu === "about" && "rotate-180 text-[#214c39]"
-                    )}
-                  />
-                </button>
-
-                {mobileActiveSubmenu === "about" && (
-                  <div id="mobile-submenu-about" className="border-t border-[#e4dfd3] bg-[#f3efe4] px-3 py-2.5 space-y-1.5">
-                    <a
-                      href="#about"
-                      onClick={(e) => handleNavClick(e, "#about")}
-                      className="block min-h-[44px] rounded-md bg-[#fbf9f2] border border-[#e2dccf] px-3.5 py-2.5 text-xs font-bold text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
-                    >
-                      Company Overview & Perspective
-                    </a>
-                    {aboutLinks.map((item) => {
-                      const IconComponent = item.icon
-                      return (
-                        <a
-                          key={item.title}
-                          href={item.href}
-                          onClick={(e) => handleNavClick(e, item.href)}
-                          className="flex min-h-[44px] items-start gap-2.5 rounded-md px-3.5 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
-                        >
-                          <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded border border-[#d8cfb9] bg-[#fbf9f2] text-[#8b682d]">
-                            <IconComponent className="h-3.5 w-3.5" />
-                          </span>
-                          <div>
-                            <div className="font-semibold text-[#1d392d]">{item.title}</div>
-                            <div className="text-[11px] leading-relaxed text-[#718074]">{item.description}</div>
-                          </div>
-                        </a>
-                      )
-                    })}
-                  </div>
+              {/* About Us – direct link */}
+              <Link
+                href="/about/"
+                onClick={closeMobileMenu}
+                className={cn(
+                  "flex min-h-[48px] items-center justify-between rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] px-4 py-3 text-sm font-semibold text-[#1d392d] transition-colors hover:bg-[#eee8dc] active:bg-[#e6dfcf] touch-manipulation",
+                  isAboutPage && "border-[#D9A441] bg-[#ede7d8] text-[#8a682f]"
                 )}
-              </div>
+              >
+                <span className="flex items-center gap-2.5">
+                  <span className="grid h-7 w-7 place-items-center rounded-md border border-[#d8cfb9] bg-[#f7f3e8] text-[#8b682d]">
+                    <Sprout className="h-4 w-4" />
+                  </span>
+                  <span>About Us</span>
+                </span>
+                <ChevronRight size={16} className="text-[#998b76]" />
+              </Link>
 
               {/* Our Products Accordion */}
               <div className="rounded-lg border border-[#e4dfd3] bg-[#fbf9f2] overflow-hidden">
