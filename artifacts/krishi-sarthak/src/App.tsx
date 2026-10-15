@@ -1,6 +1,9 @@
-import { useState, type AnchorHTMLAttributes, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type AnchorHTMLAttributes, type FormEvent, type ReactNode } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck, BarChart3, Check, ChevronDown, CircleHelp, ClipboardList, Compass, Facebook, Globe2, Instagram, Linkedin, MapPin, Menu, PackageCheck, Send, Ship, Sprout, Truck, X } from 'lucide-react';
 import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
 import { GlowCard } from './components/ui/spotlight-card';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -329,80 +332,125 @@ function CategorySection() {
 
       {/* Grid of identical size cards and images */}
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {categories.map((item) => (
-          <article
-            key={item.name}
-            className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#D9A441] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden rounded-lg"
-          >
-            {/* Exactly identical size image container for all cards */}
-            <div className="relative h-[210px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
-              <img
-                src={item.image}
-                alt={`${item.name} sourcing category`}
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-[#102c20]/15 to-transparent pointer-events-none" />
-              <span className="absolute left-3.5 top-3.5 border border-white/40 bg-[#1d392d]/85 px-2.5 py-1 text-[9px] font-bold tracking-widest text-[#f5ebd2] backdrop-blur-xs">
-                CATEGORY {item.tag}
-              </span>
-              <span className="absolute right-3.5 top-3.5 border border-[#D9A441]/60 bg-[#D9A441] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#0a1826] backdrop-blur-xs shadow-xs">
-                {item.badge}
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedCategory(item)}
-                className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
-                aria-label={`View ${item.name} specifications`}
-              >
-                <ArrowUpRight size={15} />
-              </button>
-            </div>
+        {categories.map((item) => {
+          const isFreshProduce = item.name === 'Fresh Fruits & Vegetables';
+          const isFrozenVeg = item.name.includes('Frozen Vegetables');
+          const categoryUrl = isFreshProduce
+            ? '/products/fresh-fruits-vegetables/'
+            : isFrozenVeg
+            ? '/products/frozen-vegetables/'
+            : null;
 
-            {/* Exactly identical size card body */}
-            <div className="p-5 flex flex-col flex-1 justify-between">
-              <div>
-                <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#967235] transition-colors line-clamp-1">
-                  {item.name}
-                </h3>
-                <p className="mt-1 text-[11px] font-semibold text-[#967235] tracking-wide line-clamp-1">
-                  {item.subtitle}
-                </p>
-                <p className="mt-2.5 text-xs leading-5 text-[#6f7b70] line-clamp-3 min-h-[60px]">
-                  {item.text}
-                </p>
+          return (
+            <article
+              key={item.name}
+              className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#D9A441] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden rounded-lg"
+            >
+              {/* Exactly identical size image container for all cards */}
+              <div className="relative h-[210px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
+                {categoryUrl ? (
+                  <Link href={categoryUrl} className="block h-full w-full">
+                    <img
+                      src={item.image}
+                      alt={`${item.name} sourcing category`}
+                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                    />
+                  </Link>
+                ) : (
+                  <img
+                    src={item.image}
+                    alt={`${item.name} sourcing category`}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-[#102c20]/15 to-transparent pointer-events-none" />
+                <span className="absolute left-3.5 top-3.5 border border-white/40 bg-[#1d392d]/85 px-2.5 py-1 text-[9px] font-bold tracking-widest text-[#f5ebd2] backdrop-blur-xs">
+                  CATEGORY {item.tag}
+                </span>
+                <span className="absolute right-3.5 top-3.5 border border-[#D9A441]/60 bg-[#D9A441] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#0a1826] backdrop-blur-xs shadow-xs">
+                  {item.badge}
+                </span>
+                {categoryUrl ? (
+                  <Link
+                    href={categoryUrl}
+                    className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
+                    aria-label={`View ${item.name} category page`}
+                  >
+                    <ArrowUpRight size={15} />
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCategory(item)}
+                    className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
+                    aria-label={`View ${item.name} specifications`}
+                  >
+                    <ArrowUpRight size={15} />
+                  </button>
+                )}
+              </div>
 
-                {/* Specification tags */}
-                <div className="mt-3.5 flex flex-wrap gap-1.5 pt-1">
-                  {item.highlights.map((h) => (
-                    <span
-                      key={h}
-                      className="rounded-xs border border-[#ddd8ca] bg-[#f4eee1] px-2 py-0.5 text-[9.5px] font-medium text-[#526457]"
+              {/* Exactly identical size card body */}
+              <div className="p-5 flex flex-col flex-1 justify-between">
+                <div>
+                  <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#967235] transition-colors line-clamp-1">
+                    {categoryUrl ? (
+                      <Link href={categoryUrl} className="hover:underline">
+                        {item.name}
+                      </Link>
+                    ) : (
+                      item.name
+                    )}
+                  </h3>
+                  <p className="mt-1 text-[11px] font-semibold text-[#967235] tracking-wide line-clamp-1">
+                    {item.subtitle}
+                  </p>
+                  <p className="mt-2.5 text-xs leading-5 text-[#6f7b70] line-clamp-3 min-h-[60px]">
+                    {item.text}
+                  </p>
+
+                  {/* Specification tags */}
+                  <div className="mt-3.5 flex flex-wrap gap-1.5 pt-1">
+                    {item.highlights.map((h) => (
+                      <span
+                        key={h}
+                        className="rounded-xs border border-[#ddd8ca] bg-[#f4eee1] px-2 py-0.5 text-[9.5px] font-medium text-[#526457]"
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Card Footer with identical button positions */}
+                <div className="mt-5 pt-3.5 border-t border-[#e8e2d4] flex items-center justify-between">
+                  {categoryUrl ? (
+                    <Link
+                      href={categoryUrl}
+                      className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
                     >
-                      {h}
-                    </span>
-                  ))}
+                      View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1 text-[#D9A441]" />
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory(item)}
+                      className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
+                    >
+                      View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1 text-[#D9A441]" />
+                    </button>
+                  )}
+                  <Anchor
+                    to="contact"
+                    className="text-[10px] font-bold uppercase tracking-wider text-[#967235] hover:underline"
+                  >
+                    Inquire
+                  </Anchor>
                 </div>
               </div>
-
-              {/* Card Footer with identical button positions */}
-              <div className="mt-5 pt-3.5 border-t border-[#e8e2d4] flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => setSelectedCategory(item)}
-                  className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
-                >
-                  View details <ArrowRight size={13} className="transition-transform group-hover:translate-x-1 text-[#D9A441]" />
-                </button>
-                <Anchor
-                  to="contact"
-                  className="text-[10px] font-bold uppercase tracking-wider text-[#967235] hover:underline"
-                >
-                  Inquire
-                </Anchor>
-              </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
 
       {/* Interactive Category Details Modal */}
@@ -706,8 +754,17 @@ function Careers() {
   </section>;
 }
 function Contact() {
+  const router = useRouter();
   const [success,setSuccess]=useState(false);
   const [formError,setFormError]=useState('');
+  const [productParam, setProductParam] = useState('');
+
+  useEffect(() => {
+    if (router?.query?.product) {
+      setProductParam(router.query.product as string);
+    }
+  }, [router?.query?.product]);
+
   const submit=(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault(); const form=event.currentTarget;
     if(!form.reportValidity()){setFormError('Please complete the required fields with a valid email address.');return;}
@@ -736,25 +793,14 @@ function Contact() {
             <label className="block text-[10px] font-bold text-[#56675a]">Email address *<input required type="email" name="email" autoComplete="email" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="name@company.com"/></label>
             <label className="block text-[10px] font-bold text-[#56675a]">Phone number<input type="tel" name="phone" autoComplete="tel" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="+ country code"/></label>
             <label className="block text-[10px] font-bold text-[#56675a]">Country<input name="country" autoComplete="country-name" className="mt-2 w-full border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Country"/></label>
-            <label className="block text-[10px] font-bold text-[#56675a]">Interested in<select name="interest" defaultValue="" className="mt-2 w-full border border-[#d9d4c7] bg-[#fbf9f2] px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]"><option value="" disabled>Select a product or service</option>{[...productsNav,...servicesNav].map(item=><option key={item}>{item}</option>)}</select></label>
-            <label className="block text-[10px] font-bold text-[#56675a] sm:col-span-2">Your message *<textarea required name="message" rows={4} className="mt-2 w-full resize-y border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Tell us a little about your requirements"/></label>
+            <label className="block text-[10px] font-bold text-[#56675a]">Interested in<select name="interest" defaultValue={productParam ? (productParam.toLowerCase().includes('frozen') || ['peas', 'beans', 'corn', 'broccoli', 'mushroom'].some((v) => productParam.toLowerCase().includes(v)) ? 'Frozen Vegetables' : 'Fresh Fruits & Vegetables') : ''} key={productParam} className="mt-2 w-full border border-[#d9d4c7] bg-[#fbf9f2] px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]"><option value="" disabled>Select a product or service</option>{[...productsNav,...servicesNav].map(item=><option key={item}>{item}</option>)}</select></label>
+            <label className="block text-[10px] font-bold text-[#56675a] sm:col-span-2">Your message *<textarea required name="message" rows={4} defaultValue={productParam ? `Hello, I am interested in sourcing ${productParam}. Please share product specifications, pricing, packaging, and export availability.` : ''} key={productParam + '-msg'} className="mt-2 w-full resize-y border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]" placeholder="Tell us a little about your requirements"/></label>
             <div className="flex flex-col justify-between gap-4 sm:col-span-2 sm:flex-row sm:items-center"><p className="max-w-xs text-[9px] leading-4 text-[#889084]">Preview form only. No message will be transmitted or stored.</p><button type="submit" className="btn-primary">Send inquiry <ArrowRight size={15}/></button></div>
           </form>
         </div>
       </div>
     </div>
   </section>;
-}
-function Footer() {
-  return <footer className="bg-[#173a2a] text-[#f7f4eb]">
-    <div className="wrap grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_.75fr_.9fr_.85fr]">
-      <div><div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full border border-[#D9A441]/60 text-[#D9A441]"><Sprout size={21}/></span><span><span className="block text-[11px] font-extrabold tracking-[.1em]">KRISHI SARTHAK</span><span className="mt-1 block text-[8px] tracking-[.19em] text-white/55">VENTURES LLP</span></span></div><p className="mt-5 max-w-sm font-display text-xl leading-snug text-[#f3dfb4]">Empowering Global Trade Through Quality, Reliability, and Innovation.</p><p className="mt-4 max-w-sm text-xs leading-6 text-white/60">Connecting businesses with agricultural products, sourcing opportunities and international trade solutions.</p><div className="mt-5 flex gap-3 text-xs"><a href="#contact" aria-label="LinkedIn (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Linkedin size={14}/></a><a href="#contact" aria-label="Facebook (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Facebook size={14}/></a><a href="#contact" aria-label="Instagram (placeholder link)" className="grid h-8 w-8 place-items-center border border-white/25 hover:border-[#D9A441] hover:text-[#D9A441]"><Instagram size={14}/></a></div></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Quick links</p><ul className="mt-5 space-y-3">{navItems.map(([label,id])=><li key={id}><Anchor to={id} className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Product categories</p><ul className="mt-5 space-y-3">{productsNav.map(label=><li key={label}><Anchor to="categories" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul></div>
-      <div><p className="text-[10px] font-bold uppercase tracking-[.18em] text-[#D9A441]">Trade services</p><ul className="mt-5 space-y-3">{servicesNav.map(label=><li key={label}><Anchor to="services" className="text-xs text-white/70 transition hover:text-white">{label}</Anchor></li>)}</ul><div className="mt-7 space-y-2 text-[10px] leading-5 text-white/65"><p>Phone: [Add Company Phone Number]</p><p>Email: [Add Company Email]</p><p>Address: [Add Registered Office Address]</p></div></div>
-    </div>
-    <div className="border-t border-white/15"><div className="wrap flex flex-col justify-between gap-2 py-5 text-[9px] text-white/50 sm:flex-row"><p>© 2026 KRISHI SARTHAK VENTURES LLP. All Rights Reserved.</p><p>Company details and contact information are editable placeholders.</p></div></div>
-  </footer>;
 }
 function App() {
   return <div className="grain min-h-[100dvh]">

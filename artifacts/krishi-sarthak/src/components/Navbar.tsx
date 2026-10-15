@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -41,45 +42,46 @@ import {
 const productCategories = [
   {
     title: "Fresh Fruits & Vegetables",
-    href: "#categories",
+    href: "/products/fresh-fruits-vegetables/",
     description: "Export-grade apples, bananas, exotic dragon fruit, and premium Indian onions.",
     tag: "01",
     badge: "Core Export",
   },
   {
     title: "Frozen Vegetables",
-    href: "#categories",
-    description: "Quality-preserved IQF vegetables with strict temperature-controlled logistics.",
+    href: "/products/frozen-vegetables/",
+    description: "Export-grade IQF green peas, French beans, baby corn, broccoli & mushrooms.",
     tag: "02",
+    badge: "IQF Frozen",
   },
   {
     title: "Dehydrated Powders",
-    href: "#categories",
+    href: "/#categories",
     description: "Nutritious fruit and vegetable powders for global food processing industries.",
     tag: "03",
   },
   {
     title: "Spices & Herbs",
-    href: "#categories",
+    href: "/#categories",
     description: "Rich Indian spices and culinary herbs sourced directly for reliable quality.",
     tag: "04",
     badge: "High Demand",
   },
   {
     title: "Pulses & Grains",
-    href: "#categories",
+    href: "/#categories",
     description: "Export-quality Basmati and Non-Basmati rice, pulses, and staple grains.",
     tag: "05",
   },
   {
     title: "Dry Fruits & Nuts",
-    href: "#categories",
+    href: "/#categories",
     description: "Carefully selected dry fruits, dates, and nuts for international buyers.",
     tag: "06",
   },
   {
-    title: "Construction Materials",
-    href: "#categories",
+    title: "Construction & Road Materials",
+    href: "/#categories",
     description: "High-purity gypsum and industrial minerals for commercial infrastructure.",
     tag: "07",
   },
@@ -137,6 +139,12 @@ const aboutLinks = [
 ]
 
 export function Navbar() {
+  const router = useRouter()
+  const currentPath = router?.pathname || ""
+  const isHomePage = currentPath === "/" || currentPath === ""
+  const isFreshFruitsPage = currentPath.includes("fresh-fruits-vegetables")
+  const isFrozenVegetablesPage = currentPath.includes("frozen-vegetables")
+
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [mobileActiveSubmenu, setMobileActiveSubmenu] = React.useState<string | null>(null)
   const [headerBottom, setHeaderBottom] = React.useState(76)
@@ -174,16 +182,25 @@ export function Navbar() {
   ) => {
     closeMobileMenu()
 
-    if (href.startsWith("#")) {
+    if (!href.startsWith("#") && !href.startsWith("/#")) {
+      return
+    }
+
+    const hash = href.startsWith("/#") ? href.slice(1) : href
+    const targetId = hash.slice(1)
+
+    if (isHomePage) {
       e.preventDefault()
-      const targetId = href.slice(1)
       const element = document.getElementById(targetId)
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: "smooth" })
-          window.history.pushState(null, "", href)
+          window.history.pushState(null, "", hash)
         }, 60)
       }
+    } else {
+      e.preventDefault()
+      router.push(`/${hash}`)
     }
   }
 
@@ -294,8 +311,14 @@ export function Navbar() {
         <div className="wrap flex h-[70px] sm:h-[76px] items-center justify-between">
           {/* Brand Logo */}
           <Link
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
+            href="/"
+            onClick={(e) => {
+              if (isHomePage) {
+                handleNavClick(e, "#home")
+              } else {
+                closeMobileMenu()
+              }
+            }}
             className="group flex items-center gap-2.5 sm:gap-3 outline-none"
             aria-label="Krishi Sarthak Ventures Home"
           >
@@ -380,7 +403,10 @@ export function Navbar() {
 
                 {/* Our Products Menu */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]">
+                  <NavigationMenuTrigger className={cn(
+                    "text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]",
+                    (isFreshFruitsPage || isFrozenVegetablesPage) && "bg-[#ede7d8] text-[#8a682f] font-bold"
+                  )}>
                     Our Products
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -395,7 +421,8 @@ export function Navbar() {
                           </h4>
                         </div>
                         <Link
-                          href="#products"
+                          href="/#products"
+                          onClick={(e) => handleNavClick(e, "#products")}
                           className="inline-flex items-center gap-1 text-xs font-bold text-[#214c39] hover:text-[#8a682f]"
                         >
                           View all products <ChevronRight className="h-3.5 w-3.5" />
@@ -403,16 +430,27 @@ export function Navbar() {
                       </div>
 
                       <ul className="grid grid-cols-2 gap-1.5">
-                        {productCategories.map((cat) => (
-                          <ListItem
-                            key={cat.title}
-                            title={cat.title}
-                            href={cat.href}
-                            badge={cat.badge}
-                          >
-                            {cat.description}
-                          </ListItem>
-                        ))}
+                        {productCategories.map((cat) => {
+                          const isActive =
+                            (cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
+                            (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage);
+                          return (
+                            <ListItem
+                              key={cat.title}
+                              title={cat.title}
+                              href={cat.href}
+                              badge={isActive ? "Active Page" : cat.badge}
+                              active={isActive}
+                              onClick={() => {
+                                if (cat.href.startsWith("#") || cat.href.startsWith("/#")) {
+                                  // hash navigation
+                                }
+                              }}
+                            >
+                              {cat.description}
+                            </ListItem>
+                          );
+                        })}
                       </ul>
 
                       <div className="mt-3 flex items-center justify-between rounded-lg bg-[#efe9dc] px-4 py-2.5 text-xs text-[#526457]">
@@ -659,22 +697,36 @@ export function Navbar() {
                     </a>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
                       {productCategories.map((cat) => (
-                        <a
+                        <Link
                           key={cat.title}
                           href={cat.href}
-                          onClick={(e) => handleNavClick(e, cat.href)}
-                          className="flex min-h-[44px] items-center justify-between rounded-md bg-[#fbf9f2]/80 border border-[#e2dccf]/70 px-3 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
+                          onClick={(e) => {
+                            if (cat.href.startsWith("#") || cat.href.startsWith("/#")) {
+                              handleNavClick(e, cat.href)
+                            } else {
+                              closeMobileMenu()
+                            }
+                          }}
+                          className={cn(
+                            "flex min-h-[44px] items-center justify-between rounded-md bg-[#fbf9f2]/80 border border-[#e2dccf]/70 px-3 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation",
+                            ((cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
+                              (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage)) &&
+                              "bg-[#ede7d8] border-[#D9A441] text-[#183c2c] font-bold"
+                          )}
                         >
                           <div className="flex items-center gap-2 pr-2">
                             <span className="font-semibold text-[#1d392d]">{cat.title}</span>
                             {cat.badge && (
                               <span className="rounded bg-[#e8e1cf] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-wider text-[#685b41]">
-                                {cat.badge}
+                                {(cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
+                                (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage)
+                                  ? "Active"
+                                  : cat.badge}
                               </span>
                             )}
                           </div>
                           <span className="text-[10px] font-bold text-[#9a865b] shrink-0">{cat.tag}</span>
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -859,6 +911,7 @@ function ListItem({
   badge,
   className,
   onClick,
+  active,
   ...props
 }: React.ComponentPropsWithoutRef<"li"> & {
   href: string
@@ -866,6 +919,7 @@ function ListItem({
   icon?: React.ComponentType<{ className?: string }>
   badge?: string
   onClick?: () => void
+  active?: boolean
 }) {
   return (
     <li {...props}>
@@ -875,6 +929,7 @@ function ListItem({
           onClick={onClick}
           className={cn(
             "group block select-none rounded-lg p-2.5 leading-none no-underline outline-none transition-all duration-200 hover:bg-[#efe8da] hover:text-[#1d392d] focus:bg-[#efe8da]",
+            active && "bg-[#efe8da] border-l-2 border-[#D9A441] shadow-2xs",
             className
           )}
         >
