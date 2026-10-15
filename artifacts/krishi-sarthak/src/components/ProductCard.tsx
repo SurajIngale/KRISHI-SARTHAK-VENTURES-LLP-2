@@ -17,8 +17,13 @@ import {
   ProductSpecification,
   getWhatsAppProductUrl,
   getWhatsAppFrozenProductUrl,
+  getWhatsAppPowderProductUrl,
+  getWhatsAppSpiceProductUrl,
   getContactProductUrl,
 } from '@/data/tradeData';
+import { getWhatsAppGrainProductUrl } from '@/data/pulsesGrainsData';
+import { getWhatsAppDryFruitsProductUrl } from '@/data/dryFruitsNutsData';
+import { getWhatsAppConstructionProductUrl } from '@/data/constructionMaterialsData';
 
 interface ProductCardProps {
   product: ProductSpecification;
@@ -27,7 +32,17 @@ interface ProductCardProps {
 
 export function ProductCard({ product, priorityImage = false }: ProductCardProps) {
   const whatsappUrl =
-    product.category === 'frozen'
+    product.category === 'construction'
+      ? getWhatsAppConstructionProductUrl(product.name)
+      : product.category === 'dry-fruits'
+      ? getWhatsAppDryFruitsProductUrl(product.name)
+      : product.category === 'grains'
+      ? getWhatsAppGrainProductUrl(product.name)
+      : product.category === 'spice' || product.category === 'herbal'
+      ? getWhatsAppSpiceProductUrl(product.name)
+      : product.category === 'powder'
+      ? getWhatsAppPowderProductUrl(product.name)
+      : product.category === 'frozen'
       ? getWhatsAppFrozenProductUrl(product.name)
       : getWhatsAppProductUrl(product.name);
   const contactUrl = getContactProductUrl(product.name);
@@ -57,7 +72,19 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
         {/* Category & HS Code Badges */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <span className="rounded-sm border border-white/30 bg-[#1d392d]/90 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wider text-[#f5ebd2] backdrop-blur-xs">
-            {product.category === 'frozen'
+            {product.category === 'construction'
+              ? 'Construction & Road Materials'
+              : product.category === 'dry-fruits'
+              ? 'Dry Fruits & Nuts'
+              : product.category === 'grains'
+              ? 'Pulses & Grains'
+              : product.category === 'spice'
+              ? 'Spices & Herbs'
+              : product.category === 'herbal'
+              ? 'Herbal Product'
+              : product.category === 'powder'
+              ? 'Dehydrated Powder'
+              : product.category === 'frozen'
               ? 'Frozen – IQF'
               : product.category === 'fruit'
               ? 'Fresh Fruit'
@@ -68,16 +95,22 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
           </span>
         </div>
 
-        {/* Shelf-Life pill */}
+        {/* Shelf-Life or Grade pill */}
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-medium">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-black/60 px-2.5 py-1 backdrop-blur-xs">
             <Clock size={12} className="text-[#D9A441]" />
             <span>
-              {product.storage ? `${product.storage} · ` : ''}Shelf Life: {product.shelfLife}
+              {product.shelfLife
+                ? `${product.storage ? `${product.storage} · ` : ''}Shelf Life: ${product.shelfLife}`
+                : product.grade
+                ? `Grade: ${product.grade}`
+                : product.tradeType
+                ? `Trade: ${product.tradeType}`
+                : 'Export Grade Cargo'}
             </span>
           </span>
           <span className="rounded-full bg-[#214c39]/80 px-2 py-0.5 text-[10px] text-[#f7f4eb]">
-            Export Grade
+            {product.tradeType ? product.tradeType : 'Export Grade'}
           </span>
         </div>
       </div>
@@ -133,19 +166,143 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
                     HS Code
                   </th>
                   <td className="py-2 px-3 text-[#183c2c] font-mono font-bold">
-                    {product.hsCode}
+                    <span>{product.hsCode}</span>
+                    {product.hsVerificationNote && (
+                      <span className="mt-1 block font-sans text-[9px] font-medium text-[#8d6829] bg-[#faedd2] px-1.5 py-0.5 rounded border border-[#e5d2a8]">
+                        Flagged for tariff schedule verification
+                      </span>
+                    )}
                   </td>
                 </tr>
+                {product.tradeType && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Trade Type
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.tradeType}
+                    </td>
+                  </tr>
+                )}
+                {product.varieties && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      Varieties
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.varieties}
+                    </td>
+                  </tr>
+                )}
                 {product.productType && (
                   <tr>
                     <th
                       scope="row"
                       className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
                     >
-                      Product Type
+                      {product.category === 'construction' ? 'Type' : 'Product Type'}
                     </th>
                     <td className="py-2 px-3 text-[#495b4e] font-medium">
                       {product.productType}
+                    </td>
+                  </tr>
+                )}
+                {product.grade && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Grade
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.grade}
+                    </td>
+                  </tr>
+                )}
+                {product.productForm && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Product Form
+                    </th>
+                    <td className="py-2 px-3 text-[#495b4e] font-medium">
+                      {product.productForm}
+                    </td>
+                  </tr>
+                )}
+                {product.majorSuppliers && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      Major Suppliers
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium leading-snug">
+                      {product.majorSuppliers}
+                    </td>
+                  </tr>
+                )}
+                {product.importSources && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Import Sources
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.importSources}
+                    </td>
+                  </tr>
+                )}
+                {product.productionRegion && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      {product.name === 'Walnut' || product.name === 'Mamra Almonds'
+                        ? 'Indian Production'
+                        : 'Production Regions'}
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.productionRegion}
+                    </td>
+                  </tr>
+                )}
+                {product.reExportMarkets && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Re-Export Markets
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.reExportMarkets}
+                    </td>
+                  </tr>
+                )}
+                {product.exportType && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Export Type
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium">
+                      {product.exportType}
                     </td>
                   </tr>
                 )}
@@ -162,27 +319,42 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
                     </td>
                   </tr>
                 )}
-                <tr>
-                  <th
-                    scope="row"
-                    className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
-                  >
-                    Shelf Life
-                  </th>
-                  <td className="py-2 px-3 text-[#495b4e]">
-                    {product.shelfLife}
-                  </td>
-                </tr>
-                {product.varieties && (
+                {product.shelfLife && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Shelf Life
+                    </th>
+                    <td className="py-2 px-3 text-[#495b4e]">
+                      {product.shelfLife}
+                    </td>
+                  </tr>
+                )}
+                {product.usage && (
                   <tr>
                     <th
                       scope="row"
                       className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
                     >
-                      Varieties
+                      Usage
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium leading-snug">
+                      {product.usage}
+                    </td>
+                  </tr>
+                )}
+                {product.industry && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap"
+                    >
+                      Industry
                     </th>
                     <td className="py-2 px-3 text-[#2d4234] font-medium">
-                      {product.varieties}
+                      {product.industry}
                     </td>
                   </tr>
                 )}
@@ -199,17 +371,62 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
                     </td>
                   </tr>
                 )}
-                <tr>
-                  <th
-                    scope="row"
-                    className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
-                  >
-                    Target Markets
-                  </th>
-                  <td className="py-2 px-3 text-[#223d2e] font-medium leading-snug">
-                    {product.markets}
-                  </td>
-                </tr>
+                {product.applications && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      Applications
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium leading-snug">
+                      {product.applications}
+                    </td>
+                  </tr>
+                )}
+                {!(product.category === 'construction' && product.name === 'Gypsum') && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      {product.category === 'construction' || product.category === 'dry-fruits' || product.category === 'powder'
+                        ? 'Export Markets'
+                        : product.category === 'grains' || product.category === 'herbal'
+                        ? 'Major Markets'
+                        : 'Target Markets'}
+                    </th>
+                    <td className="py-2 px-3 text-[#223d2e] font-medium leading-snug">
+                      {product.markets}
+                    </td>
+                  </tr>
+                )}
+                {product.additionalTradeInfo && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      Additional Trade Information
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium leading-snug">
+                      {product.additionalTradeInfo}
+                    </td>
+                  </tr>
+                )}
+                {product.additionalInfo && (
+                  <tr>
+                    <th
+                      scope="row"
+                      className="w-[36%] bg-[#efe8da] py-2 px-3 font-semibold text-[#304537] whitespace-nowrap align-top"
+                    >
+                      Additional Info
+                    </th>
+                    <td className="py-2 px-3 text-[#2d4234] font-medium leading-snug">
+                      {product.additionalInfo}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

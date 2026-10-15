@@ -16,11 +16,11 @@ const navItems = [
 const productCategories = [
   { label: 'Fresh Fruits & Vegetables', href: '/products/fresh-fruits-vegetables/' },
   { label: 'Frozen Vegetables', href: '/products/frozen-vegetables/' },
-  { label: 'Dehydrated Powders', href: '/#categories' },
-  { label: 'Spices & Herbs', href: '/#categories' },
-  { label: 'Pulses & Grains', href: '/#categories' },
-  { label: 'Dry Fruits & Nuts', href: '/#categories' },
-  { label: 'Construction & Road Materials', href: '/#categories' },
+  { label: 'Dehydrated Powders', href: '/products/dehydrated-powders/' },
+  { label: 'Spices & Herbs', href: '/products/spices-herbs/' },
+  { label: 'Pulses & Grains', href: '/products/pulses-grains/' },
+  { label: 'Dry Fruits & Nuts', href: '/products/dry-fruits-nuts/' },
+  { label: 'Construction & Road Materials', href: '/products/construction-materials/' },
 ];
 
 const tradeServices = [

@@ -34,6 +34,12 @@ export default function ContactPage() {
   useEffect(() => {
     if (router?.isReady && router.query.product) {
       setProductParam(router.query.product as string);
+    } else if (typeof window !== 'undefined' && window.location.search) {
+      const params = new URLSearchParams(window.location.search);
+      const prod = params.get('product');
+      if (prod) {
+        setProductParam(prod);
+      }
     }
   }, [router?.isReady, router?.query?.product]);
 
@@ -188,10 +194,28 @@ export default function ContactPage() {
                         name="interest"
                         defaultValue={
                           activeProduct
-                            ? activeProduct.toLowerCase().includes('frozen') ||
-                              ['peas', 'beans', 'corn', 'broccoli', 'mushroom'].some((v) =>
-                                activeProduct.toLowerCase().includes(v)
+                            ? ['gypsum', 'bitumen', 'fly ash', 'cement', 'construction', 'road material'].some((c) =>
+                                activeProduct.toLowerCase().includes(c)
                               )
+                              ? 'Construction & Road Materials'
+                              : ['date', 'walnut', 'pista', 'almond', 'cashew', 'raisin', 'nut', 'dry fruit'].some((d) =>
+                                  activeProduct.toLowerCase().includes(d)
+                                )
+                              ? 'Dry Fruits & Nuts'
+                              : ['rice', 'maize', 'corn', 'chickpea', 'chana', 'barley', 'soybean', 'pulse', 'grain'].some((g) =>
+                                  activeProduct.toLowerCase().includes(g)
+                                )
+                              ? 'Pulses & Grains'
+                              : ['spice', 'herb', 'pepper', 'cardamom', 'cumin', 'turmeric', 'ginger', 'mustard', 'fenugreek', 'chilli', 'tamarind', 'coriander', 'haritaki', 'ashwagandha', 'shatavari', 'carom', 'ajwain'].some((s) =>
+                                activeProduct.toLowerCase().includes(s)
+                              )
+                              ? 'Spices & Herbs'
+                              : activeProduct.toLowerCase().includes('powder')
+                              ? 'Dehydrated Powders'
+                              : activeProduct.toLowerCase().includes('frozen') ||
+                                ['peas', 'beans', 'broccoli', 'mushroom'].some((v) =>
+                                  activeProduct.toLowerCase().includes(v)
+                                )
                               ? 'Frozen Vegetables'
                               : 'Fresh Fruits & Vegetables'
                             : ''

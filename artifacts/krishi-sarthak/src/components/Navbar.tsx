@@ -56,34 +56,38 @@ const productCategories = [
   },
   {
     title: "Dehydrated Powders",
-    href: "/#categories",
-    description: "Nutritious fruit and vegetable powders for global food processing industries.",
+    href: "/products/dehydrated-powders/",
+    description: "Export-grade Moringa, Onion, Garlic, Tomato, Banana & Beetroot powders.",
     tag: "03",
+    badge: "Export Grade",
   },
   {
     title: "Spices & Herbs",
-    href: "/#categories",
-    description: "Rich Indian spices and culinary herbs sourced directly for reliable quality.",
+    href: "/products/spices-herbs/",
+    description: "Export-grade Black Pepper, Cardamom, Turmeric, Cumin, Red Chilli, Ashwagandha & Shatavari.",
     tag: "04",
-    badge: "High Demand",
+    badge: "Export Grade",
   },
   {
     title: "Pulses & Grains",
-    href: "/#categories",
+    href: "/products/pulses-grains/",
     description: "Export-quality Basmati and Non-Basmati rice, pulses, and staple grains.",
     tag: "05",
+    badge: "Export Grade",
   },
   {
     title: "Dry Fruits & Nuts",
-    href: "/#categories",
+    href: "/products/dry-fruits-nuts/",
     description: "Carefully selected dry fruits, dates, and nuts for international buyers.",
     tag: "06",
+    badge: "Export Grade",
   },
   {
     title: "Construction & Road Materials",
-    href: "/#categories",
-    description: "High-purity gypsum and industrial minerals for commercial infrastructure.",
+    href: "/products/construction-materials/",
+    description: "High-purity gypsum, industrial bitumen, and fly ash for infrastructure.",
     tag: "07",
+    badge: "Export Grade",
   },
 ]
 
@@ -144,6 +148,11 @@ export function Navbar() {
   const isHomePage = currentPath === "/" || currentPath === ""
   const isFreshFruitsPage = currentPath.includes("fresh-fruits-vegetables")
   const isFrozenVegetablesPage = currentPath.includes("frozen-vegetables")
+  const isDehydratedPowdersPage = currentPath.includes("dehydrated-powders")
+  const isSpicesHerbsPage = currentPath.includes("spices-herbs")
+  const isPulsesGrainsPage = currentPath.includes("pulses-grains")
+  const isDryFruitsNutsPage = currentPath.includes("dry-fruits-nuts")
+  const isConstructionMaterialsPage = currentPath.includes("construction-materials")
 
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [mobileActiveSubmenu, setMobileActiveSubmenu] = React.useState<string | null>(null)
@@ -405,7 +414,7 @@ export function Navbar() {
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className={cn(
                     "text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]",
-                    (isFreshFruitsPage || isFrozenVegetablesPage) && "bg-[#ede7d8] text-[#8a682f] font-bold"
+                    (isFreshFruitsPage || isFrozenVegetablesPage || isDehydratedPowdersPage || isSpicesHerbsPage || isPulsesGrainsPage || isDryFruitsNutsPage || isConstructionMaterialsPage) && "bg-[#ede7d8] text-[#8a682f] font-bold"
                   )}>
                     Our Products
                   </NavigationMenuTrigger>
@@ -433,7 +442,12 @@ export function Navbar() {
                         {productCategories.map((cat) => {
                           const isActive =
                             (cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
-                            (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage);
+                            (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage) ||
+                            (cat.title === "Dehydrated Powders" && isDehydratedPowdersPage) ||
+                            (cat.title === "Spices & Herbs" && isSpicesHerbsPage) ||
+                            (cat.title === "Pulses & Grains" && isPulsesGrainsPage) ||
+                            (cat.title === "Dry Fruits & Nuts" && isDryFruitsNutsPage) ||
+                            (cat.title === "Construction & Road Materials" && isConstructionMaterialsPage);
                           return (
                             <ListItem
                               key={cat.title}
@@ -710,7 +724,12 @@ export function Navbar() {
                           className={cn(
                             "flex min-h-[44px] items-center justify-between rounded-md bg-[#fbf9f2]/80 border border-[#e2dccf]/70 px-3 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation",
                             ((cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
-                              (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage)) &&
+                              (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage) ||
+                              (cat.title === "Dehydrated Powders" && isDehydratedPowdersPage) ||
+                              (cat.title === "Spices & Herbs" && isSpicesHerbsPage) ||
+                              (cat.title === "Pulses & Grains" && isPulsesGrainsPage) ||
+                              (cat.title === "Dry Fruits & Nuts" && isDryFruitsNutsPage) ||
+                              (cat.title === "Construction & Road Materials" && isConstructionMaterialsPage)) &&
                               "bg-[#ede7d8] border-[#D9A441] text-[#183c2c] font-bold"
                           )}
                         >
@@ -719,7 +738,12 @@ export function Navbar() {
                             {cat.badge && (
                               <span className="rounded bg-[#e8e1cf] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-wider text-[#685b41]">
                                 {(cat.title === "Fresh Fruits & Vegetables" && isFreshFruitsPage) ||
-                                (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage)
+                                (cat.title === "Frozen Vegetables" && isFrozenVegetablesPage) ||
+                                (cat.title === "Dehydrated Powders" && isDehydratedPowdersPage) ||
+                                (cat.title === "Spices & Herbs" && isSpicesHerbsPage) ||
+                                (cat.title === "Pulses & Grains" && isPulsesGrainsPage) ||
+                                (cat.title === "Dry Fruits & Nuts" && isDryFruitsNutsPage) ||
+                                (cat.title === "Construction & Road Materials" && isConstructionMaterialsPage)
                                   ? "Active"
                                   : cat.badge}
                               </span>

@@ -110,6 +110,7 @@ const rawCategories: CategoryItem[] = [
       'White & Red Onion Powder/Flakes, Garlic Powder/Granules, Ginger Powder, Tomato Powder, Fruit Powders',
     packaging:
       'Double-layer polyethylene lined aluminium foil pouches, multi-wall paper bags, HDPE drums (20kg–25kg)',
+    url: '/products/dehydrated-powders/',
   },
   {
     name: 'Spices & Herbs',
@@ -123,6 +124,7 @@ const rawCategories: CategoryItem[] = [
       'Salem & Nizamabad Turmeric (3-5% curcumin), Guntur S17 & Teja Chilli, Unjha Cumin Seeds, Coriander, Green Cardamom',
     packaging:
       'Multi-wall kraft paper bags, jute bags with inner poly liners, vacuum pouches (25kg–50kg bulk)',
+    url: '/products/spices-herbs/',
   },
   {
     name: 'Pulses & Grains',
@@ -136,6 +138,7 @@ const rawCategories: CategoryItem[] = [
       '1121 Steam & Sella Basmati, Pusa Basmati, PR-11 & IR-64 Non-Basmati, Kabuli Chickpeas, Yellow Maize',
     packaging:
       'Non-woven fabric bags, BOPP laminated bags, PP bags (5kg, 10kg, 25kg, 50kg) & containerized bulk liners',
+    url: '/products/pulses-grains/',
   },
   {
     name: 'Dry Fruits & Nuts',
@@ -149,6 +152,7 @@ const rawCategories: CategoryItem[] = [
       'Medjool, Kimia & Sayer Dates, W180 / W240 / W320 Whole Cashew Kernels, California & Mamra Almonds, Raisins',
     packaging:
       'Nitrogen-flushed tins, vacuum poly-packs (10kg/20kg), reinforced corrugated master boxes with moisture barrier',
+    url: '/products/dry-fruits-nuts/',
   },
   {
     name: 'Construction & Road Materials',
@@ -162,6 +166,7 @@ const rawCategories: CategoryItem[] = [
       'Raw Natural Gypsum Rock (crushed/lumps), Calcined Gypsum, Mineral Aggregates, Industrial Quartz & Silica',
     packaging:
       'Break-bulk vessel shipments, jumbo tonner bags (1 MT / 1.5 MT), and open-top bulk containers',
+    url: '/products/construction-materials/',
   },
   {
     name: 'Custom Sourcing & Contract Farming',

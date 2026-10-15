@@ -1,15 +1,29 @@
 export interface ProductSpecification {
   name: string;
   slug: string;
-  category: 'fruit' | 'vegetable' | 'frozen';
+  category: 'fruit' | 'vegetable' | 'frozen' | 'powder' | 'spice' | 'herbal' | 'grains' | 'dry-fruits' | 'construction';
   description: string;
   hsCode: string;
   productType?: string;
+  productForm?: string;
+  tradeType?: string;
+  majorSuppliers?: string;
+  reExportMarkets?: string;
+  exportType?: string;
+  importSources?: string;
+  productionRegion?: string;
+  usage?: string;
+  industry?: string;
+  grade?: string;
   storage?: string;
-  shelfLife: string;
+  shelfLife?: string;
   varieties?: string;
   packaging?: string;
+  applications?: string;
   markets: string;
+  additionalInfo?: string;
+  additionalTradeInfo?: string;
+  hsVerificationNote?: string;
   image: string;
   imageAlt?: string;
   marketNote?: string;
@@ -42,6 +56,21 @@ export function getWhatsAppFrozenProductUrl(productName: string): string {
     ? `Frozen ${productName.replace(' (Frozen)', '')}`
     : productName;
   const message = `Hello, I am interested in ${cleanName}. Please share the available grades, packaging options, pricing, minimum order quantity, and export availability.`;
+  return `https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export function getWhatsAppPowderProductUrl(productName: string): string {
+  const message = `Hello KRISHI SARTHAK VENTURES LLP, I am interested in ${productName}. Please share the available specifications, minimum order quantity, pricing, packaging options, and export details.`;
+  return `https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export function getWhatsAppSpiceProductUrl(productName: string): string {
+  const message = `Hello KRISHI SARTHAK VENTURES LLP, I am interested in ${productName}. Please share the available product specifications, minimum order quantity, pricing, packaging options, and export details.`;
+  return `https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+export function getWhatsAppGrainProductUrl(productName: string): string {
+  const message = `Hello, I am interested in ${productName} from KRISHI SARTHAK VENTURES LLP. Please share the product specifications, pricing, minimum order quantity, packaging options, and export availability.`;
   return `https://wa.me/${COMPANY_INFO.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 
@@ -341,6 +370,7 @@ export const VEGETABLE_PRODUCTS: ProductSpecification[] = [
 export const ALL_FRESH_PRODUCE = [...FRUIT_PRODUCTS, ...VEGETABLE_PRODUCTS];
 
 export { FROZEN_VEGETABLE_PRODUCTS } from './frozenVegetablesData';
+export { DEHYDRATED_POWDER_PRODUCTS } from './dehydratedPowdersData';
 
 export const COMPLIANCE_ITEMS = [
   {
