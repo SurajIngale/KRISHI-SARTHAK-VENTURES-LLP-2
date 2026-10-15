@@ -29,21 +29,33 @@ export default function ContactPage() {
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState('');
   const queryProduct = (router?.query?.product as string) || '';
+  const queryService = (router?.query?.service as string) || '';
   const [productParam, setProductParam] = useState(queryProduct);
+  const [serviceParam, setServiceParam] = useState(queryService);
 
   useEffect(() => {
-    if (router?.isReady && router.query.product) {
-      setProductParam(router.query.product as string);
+    if (router?.isReady) {
+      if (router.query.product) {
+        setProductParam(router.query.product as string);
+      }
+      if (router.query.service) {
+        setServiceParam(router.query.service as string);
+      }
     } else if (typeof window !== 'undefined' && window.location.search) {
       const params = new URLSearchParams(window.location.search);
       const prod = params.get('product');
+      const srv = params.get('service');
       if (prod) {
         setProductParam(prod);
       }
+      if (srv) {
+        setServiceParam(srv);
+      }
     }
-  }, [router?.isReady, router?.query?.product]);
+  }, [router?.isReady, router?.query?.product, router?.query?.service]);
 
   const activeProduct = productParam || queryProduct;
+  const activeService = serviceParam || queryService;
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -193,7 +205,11 @@ export default function ContactPage() {
                       <select
                         name="interest"
                         defaultValue={
-                          activeProduct
+                          activeService
+                            ? servicesNav.find(
+                                (s) => s.toLowerCase() === activeService.toLowerCase()
+                              ) || activeService
+                            : activeProduct
                             ? ['gypsum', 'bitumen', 'fly ash', 'cement', 'construction', 'road material'].some((c) =>
                                 activeProduct.toLowerCase().includes(c)
                               )
@@ -220,7 +236,7 @@ export default function ContactPage() {
                               : 'Fresh Fruits & Vegetables'
                             : ''
                         }
-                        key={activeProduct}
+                        key={activeService || activeProduct}
                         className="mt-2 w-full border border-[#d9d4c7] bg-[#fbf9f2] px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]"
                       >
                         <option value="" disabled>Select a product or service</option>
@@ -236,11 +252,13 @@ export default function ContactPage() {
                         name="message"
                         rows={4}
                         defaultValue={
-                          activeProduct
+                          activeService
+                            ? `Hello KRISHI SARTHAK VENTURES LLP, I would like to discuss ${activeService}. Please share coordination details, procedural requirements, and next steps.`
+                            : activeProduct
                             ? `Hello, I am interested in sourcing ${activeProduct}. Please share product specifications, pricing, packaging, and export availability.`
                             : ''
                         }
-                        key={activeProduct + '-msg'}
+                        key={(activeService || activeProduct) + '-msg'}
                         className="mt-2 w-full resize-y border border-[#d9d4c7] bg-transparent px-3 py-3 text-xs font-normal outline-none focus:border-[#718b5c]"
                         placeholder="Tell us a little about your requirements"
                       />

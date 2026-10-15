@@ -5,12 +5,12 @@ import { COMPANY_INFO } from '@/data/tradeData';
 
 const navItems = [
   { label: 'Home', href: '/#home' },
-  { label: 'About Us', href: '/#about' },
+  { label: 'About Us', href: '/about' },
   { label: 'Our Products', href: '/#products' },
-  { label: 'Our Services', href: '/#services' },
+  { label: 'Our Services', href: '/services' },
   { label: 'News & Blogs', href: '/#news' },
   { label: 'Careers', href: '/#careers' },
-  { label: 'Contact Us', href: '/#contact' },
+  { label: 'Contact Us', href: '/contact' },
 ];
 
 const productCategories = [
@@ -24,10 +24,10 @@ const productCategories = [
 ];
 
 const tradeServices = [
-  { label: 'Shipment Services', href: '/#services' },
-  { label: 'Global Trade Consultancy', href: '/#services' },
-  { label: 'Freight Forwarding & Logistics', href: '/#services' },
-  { label: 'Documentation Services', href: '/#services' },
+  { label: 'Shipment Services', href: '/services/shipments' },
+  { label: 'Global Trade Consultancy', href: '/services/global-trade-consultancy' },
+  { label: 'Freight Forwarding & Logistics', href: '/services/freight-forwarding-logistics' },
+  { label: 'Documentation Services', href: '/services/documentation-services' },
 ];
 
 export function Footer() {

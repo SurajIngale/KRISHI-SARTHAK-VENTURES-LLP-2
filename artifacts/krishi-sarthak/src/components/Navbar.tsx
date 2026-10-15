@@ -93,28 +93,31 @@ const productCategories = [
 const tradeServices = [
   {
     title: "Shipment Services",
-    href: "#services",
-    description: "Container booking, freight guidance, port clearance, and end-to-end cargo logistics.",
+    href: "/services/shipments",
+    description: "Shipment coordination for group and individual consignments, documentation, and freight booking.",
     icon: Ship,
-    badge: "Turnkey",
+    badge: "Consignments",
   },
   {
     title: "Global Trade Consultancy",
-    href: "#services",
-    description: "Advisory on international regulations, tariff optimizations, and market entry.",
+    href: "/services/global-trade-consultancy",
+    description: "Trade advisory, market intelligence, product and market evaluation, and trade planning.",
     icon: Compass,
+    badge: "Advisory",
   },
   {
     title: "Freight Forwarding & Logistics",
-    href: "#services",
-    description: "Multi-modal sea, land, and air transportation coordination with cold-chain support.",
+    href: "/services/freight-forwarding-logistics",
+    description: "Sea freight, air freight, customs coordination, inland transportation, and international shipping.",
     icon: Truck,
+    badge: "Logistics",
   },
   {
-    title: "Documentation & Licensing",
-    href: "#services",
-    description: "Regulatory compliance support for IEC, APEDA, FSSAI, RCMC, and DGFT filing.",
+    title: "Documentation Services",
+    href: "/services/documentation-services",
+    description: "Guidance and coordination concerning IEC, DGFT, RCMC, AD Code, ICEGATE, and compliance.",
     icon: ClipboardList,
+    badge: "Compliance",
   },
 ]
 
@@ -132,6 +135,7 @@ export function Navbar() {
   const isPulsesGrainsPage = currentPath.includes("pulses-grains")
   const isDryFruitsNutsPage = currentPath.includes("dry-fruits-nuts")
   const isConstructionMaterialsPage = currentPath.includes("construction-materials")
+  const isServicesPage = currentPath.startsWith("/services")
 
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [mobileActiveSubmenu, setMobileActiveSubmenu] = React.useState<string | null>(null)
@@ -426,7 +430,12 @@ export function Navbar() {
 
                 {/* Our Services Menu */}
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]">
+                  <NavigationMenuTrigger
+                    className={cn(
+                      "text-xs font-semibold tracking-wide text-[#2e473a] hover:bg-[#ede7d8] hover:text-[#8a682f] data-[state=open]:bg-[#ede7d8] data-[state=open]:text-[#8a682f]",
+                      isServicesPage && "bg-[#ede7d8] text-[#8a682f] font-bold"
+                    )}
+                  >
                     Our Services
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -448,6 +457,7 @@ export function Navbar() {
                             href={service.href}
                             icon={service.icon}
                             badge={service.badge}
+                            active={currentPath === service.href || currentPath === service.href + "/"}
                           >
                             {service.description}
                           </ListItem>
@@ -456,7 +466,7 @@ export function Navbar() {
 
                       <div className="mt-3 border-t border-[#ddd8ca] pt-3 text-center">
                         <Link
-                          href="#contact"
+                          href="/contact"
                           className="inline-flex items-center gap-2 text-xs font-bold text-[#214c39] hover:text-[#8a682f]"
                         >
                           Book a Trade Consultation Call <ArrowUpRight className="h-3.5 w-3.5" />
@@ -689,21 +699,25 @@ export function Navbar() {
 
                 {mobileActiveSubmenu === "services" && (
                   <div id="mobile-submenu-services" className="border-t border-[#e4dfd3] bg-[#f3efe4] px-3 py-2.5 space-y-1.5">
-                    <a
-                      href="#services"
-                      onClick={(e) => handleNavClick(e, "#services")}
+                    <Link
+                      href="/services"
+                      onClick={closeMobileMenu}
                       className="block min-h-[44px] rounded-md bg-[#fbf9f2] border border-[#e2dccf] px-3.5 py-2.5 text-xs font-bold text-[#214c39] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
                     >
-                      Comprehensive Trade Support
-                    </a>
+                      All Trade Services Overview
+                    </Link>
                     {tradeServices.map((service) => {
                       const IconComponent = service.icon
+                      const isActive = currentPath === service.href || currentPath === service.href + "/"
                       return (
-                        <a
+                        <Link
                           key={service.title}
                           href={service.href}
-                          onClick={(e) => handleNavClick(e, service.href)}
-                          className="flex min-h-[44px] items-start gap-2.5 rounded-md px-3.5 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation"
+                          onClick={closeMobileMenu}
+                          className={cn(
+                            "flex min-h-[44px] items-start gap-2.5 rounded-md px-3.5 py-2.5 text-xs text-[#526457] transition-colors hover:bg-[#ede7d8] active:bg-[#e4ded0] touch-manipulation",
+                            isActive && "bg-[#ede7d8] font-bold text-[#214c39]"
+                          )}
                         >
                           <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded border border-[#d8cfb9] bg-[#fbf9f2] text-[#8b682d]">
                             <IconComponent className="h-3.5 w-3.5" />
@@ -719,7 +733,7 @@ export function Navbar() {
                             </div>
                             <div className="text-[11px] leading-relaxed text-[#718074]">{service.description}</div>
                           </div>
-                        </a>
+                        </Link>
                       )
                     })}
                   </div>

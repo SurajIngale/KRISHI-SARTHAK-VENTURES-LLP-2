@@ -312,43 +312,51 @@ const detailedProducts: DetailedProductItem[] = [
 const services = [
   {
     name: 'Shipment Services',
+    route: '/services/shipments',
     icon: Ship,
+    badge: 'Consignments',
     deliverables: [
-      'Reefer & Dry Container Bookings',
-      'Port Handling & Stevedoring',
-      'Customs Drayage & Clearance',
+      'Group & Individual Consignments',
+      'Product Sourcing & Container Booking',
+      'Customs & Logistics Coordination',
     ],
-    text: 'Turnkey coordination for full container loads (FCL) and consolidated shipments, from packhouse pre-cooling and container booking to shipping line manifests and destination customs clearance.',
+    text: 'Shipment coordination for group and individual consignments, including product sourcing guidance, documentation, freight booking, and international logistics coordination.',
   },
   {
     name: 'Global Trade Consultancy',
+    route: '/services/global-trade-consultancy',
     icon: Compass,
+    badge: 'Advisory',
     deliverables: [
-      'Target Market Entry Feasibility',
-      'Tariff & HS Code Optimization',
-      'Overseas Buyer & Counterparty Due Diligence',
+      'Market Intelligence & Demand Research',
+      'Product & Destination Market Selection',
+      'Buyer-Supplier Opportunity Assessment',
     ],
-    text: 'Strategic commercial advisory designed to help exporters and importers navigate global market dynamics, identify competitive advantages, and establish dependable international distribution channels.',
+    text: 'Trade advisory, market intelligence, product and market evaluation, buyer-supplier opportunity research, and trade planning.',
   },
   {
     name: 'Freight Forwarding & Logistics',
+    route: '/services/freight-forwarding-logistics',
     icon: Truck,
+    badge: 'Multi-Modal',
     deliverables: [
-      'Multi-Modal Sea, Land & Air Freight',
-      'Real-Time Reefer Temperature Telemetry',
-      'Demurrage & Detention Safeguards',
+      'Sea (FCL / LCL) & Air Freight Options',
+      'Customs Coordination & Port Drayage',
+      'Inland Transportation & Cargo Handling',
     ],
-    text: 'Precision freight orchestration across premier maritime corridors. We safeguard perishable cargo through active cold-chain monitoring, optimized transit windows, and seamless port handling.',
+    text: 'Sea freight, air freight, customs coordination, inland transportation, and related international shipping arrangements.',
   },
   {
-    name: 'Documentation & Compliance',
+    name: 'Documentation Services',
+    route: '/services/documentation-services',
     icon: ClipboardList,
+    badge: 'Compliance',
     deliverables: [
-      'Phytosanitary & Fumigation Certificates',
-      'APEDA, ICEGATE & AD Code Coordination',
-      'Preferential Certificates of Origin (COO)',
+      'IEC Application & DGFT Procedures',
+      'RCMC & Commodity Board Registrations',
+      'AD Code & ICEGATE Customs Filing',
     ],
-    text: 'Rigorous trade documentation advisory ensuring every consignment complies with DGFT, customs, and importing nation border agencies, preventing transit delays and regulatory penalties.',
+    text: 'Guidance and coordination concerning IEC, DGFT, RCMC, AD Code, ICEGATE, and applicable business and product-specific documentation.',
   },
 ];
 
@@ -1506,9 +1514,14 @@ function Services() {
                     <span className="grid h-12 w-12 place-items-center rounded-lg border border-[#D9A441]/35 bg-[#f4eee1] text-[#967235] shadow-xs transition-all duration-300 group-hover:border-[#D9A441] group-hover:bg-[#214c39] group-hover:text-[#D9A441] group-hover:scale-105">
                       <Icon size={22} />
                     </span>
-                    <span className="font-display text-3xl font-light text-[#cfc7b4] transition-colors duration-300 group-hover:text-[#D9A441]">
-                      0{i + 1}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-[#e8e1cf] px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#685b41]">
+                        {service.badge}
+                      </span>
+                      <span className="font-display text-3xl font-light text-[#cfc7b4] transition-colors duration-300 group-hover:text-[#D9A441]">
+                        0{i + 1}
+                      </span>
+                    </div>
                   </div>
 
                   <h3 className="font-display mt-6 text-2xl font-medium text-[#1d392d] transition-colors duration-300 group-hover:text-[#183c2c]">
@@ -1533,16 +1546,16 @@ function Services() {
                 </div>
 
                 <div className="mt-8 flex items-center justify-between border-t border-[#ede7d8] pt-5">
-                  <Anchor
-                    to="contact"
+                  <Link
+                    href={service.route}
                     className="inline-flex items-center gap-2 text-xs font-bold text-[#214c39] transition-all duration-200 group-hover:text-[#967235] group-hover:translate-x-1"
                   >
-                    <span>Consult on this service</span>
+                    <span>Read More</span>
                     <ArrowRight
                       size={13}
                       className="text-[#D9A441] transition-transform duration-200 group-hover:translate-x-1"
                     />
-                  </Anchor>
+                  </Link>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#9a865b]">
                     Export Service
                   </span>

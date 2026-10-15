@@ -24,6 +24,7 @@ import {
 import { getWhatsAppGrainProductUrl } from '@/data/pulsesGrainsData';
 import { getWhatsAppDryFruitsProductUrl } from '@/data/dryFruitsNutsData';
 import { getWhatsAppConstructionProductUrl } from '@/data/constructionMaterialsData';
+import { getFreshFruitWhatsAppUrl } from '@/data/freshFruitsData';
 
 interface ProductCardProps {
   product: ProductSpecification;
@@ -44,6 +45,8 @@ export function ProductCard({ product, priorityImage = false }: ProductCardProps
       ? getWhatsAppPowderProductUrl(product.name)
       : product.category === 'frozen'
       ? getWhatsAppFrozenProductUrl(product.name)
+      : product.category === 'fruit'
+      ? getFreshFruitWhatsAppUrl(product.name)
       : getWhatsAppProductUrl(product.name);
   const contactUrl = getContactProductUrl(product.name);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
