@@ -172,7 +172,7 @@ const rawCategories: CategoryItem[] = [
     name: 'Custom Sourcing & Contract Farming',
     subtitle: 'Bespoke Crop Origins & Private Labeling',
     text: 'Looking for specific regional varieties, dedicated farm cluster contracting, or specialized consumer packaging? Our global trade specialists manage turnkey sourcing and export fulfillment.',
-    image: '/produce-market.png',
+    image: '/categories/custom-sourcing.jpeg',
     tag: '08',
     badge: 'Turnkey Trade',
     highlights: ['Direct Farmer Clusters', 'Private Labeling', 'End-to-End Clearance'],
@@ -718,119 +718,98 @@ function CategorySection() {
         </div>
 
         {/* 8 Categories Grid */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((item) => {
             const categoryUrl = item.url || null;
 
             return (
               <article
                 key={item.name}
-                className="group card-line flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#D9A441] transition-all duration-300 shadow-xs hover:shadow-xl hover:-translate-y-1.5 overflow-hidden rounded-lg"
+                className="group flex flex-col h-full bg-[#fbf9f2] border border-[#ddd8ca] hover:border-[#D9A441]/70 transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-1 overflow-hidden rounded-xl"
               >
-                <div className="relative h-[210px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
-                  {categoryUrl ? (
-                    <Link href={categoryUrl} className="block h-full w-full">
-                      <img
-                        src={item.image}
-                        alt={`${item.name} sourcing category`}
-                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                      />
-                    </Link>
-                  ) : (
-                    <img
-                      src={item.image}
-                      alt={`${item.name} sourcing category`}
-                      className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#102c20]/80 via-[#102c20]/15 to-transparent pointer-events-none" />
-                  <span className="absolute left-3.5 top-3.5 border border-white/40 bg-[#1d392d]/90 px-2.5 py-1 text-[9px] font-bold tracking-widest text-[#f5ebd2] backdrop-blur-xs">
-                    CATEGORY {item.tag}
+                {/* Compact image — 160px */}
+                <div className="relative h-[160px] w-full overflow-hidden bg-[#e8e2cf] shrink-0">
+                  <img
+                    src={item.image}
+                    alt={`${item.name} sourcing category`}
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  {/* subtle dark gradient at bottom for text legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d2518]/70 via-transparent to-transparent pointer-events-none" />
+                  {/* Category tag — top-left */}
+                  <span className="absolute left-3 top-3 bg-[#1d392d]/85 px-2 py-0.5 text-[8.5px] font-bold tracking-widest text-[#e8d9b5] backdrop-blur-sm rounded-sm">
+                    {item.tag}
                   </span>
-                  <span className="absolute right-3.5 top-3.5 border border-[#D9A441]/60 bg-[#D9A441] px-2 py-0.5 text-[9px] font-bold tracking-wider text-[#0a1826] backdrop-blur-xs shadow-xs">
+                  {/* Badge — top-right */}
+                  <span className="absolute right-3 top-3 bg-[#D9A441] px-2 py-0.5 text-[8.5px] font-bold tracking-wide text-[#0a1826] rounded-sm shadow-xs">
                     {item.badge}
                   </span>
+                  {/* Arrow CTA button — bottom-right, appears on hover */}
                   {categoryUrl ? (
                     <Link
                       href={categoryUrl}
-                      className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
+                      className="absolute bottom-2.5 right-2.5 grid h-7 w-7 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:bg-[#D9A441] group-hover:text-[#0a1826] scale-90 group-hover:scale-100"
                       aria-label={`View ${item.name} category page`}
                     >
-                      <ArrowUpRight size={15} />
+                      <ArrowUpRight size={13} />
                     </Link>
                   ) : (
                     <button
                       type="button"
                       onClick={() => setSelectedCategory(item)}
-                      className="absolute bottom-3 right-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md transition-all group-hover:bg-[#D9A441] group-hover:text-[#0a1826] group-hover:scale-110"
+                      className="absolute bottom-2.5 right-2.5 grid h-7 w-7 place-items-center rounded-full bg-white/90 text-[#1d392d] shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:bg-[#D9A441] group-hover:text-[#0a1826] scale-90 group-hover:scale-100"
                       aria-label={`View ${item.name} specifications`}
                     >
-                      <ArrowUpRight size={15} />
+                      <ArrowUpRight size={13} />
                     </button>
                   )}
                 </div>
 
-                <div className="p-5 flex flex-col flex-1 justify-between">
-                  <div>
-                    <h3 className="font-display text-lg font-medium leading-snug text-[#1d392d] group-hover:text-[#967235] transition-colors line-clamp-1">
-                      {categoryUrl ? (
-                        <Link href={categoryUrl} className="hover:underline">
-                          {item.name}
-                        </Link>
-                      ) : (
-                        item.name
-                      )}
-                    </h3>
-                    <p className="mt-1 text-[11px] font-semibold text-[#967235] tracking-wide line-clamp-1">
-                      {item.subtitle}
-                    </p>
-                    <p className="mt-2.5 text-xs leading-5 text-[#6f7b70] line-clamp-3 min-h-[60px]">
-                      {item.text}
-                    </p>
+                {/* Card body */}
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-display text-[15px] font-semibold leading-snug text-[#1d392d] group-hover:text-[#7a5c22] transition-colors line-clamp-1">
+                    {categoryUrl ? (
+                      <Link href={categoryUrl} className="hover:underline decoration-[#D9A441]/50 underline-offset-2">
+                        {item.name}
+                      </Link>
+                    ) : (
+                      item.name
+                    )}
+                  </h3>
+                  <p className="mt-0.5 text-[10.5px] font-medium text-[#967235] tracking-wide line-clamp-1">
+                    {item.subtitle}
+                  </p>
+                  <p className="mt-2 text-[11.5px] leading-[1.6] text-[#6b7a6d] line-clamp-2 flex-1">
+                    {item.text}
+                  </p>
 
-                    <div className="mt-3.5 flex flex-wrap gap-1.5 pt-1">
-                      {item.highlights.map((h) => (
-                        <span
-                          key={h}
-                          className="rounded-xs border border-[#ddd8ca] bg-[#f4eee1] px-2 py-0.5 text-[9.5px] font-medium text-[#526457]"
-                        >
-                          {h}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-5 pt-3.5 border-t border-[#e8e2d4] flex items-center justify-between">
+                  {/* CTA */}
+                  <div className="mt-3 pt-3 border-t border-[#e8e2d4]">
                     {categoryUrl ? (
                       <Link
                         href={categoryUrl}
-                        className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#214c39] hover:text-[#967235] transition-colors group/cta"
                       >
-                        Explore category{' '}
+                        Explore category
                         <ArrowRight
-                          size={13}
-                          className="transition-transform group-hover:translate-x-1 text-[#D9A441]"
+                          size={12}
+                          className="transition-transform duration-200 group-hover/cta:translate-x-0.5 text-[#D9A441]"
                         />
                       </Link>
                     ) : (
                       <button
                         type="button"
                         onClick={() => setSelectedCategory(item)}
-                        className="btn-outline !py-0 !border-b-0 text-xs font-bold text-[#214c39] hover:text-[#967235] inline-flex items-center gap-1.5"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#214c39] hover:text-[#967235] transition-colors group/cta"
                       >
-                        View specifications{' '}
+                        View specifications
                         <ArrowRight
-                          size={13}
-                          className="transition-transform group-hover:translate-x-1 text-[#D9A441]"
+                          size={12}
+                          className="transition-transform duration-200 group-hover/cta:translate-x-0.5 text-[#D9A441]"
                         />
                       </button>
                     )}
-                    <Anchor
-                      to="contact"
-                      className="text-[10px] font-bold uppercase tracking-wider text-[#967235] hover:underline"
-                    >
-                      Inquire
-                    </Anchor>
                   </div>
                 </div>
               </article>
